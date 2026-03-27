@@ -1,4 +1,4 @@
-# Título do Projeto
+# Portal do Paciente Crônico
 
 `CURSO: Sistemas de Informação`
 
@@ -6,20 +6,21 @@
 
 `SEMESTRE: 1º`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+O projeto Portal do Paciente Crônico é uma aplicação Web desenvolvida para atuar como um Registro Pessoal de Saúde, otimizada para o acompanhamento diário de cidadãos com doenças crônicas, como diabetes e hipertensão. O foco da plataforma é combater a baixa adesão ao tratamento por meio de uma interface altamente intuitiva, reduzindo o atrito ao registrar medições de rotina e horários fracionados de medicamentos.
+Além de empoderar o paciente com o controle de sua própria evolução de forma confortável, a aplicação consolida o histórico em um painel visual (dashboard). Isso facilita a rápida leitura dos dados e auxilia a tomada de decisão clínica pelos profissionais de saúde durante os atendimentos na Atenção Primária (UBS), promovendo um cuidado mais eficiente e preventivo.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-* Nome completo do aluno 5
+* Alan Alencar da Silva
+* Alex Gabriel Rocha Santos
+* Bernardo Santos Torres
+* Marcela Fernandes de Castro Melo
+* Sara Zschaber de Souza
 
 
 ## Orientador
 
-* Nome completo do professor 1
+* Clóvis Lemos Tavares
 
 # Planejamento
 
