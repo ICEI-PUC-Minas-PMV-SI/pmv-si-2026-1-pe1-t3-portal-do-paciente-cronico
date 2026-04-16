@@ -1,13 +1,13 @@
 
 # Projeto de Interface
 
-Visão geral da interação do usuário pelas telas do sistema e protótipo interativo das telas com as funcionalidades que fazem parte do sistema (wireframes).
-
- Apresente as principais interfaces da plataforma. Discuta como ela foi elaborada de forma a atender os requisitos funcionais, não funcionais e histórias de usuário abordados nas <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a>.
-
+Visão geral da interação do usuário pelas telas do sistema e protótipo interativo das telas com as funcionalidades que fazem parte do sistema (wireframes)
 ## User Flow
 
-![Exemplo de UserFlow](img/userflow.jpg)
+<a href="2-Especificação do Projeto.md"> Documentação de Especificação</a>.
+Aqui apresentamos a interface principal do nosso aplicativo, explicando as suas seguintes funcionalidades e como elas pode ser utilizadas pelo usuário para que ele cumpra o próposito de auxiliar tanto o paciente, quanto os cuidadores, que possuem o espelho do perfil do indivíduo no qual ele zela, além dos profissionais da saúde, que assim, conseguem ter acesso ao registro de todos os seus pacientes, podendo organizar melhor seus prontuários, mas também ter um controle muito maior sobre o bem-estar deles no dia-a-dia.
+[Flow.pdf](https://github.com/user-attachments/files/26801895/Flow.pdf) 
+
 
 ## Protótipo de baixa fidelidade
 
