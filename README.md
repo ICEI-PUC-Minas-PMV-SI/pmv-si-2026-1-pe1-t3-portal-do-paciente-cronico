@@ -6,6 +6,8 @@
 
 `SEMESTRE: 1º`
 
+**🔗 Link da Aplicação:** [Acesse o Portal do Paciente Crônico rodando aqui](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/src/)
+
 O projeto Portal do Paciente Crônico é uma aplicação Web desenvolvida para atuar como um Registro Pessoal de Saúde, otimizada para o acompanhamento diário de cidadãos com doenças crônicas, como diabetes e hipertensão. O foco da plataforma é combater a baixa adesão ao tratamento por meio de uma interface altamente intuitiva, reduzindo o atrito ao registrar medições de rotina e horários fracionados de medicamentos.
 Além de empoderar o paciente com o controle de sua própria evolução de forma confortável, a aplicação consolida o histórico em um painel visual (dashboard). Isso facilita a rápida leitura dos dados e auxilia a tomada de decisão clínica pelos profissionais de saúde durante os atendimentos na Atenção Primária (UBS), promovendo um cuidado mais eficiente e preventivo.
 
