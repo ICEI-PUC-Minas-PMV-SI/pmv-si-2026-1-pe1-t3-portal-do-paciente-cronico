@@ -27,9 +27,9 @@ As telas do sistema apresentam uma estrutura comum que é apresentada na figura 
 <h3><b>Tela – Cadastro</b></h3>
 <p>A tela de cadastro apresenta os seguintes campos para a inserção das informações pessoais do usuário paciente: Nome Completo, CPF, Senha, data de nascimento, sexo do paciente, qual a doença crônica, tipo sanguineo, alergias, opção para aceitar os termos de uso e botão de cadastro.</p> <p>Também tem a o cadastro para o Cuidador, que assim como o paciente apresenta CPF e senha.</p> <p>E para finalizar a area de cadastro, temos o cadastro do médico, que requer nome completo, CPF, CRM, e senha.</p>
   
+  ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085202.png)
   ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085359.png)
-  ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085410.png)
-![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20094527.png)
+![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085410.png)
 
 <figure> 
     <figcaption> - Tela de cadastro de usuários
@@ -37,12 +37,12 @@ As telas do sistema apresentam uma estrutura comum que é apresentada na figura 
 <hr> 
 
 <h3><b>Tela – Login</b></h3>
-<p>A tela de Login apresenta campos para a inserção da ocupação do usuario ( paciente, cuidador e médico), do CPF/e-mail, da senha, e a funcionalidade de recuperar a senha caso tenha esquecido</p>
-  ![login](https://user-images.githubusercontent.com/81182674/167681381-ee88eeee-ffd8-428f-bfb2-67106c0d6046.png)
+<p>A tela de Login apresenta campos para a inserção da ocupação do usuario ( paciente, cuidador e médico), do CPF/e-mail, da senha, e a funcionalidade de recuperar a senha caso tenha esquecido.</p>
+![login](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20094527.png)
 
 
 <figure> 
-    <figcaption>Figura 6 - Tela de acesso à conta do usuário
+    <figcaption> - Tela de acesso à conta do usuário
 </figure>
 <hr>
 
