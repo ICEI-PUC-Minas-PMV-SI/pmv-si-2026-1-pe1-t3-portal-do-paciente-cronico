@@ -1,0 +1,56 @@
+/* css/variables.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Colors */
+  --primary: #0265DC; /* Trust Blue */
+  --primary-dark: #004CB0;
+  --primary-light: #E6F0FC;
+  
+  --accent: #FF6B00; /* Vibrant Orange for high visibility */
+  --accent-hover: #E56000;
+  
+  --success: #10B981; /* Green Saúde */
+  --success-light: #D1FAE5;
+  --danger: #EF4444;  /* Red Alerts */
+  --danger-light: #FEE2E2;
+  --warning: #F59E0B;
+  
+  /* Neutral / Grays */
+  --bg-color: #F8F9FA; /* Ice background */
+  --surface: #FFFFFF;  /* Cards */
+  --surface-hover: #F3F4F6;
+  
+  --text-main: #111827; /* Darkest Gray - Alto Contraste */
+  --text-muted: #4B5563; /* Secondary texts */
+  --border: #E5E7EB;
+
+  /* Typography */
+  --font-family: 'Inter', sans-serif;
+  
+  /* Spacing */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-12: 3rem;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-fab: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-float: 0 10px 25px rgba(255, 107, 0, 0.4); /* Glow para o FAB! */
+
+  /* Transitions */
+  --transition: all 0.2s ease-in-out;
+}

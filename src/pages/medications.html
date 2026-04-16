@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Remédios - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .med-item {
+            border-left: 4px solid var(--primary);
+        }
+        .med-item.warning { border-left-color: var(--warning); }
+        .actions { display: flex; gap: var(--sp-2); }
+        .btn-icon { padding: var(--sp-2); border-radius: var(--radius-sm); background: var(--surface-hover); color: var(--text-muted); }
+        
+        /* Modal Form New Med */
+        #form-new-med {
+            display: none;
+            background: var(--surface);
+            padding: var(--sp-4);
+            border-radius: var(--radius-lg);
+            border: 1px dashed var(--primary);
+            margin-bottom: var(--sp-6);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container animate-fade-in">
+    <h2 class="mt-4 mb-4">Meus Medicamentos</h2>
+
+    <button class="btn btn-outline mb-4" id="btn-show-form">
+        <i data-lucide="plus"></i> Novo Medicamento
+    </button>
+
+    <!-- Formulário Escondido -->
+    <div id="form-new-med">
+        <h4 class="mb-4">Adicionar Medicamento</h4>
+        <div class="form-group">
+            <label>Nome do Remédio</label>
+            <input type="text" id="med-name" class="form-control" placeholder="Ex: Dipirona" required>
+        </div>
+        <div class="form-group">
+            <label>Dosagem</label>
+            <input type="text" id="med-dose" class="form-control" placeholder="10mg" required>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:12px;">
+            <div class="form-group" style="flex:1;">
+                <label>Primeira dose</label>
+                <input type="time" id="med-first-dose" class="form-control" required>
+            </div>
+            <div class="form-group" style="flex:2;">
+                <label>Frequência</label>
+                <input type="text" id="med-freq" class="form-control" placeholder="A cada 8h" required>
+            </div>
+        </div>
+        <div class="flex-between mt-2">
+            <button class="btn btn-outline" id="btn-cancel-med" style="width: auto;">Cancelar</button>
+            <button class="btn btn-primary" id="btn-save-med" style="width: auto;">Salvar</button>
+        </div>
+    </div>
+
+    <!-- Lista Dinâmica -->
+    <div id="med-list-container">
+        <!-- Renderizado via JS -->
+    </div>
+
+</div>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item">
+        <i data-lucide="home"></i>
+        <span>Início</span>
+    </a>
+    <a href="history.html" class="bottom-nav-item">
+        <i data-lucide="clock"></i>
+        <span>Histórico</span>
+    </a>
+    <a href="medications.html" class="bottom-nav-item active">
+        <i data-lucide="pill"></i>
+        <span>Remédios</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item">
+        <i data-lucide="user"></i>
+        <span>Perfil</span>
+    </a>
+</nav>
+
+<script src="../js/security.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('med-list-container');
+        const formDiv = document.getElementById('form-new-med');
+        const btnShow = document.getElementById('btn-show-form');
+        const btnCancel = document.getElementById('btn-cancel-med');
+        const btnSave = document.getElementById('btn-save-med');
+
+        let editingMedId = null;
+
+        // Toggle Form
+        btnShow.addEventListener('click', () => {
+            editingMedId = null; // Reinicia pra adição
+            document.getElementById('med-name').value = '';
+            document.getElementById('med-dose').value = '';
+            document.getElementById('med-freq').value = '';
+            document.getElementById('med-first-dose').value = '';
+            document.querySelector('#form-new-med h4').innerText = 'Adicionar Medicamento';
+            formDiv.style.display = 'block';
+            btnShow.style.display = 'none';
+        });
+
+        btnCancel.addEventListener('click', () => {
+            formDiv.style.display = 'none';
+            btnShow.style.display = 'flex';
+        });
+
+        // Save Logic
+        btnSave.addEventListener('click', () => {
+            const name = document.getElementById('med-name').value;
+            const dose = document.getElementById('med-dose').value;
+            const freq = document.getElementById('med-freq').value;
+            const firstDose = document.getElementById('med-first-dose').value;
+
+            if (name && dose && freq && firstDose) {
+                if (editingMedId) {
+                    appStore.updateMedication(editingMedId, { name, dose, frequency: freq, firstDose });
+                } else {
+                    appStore.addMedication({ name, dose, frequency: freq, firstDose, warning: false });
+                }
+                formDiv.style.display = 'none';
+                btnShow.style.display = 'flex';
+                renderList();
+            } else {
+                alert("Preencha todos os campos, incluindo a primeira dose.");
+            }
+        });
+
+        window.editMed = function(id) {
+            const meds = appStore.getMedications();
+            const med = meds.find(m => m.id === id);
+            if(med) {
+                document.getElementById('med-name').value = med.name;
+                document.getElementById('med-dose').value = med.dose;
+                document.getElementById('med-freq').value = med.frequency;
+                document.getElementById('med-first-dose').value = med.firstDose || '';
+                document.querySelector('#form-new-med h4').innerText = 'Editar Medicamento';
+                editingMedId = id;
+                formDiv.style.display = 'block';
+                btnShow.style.display = 'none';
+            }
+        };
+
+        // Delete Logic attached to global window for inline onclick
+        window.deleteMed = function(id) {
+            if(confirm("Tem certeza que deseja apagar este medicamento?")){
+                appStore.deleteMedication(id);
+                renderList();
+            }
+        };
+
+        function renderList() {
+            container.innerHTML = '';
+            const meds = appStore.getMedications();
+            
+            if (meds.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Nenhum medicamento registrado.</p>';
+                return;
+            }
+
+            meds.forEach(med => {
+                const card = document.createElement('div');
+                card.className = `card med-item ${med.warning ? 'warning' : ''}`;
+                card.innerHTML = `
+                    <div class="flex-between">
+                        <div>
+                            <h3 style="margin-bottom: 4px;">${med.name}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">${med.dose} • Início: ${med.firstDose || '--:--'}</p>
+                            <span class="badge ${med.warning ? '' : 'badge-success'} mt-2" style="display:inline-block; background: ${med.warning ? 'var(--bg-color)' : ''}; color: ${med.warning ? 'var(--text-main)' : ''}">${med.frequency}</span>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-icon" onclick="editMed(${med.id})"><i data-lucide="edit-2" style="width:18px;height:18px"></i></button>
+                            <button class="btn-icon" style="color: var(--danger);" onclick="deleteMed(${med.id})"><i data-lucide="trash-2" style="width:18px;height:18px"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Init
+        renderList();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+/* css/components.css */
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--radius-lg); /* Bordas amigáveis */
+  font-weight: 600;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: white;
+}
+.btn-accent:hover {
+  background-color: var(--accent-hover);
+  box-shadow: var(--shadow-float);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.btn-outline:hover {
+  background-color: var(--primary-light);
+}
+
+/* Campos Fomulário (Grandes e Alto Contraste) */
+.form-group {
+  margin-bottom: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: var(--sp-1);
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  color: var(--text-main);
+  transition: var(--transition);
+}
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Cards (Glassmorphism sutil / Clean) */
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--sp-4);
+  border: 1px solid var(--border);
+}
+
+/* Elementos do Dashboard Médico em Componentes reaproveitáveis */
+.badge {
+  padding: 4px 8px;
+  border-radius: var(--radius-xl);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+
+/* Floating Action Button (FAB) */
+.fab {
+  position: fixed;
+  bottom: 80px; /* acima da nav */
+  right: calc(50% - 28px); /* Centralizado mobile */
+  transform: translateX(100px); /* Ajuste com flex nav depois */
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-fab);
+  background-color: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-float);
+  z-index: 10;
+}
+@media (min-width: 600px) {
+  .fab {
+    right: max(var(--sp-4), calc(50% - 300px + var(--sp-4))); /* Container constrain */
+    transform: none;
+  }
+}
+.fab i { font-size: 24px; }
+.fab:active { transform: scale(0.95); }
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background-color: var(--surface);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 9;
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: var(--sp-2);
+}
+.bottom-nav-item i {
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+
+/* Modals / Bottom Sheets */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.bottom-sheet {
+  position: fixed;
+  bottom: -100%;
+  left: 0; right: 0;
+  background: var(--surface);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  padding: var(--sp-6) var(--sp-4);
+  z-index: 101;
+  transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+.bottom-sheet.active {
+  bottom: 0;
+}
+.sheet-drag-handle {
+  width: 40px; height: 5px;
+  background: #D1D5DB;
+  border-radius: 10px;
+  margin: 0 auto 16px auto;
+}

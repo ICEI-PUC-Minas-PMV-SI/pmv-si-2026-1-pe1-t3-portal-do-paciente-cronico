@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .header-dash { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-6); }
+        .user-avatar { width: 48px; height: 48px; background-color: var(--primary-light); border-radius: var(--radius-fab); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+        .status-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: var(--sp-4); border-radius: var(--radius-xl); margin-bottom: var(--sp-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); }
+        .medication-list { margin-bottom: var(--sp-8); }
+        .med-card { display: flex; justify-content: space-between; align-items: center; padding: var(--sp-3); border-bottom: 1px solid var(--border); }
+        .med-card:last-child { border-bottom: none; }
+        .tab-btn { flex: 1; padding: var(--sp-3); text-align: center; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; cursor: pointer;}
+        .tab-content { display: none; padding-top: var(--sp-4); }
+        .tab-content.active { display: block; }
+        .chip { padding: 8px 16px; background: var(--surface-hover); border-radius: 20px; display: inline-block; margin: 4px; color: var(--text-main); font-size: 0.875rem; border: 1px solid var(--border); cursor:pointer;}
+        .chip.selected { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container animate-fade-in">
+    <!-- Header -->
+    <header class="header-dash mt-4">
+        <div>
+            <h1 style="font-size: 1.5rem;" id="user-greeting">Olá, Carregando...</h1>
+            <p style="color: var(--text-muted);" id="current-date">Hoje</p>
+        </div>
+        <div class="user-avatar" id="user-avatar-icon" onclick="window.location.href='profile.html'">-</div>
+    </header>
+
+    <div class="status-card">
+        <div>
+            <h2 style="color: white; font-size: 1.25rem;">Muito bem!</h2>
+            <p style="opacity: 0.9;">Medições em dia.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); border-radius: 50%; padding: 12px;">
+            <i data-lucide="award" style="color: white;"></i>
+        </div>
+    </div>
+
+    <!-- Próximos Remédios Dinâmico (Mock de 2 fixos da LS) -->
+    <h3 class="mb-4">Próximos Remédios (Hoje)</h3>
+    <div class="card medication-list" id="home-med-list">
+        <!-- Render via JS abaixo -->
+    </div>
+
+    <h3 class="mb-4">Evolução Glicêmica</h3>
+    <div class="card" style="padding: var(--sp-2); margin-bottom: var(--sp-6);">
+        <!-- Chart.js Canvas -->
+        <canvas id="glycemiaChart" height="200"></canvas>
+    </div>
+
+    <h3 class="mb-4">Pressão Arterial</h3>
+    <div class="card" style="padding: var(--sp-2);">
+        <!-- Chart.js Canvas -->
+        <canvas id="pressureChart" height="200"></canvas>
+    </div>
+</div>
+
+<button class="fab" id="fab-add"><i data-lucide="plus"></i></button>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item active"><i data-lucide="home"></i><span>Início</span></a>
+    <a href="history.html" class="bottom-nav-item"><i data-lucide="clock"></i><span>Histórico</span></a>
+    <a href="medications.html" class="bottom-nav-item"><i data-lucide="pill"></i><span>Remédios</span></a>
+    <a href="profile.html" class="bottom-nav-item"><i data-lucide="user"></i><span>Perfil</span></a>
+</nav>
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="modal-overlay"></div>
+<div class="bottom-sheet" id="quick-action-sheet">
+    <div class="sheet-drag-handle"></div>
+    <h3 class="mb-4 text-center">Novo Registro</h3>
+    
+    <div style="display: flex; border-bottom: 1px solid var(--border); margin-bottom: 16px;">
+        <div class="tab-btn active border-b-2 border-primary text-primary" data-target="tab-pressao" id="t-pressao">Pressão</div>
+        <div class="tab-btn" data-target="tab-glicemia" id="t-glicose">Glicose</div>
+        <div class="tab-btn" data-target="tab-sintomas" id="t-sintomas">Sintomas</div>
+    </div>
+
+    <div id="tab-pressao" class="tab-content active" style="display: block;">
+        <div class="form-group row" style="display: flex; gap: 16px;">
+            <div style="flex: 1;"><label>Sistólica (Maior)</label><input type="number" id="val-sys" class="form-control" placeholder="120" style="font-size: 1.25rem; text-align: center;"></div>
+            <div style="flex: 1;"><label>Diastólica (Menor)</label><input type="number" id="val-dia" class="form-control" placeholder="80" style="font-size: 1.25rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <div id="tab-glicemia" class="tab-content">
+        <div class="form-group"><label>Nível (mg/dL)</label><input type="number" id="val-glicose" class="form-control" placeholder="95" style="font-size: 1.5rem; text-align: center; font-weight: bold; color: var(--primary);"></div>
+    </div>
+
+    <div id="tab-sintomas" class="tab-content">
+        <p style="margin-bottom: 8px;">Como você está se sentindo?</p>
+        <div id="sintomas-chips">
+            <div class="chip">Tontura</div><div class="chip">Dor de cabeça</div>
+            <div class="chip">Cansaço</div><div class="chip">Falta de ar</div>
+        </div>
+        <div class="form-group mt-4">
+            <label>Outro sintoma / Descrição detalhada</label>
+            <textarea id="val-sintoma-desc" class="form-control" rows="2" placeholder="Ex: Tive bastante enjoô após o almoço..."></textarea>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 16px; margin-top: 24px;">
+        <button class="btn btn-outline" id="btn-cancel-action" style="flex: 1;">Cancelar</button>
+        <button class="btn btn-primary" id="btn-save-record" style="flex: 1;">Salvar</button>
+    </div>
+</div>
+
+<script src="../js/security.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/modal.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'short'});
+
+        // Preenche com o nome logado
+        const currentUser = appStore.getCurrentUser();
+        document.getElementById('user-greeting').innerText = `Olá, ${currentUser.name.split(' ')[0]}`;
+        document.getElementById('user-avatar-icon').innerText = currentUser.name.charAt(0).toUpperCase();
+
+        // Render Home Meds
+        const meds = appStore.getMedications().slice(0, 3); // top 3
+        const medList = document.getElementById('home-med-list');
+        if(meds.length > 0) {
+            medList.innerHTML = meds.map(m => `
+                <div class="med-card">
+                    <div>
+                        <h4 style="margin:0;">${m.name}</h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top:2px;">
+                            <strong style="color:var(--primary);"><i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px;"></i> ${m.firstDose || 'Avisar'}</strong> • ${m.dose || m.dosage || 'Dose padrão'}
+                        </p>
+                    </div>
+                    <button class="btn" style="width: auto; padding: 12px; background: var(--surface-hover);" onclick="toggleMedication(this)"><i data-lucide="circle"></i></button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+            
+            // Função para alternar checado
+            window.toggleMedication = function(btn) {
+                if (btn.innerHTML.includes('check-circle')) {
+                    btn.innerHTML = '<i data-lucide="circle"></i>';
+                } else {
+                    btn.innerHTML = '<i data-lucide="check-circle" style="color:var(--success);"></i>';
+                }
+                lucide.createIcons();
+            }
+        } else {
+            medList.innerHTML = `<p style="padding:16px; text-align:center; color:var(--text-muted); font-size:0.875rem">Nenhum remédio cadastrado para hoje. Adicione em 'Remédios'.</p>`;
+        }
+
+        // Initialize Chart
+        const ctx = document.getElementById('glycemiaChart').getContext('2d');
+        let chartInstance;
+        
+        function renderChart() {
+            const vitals = appStore.getVitals();
+            if(vitals.glycemia.length === 0) {
+                // Se estiver vazio para um paciente novo, previne erro no gráfico.
+                if(chartInstance) chartInstance.destroy();
+                return;
+            }
+            const labels = vitals.glycemia.map(v => v.date);
+            const data = vitals.glycemia.map(v => v.value);
+            
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            const primaryLight = getComputedStyle(document.documentElement).getPropertyValue('--primary-light').trim();
+
+            if (chartInstance) chartInstance.destroy();
+            
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Glicemia (mg/dL)',
+                        data: data,
+                        borderColor: primaryColor,
+                        backgroundColor: primaryLight,
+                        borderWidth: 3,
+                        pointBackgroundColor: primaryColor,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: false, min: 60, max: 200 },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+        renderChart();
+
+        // Initialize Pressure Chart
+        function renderPressureChart() {
+            const canvasP = document.getElementById('pressureChart');
+            if(!canvasP) return;
+            const ctxP = canvasP.getContext('2d');
+            const vitals = appStore.getVitals();
+            if(vitals.pressure.length === 0) return;
+            
+            const labels = vitals.pressure.map(v => v.date);
+            const dataSys = vitals.pressure.map(v => v.sys);
+            const dataDia = vitals.pressure.map(v => v.dia);
+            
+            const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim();
+            const dangerLight = getComputedStyle(document.documentElement).getPropertyValue('--danger-light').trim();
+            const infoColor = '#0EA5E9'; // fixed hex for consistency
+
+            new Chart(ctxP, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Sistólica (Alta)',
+                            data: dataSys,
+                            borderColor: dangerColor,
+                            backgroundColor: dangerLight,
+                            borderWidth: 3,
+                            pointBackgroundColor: dangerColor,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Diastólica (Baixa)',
+                            data: dataDia,
+                            borderColor: infoColor,
+                            backgroundColor: 'transparent',
+                            borderWidth: 3,
+                            pointBackgroundColor: infoColor,
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11} } } },
+                    scales: {
+                        y: { beginAtZero: false, min: 60, max: 180 },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+        renderPressureChart();
+
+        // Save Functionality from Modal
+        const btnSave = document.getElementById('btn-save-record');
+        let currentTab = 'tab-pressao'; // Default
+
+        // Hook into modal tabs to know which one is active
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { currentTab = e.target.getAttribute('data-target'); });
+        });
+
+        // Chips toggle
+        document.querySelectorAll('.chip').forEach(c => {
+            c.addEventListener('click', () => c.classList.toggle('selected'));
+        });
+
+        btnSave.addEventListener('click', () => {
+            if (currentTab === 'tab-pressao') {
+                const sys = document.getElementById('val-sys').value;
+                const dia = document.getElementById('val-dia').value;
+                if(sys && dia) {
+                    appStore.addPressure(sys, dia);
+                    alert("Pressão salva com sucesso!");
+                }
+            } else if (currentTab === 'tab-glicemia') {
+                const val = document.getElementById('val-glicose').value;
+                if(val) {
+                    appStore.addGlycemia(val);
+                    renderChart(); // Dinamicamente atualiza Chart.js!
+                    document.getElementById('val-glicose').value = '';
+                }
+            } else {
+                const chips = Array.from(document.querySelectorAll('#sintomas-chips .chip.selected')).map(c => c.innerText);
+                let desc = document.getElementById('val-sintoma-desc').value;
+                
+                let finalDesc = [];
+                if (chips.length > 0) finalDesc.push(chips.join(', '));
+                if (desc) finalDesc.push(desc);
+                
+                if (finalDesc.length > 0) {
+                    appStore.addSymptom(finalDesc.join(' - '));
+                    document.getElementById('val-sintoma-desc').value = '';
+                    document.querySelectorAll('#sintomas-chips .chip.selected').forEach(c => c.classList.remove('selected'));
+                    alert("Sintomas salvos com sucesso!");
+                } else {
+                    alert("Por favor, selecione um sintoma ou descreva em texto livre.");
+                    return; // Previne que o modal feche para tentar de novo
+                }
+            }
+            
+            // Força o close do modal
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.getElementById('quick-action-sheet').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+</script>
+</body>
+</html>

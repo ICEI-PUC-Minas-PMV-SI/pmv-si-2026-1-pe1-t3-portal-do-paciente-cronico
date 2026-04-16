@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal do Paciente Crônico - Cadastro</title>
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            padding: var(--sp-6);
+        }
+        .profile-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: var(--sp-4);
+        }
+        .profile-option {
+            flex: 1;
+            text-align: center;
+            padding: var(--sp-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .profile-option.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .profile-option input { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container auth-container animate-fade-in">
+    <h1 class="mb-2 text-center">Criar Conta</h1>
+    <p style="color: var(--text-muted);" class="mb-6 text-center">Junte-se à plataforma de cuidado.</p>
+
+    <div class="card">
+        <label style="font-weight: 600; display:block; margin-bottom: 8px;">Eu sou um:</label>
+        <div class="profile-selector" id="reg-profile-selector">
+            <label class="profile-option selected">
+                <input type="radio" name="reg-profile" value="paciente" checked>
+                <i data-lucide="user" style="display:block; margin: 0 auto 4px;"></i>
+                Paciente
+            </label>
+            <label class="profile-option">
+                <input type="radio" name="reg-profile" value="cuidador">
+                <i data-lucide="users" style="display:block; margin: 0 auto 4px;"></i>
+                Cuidador
+            </label>
+            <label class="profile-option">
+                <input type="radio" name="reg-profile" value="medico">
+                <i data-lucide="stethoscope" style="display:block; margin: 0 auto 4px;"></i>
+                Médico
+            </label>
+        </div>
+
+        <div id="group-all-fields">
+            <div class="form-group" id="group-name">
+                <label for="reg-name">Nome Completo</label>
+                <input type="text" id="reg-name" class="form-control" placeholder="Seu nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-cpf">CPF</label>
+                <input type="text" id="reg-cpf" class="form-control" placeholder="000.000.000-00" required>
+            </div>
+            
+            <div class="form-group hover-crm" id="group-crm" style="display: none;">
+                <label for="reg-crm">CRM</label>
+                <input type="text" id="reg-crm" class="form-control" placeholder="Apenas números">
+            </div>
+            
+            <div class="form-group">
+                <label for="reg-password">Senha</label>
+                <input type="password" id="reg-password" class="form-control" placeholder="Crie uma senha" required>
+            </div>
+
+            <!-- Blocos omitidos para Médico -->
+            <div id="group-medico-hidden">
+
+        <div style="display:flex; gap:12px;">
+            <div class="form-group" style="flex:1;">
+                <label for="reg-birth">Nascimento</label>
+                <input type="date" id="reg-birth" class="form-control" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label for="reg-sex">Sexo</label>
+                <select id="reg-sex" class="form-control">
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                    <option value="O">Outro</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="group-conditions">
+            <label>Qual sua Doença Crônica? (Opcional)</label>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                <label style="display:flex; align-items:center; gap:4px; font-weight:normal; font-size:0.875rem"><input type="checkbox" class="cond-check" value="Diabetes"> Diabetes</label>
+                <label style="display:flex; align-items:center; gap:4px; font-weight:normal; font-size:0.875rem"><input type="checkbox" class="cond-check" value="Hipertensão"> Hipertensão</label>
+                <label style="display:flex; align-items:center; gap:4px; font-weight:normal; font-size:0.875rem"><input type="checkbox" class="cond-check" value="Asma"> Asma</label>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:8px;">
+            <div class="form-group" style="flex:1;">
+                <label for="reg-blood">Sangue</label>
+                <select id="reg-blood" class="form-control">
+                    <option value="">N/D</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:2;">
+                <label for="reg-allergies">Alergias</label>
+                <input type="text" id="reg-allergies" class="form-control" placeholder="Ex: Pólen, Dipirona, etc.">
+            </div>
+        </div>
+
+        </div> <!-- Fim do group-medico-hidden -->
+
+        <div class="form-group mt-2" id="group-lgpd">
+            <label style="display:flex; align-items:flex-start; gap:8px; font-weight:normal; font-size:0.875rem; cursor:pointer;">
+                <input type="checkbox" id="reg-lgpd" style="margin-top:4px;">
+                <span>Li e aceito os <a href="#" style="color:var(--primary);">Termos de Uso</a> e autorizo o processamento dos meus dados (<strong>LGPD</strong>).</span>
+            </label>
+        </div>
+
+        <button class="btn btn-primary mt-4" id="btn-register">
+            <span id="btn-register-text">Cadastrar</span> <i data-lucide="check" id="btn-register-icon"></i>
+        </button>
+        </div> <!-- Fim do group-all-fields -->
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="index.html" style="font-weight: 500;">Já possui conta? Faça Login</a>
+    </div>
+</div>
+
+<script src="./js/store.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/auth.js"></script>
+<script>
+    lucide.createIcons();
+    
+    // Lógica Dinâmica de Formulário
+    const radios = document.querySelectorAll('input[name="reg-profile"]');
+    const groupMedicoHidden = document.getElementById('group-medico-hidden');
+    const groupCrm = document.getElementById('group-crm');
+    const groupName = document.getElementById('group-name');
+    const groupLgpd = document.getElementById('group-lgpd');
+    const btnText = document.getElementById('btn-register-text');
+    const btnIcon = document.getElementById('btn-register-icon');
+
+    // Inicialização do estado baseado no input atual
+    function applyFormLogic() {
+        const val = document.querySelector('input[name="reg-profile"]:checked').value;
+        if (val === 'medico') {
+            groupMedicoHidden.style.display = 'none';
+            groupCrm.style.display = 'block';
+            groupName.style.display = 'block';
+            groupLgpd.style.display = 'block';
+            btnText.innerText = 'Cadastrar';
+            btnIcon.setAttribute('data-lucide', 'check');
+        } else if (val === 'cuidador') {
+            groupMedicoHidden.style.display = 'none';
+            groupCrm.style.display = 'none';
+            groupName.style.display = 'none';
+            groupLgpd.style.display = 'none';
+            btnText.innerText = 'Entrar Alternativo';
+            btnIcon.setAttribute('data-lucide', 'arrow-right');
+        } else { // paciente
+            groupMedicoHidden.style.display = 'block';
+            groupCrm.style.display = 'none';
+            groupName.style.display = 'block';
+            groupLgpd.style.display = 'block';
+            btnText.innerText = 'Cadastrar';
+            btnIcon.setAttribute('data-lucide', 'check');
+        }
+        lucide.createIcons();
+    }
+
+    radios.forEach(r => {
+        r.addEventListener('change', (e) => {
+            document.querySelectorAll('.profile-option').forEach(el => el.classList.remove('selected'));
+            e.target.closest('.profile-option').classList.add('selected');
+            applyFormLogic();
+        });
+    });
+
+    applyFormLogic(); // Roda no Load
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório Clínico</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; color: #000; margin: 0; padding: 20px; background: #fff; line-height: 1.4; }
+        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 20px; }
+        h1, h2, h3, p { margin: 0; padding: 0; }
+        h2 { margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; font-size: 1.25rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        @media print {
+            body { padding: 0; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="margin-bottom: 8px;">Relatório Clínico de Acompanhamento</h1>
+        <p id="rep-date" style="font-size: 0.875rem; color: #555;"></p>
+    </div>
+
+    <h2>Perfil do Paciente</h2>
+    <table>
+        <tr><th>Nome</th><td id="rep-name" colspan="3"></td></tr>
+        <tr><th>CPF</th><td id="rep-cpf"></td><th>Idade</th><td id="rep-age"></td></tr>
+        <tr><th>Sexo</th><td id="rep-sex"></td><th>Sangue</th><td id="rep-blood"></td></tr>
+        <tr><th>Alergias</th><td colspan="3" id="rep-allergies"></td></tr>
+        <tr><th>Doenças Crônicas</th><td colspan="3" id="rep-conds"></td></tr>
+    </table>
+
+    <h2>Medicamentos Ativos</h2>
+    <table id="table-meds">
+        <thead><tr><th>Medicamento</th><th>Dosagem</th><th>Frequência</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Histórico de Pressão Arterial</h2>
+    <table id="table-pressure">
+        <thead><tr><th>Data</th><th>Hora</th><th>Pressão (Sistólica/Diastólica)</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Histórico de Glicemia</h2>
+    <table id="table-glycemia">
+        <thead><tr><th>Data</th><th>Hora</th><th>Valor (mg/dL)</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Ocorrências, Exames e Sintomas</h2>
+    <table id="table-symptoms">
+        <thead><tr><th>Data</th><th>Hora</th><th>Sintomas / Ocorrência</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="../js/store.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tempUser = appStore.getCurrentUser();
+            // Puxa do id ativo se o requerente for cuidador
+            const targetId = appStore.getActivePatientId ? appStore.getActivePatientId() : tempUser.id;
+            
+            // Busca os dados consolidados do paciente real no banco
+            const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
+            const patientObj = users.find(u => u.id === targetId) || tempUser;
+            const pData = appStore.getPatientData(targetId);
+
+            document.getElementById('rep-date').innerText = `Emitido em: ${new Date().toLocaleString('pt-BR')}`;
+            document.getElementById('rep-name').innerText = patientObj.name || 'N/D';
+            document.getElementById('rep-cpf').innerText = patientObj.cpf || 'N/D';
+            
+            // Age
+            if (patientObj.birthDate) {
+                const birth = new Date(patientObj.birthDate);
+                const today = new Date();
+                let age = today.getFullYear() - birth.getFullYear();
+                if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
+                document.getElementById('rep-age').innerText = `${age} anos`;
+            }
+
+            const sexMap = {'M': 'Masculino', 'F': 'Feminino', 'O': 'Outro'};
+            document.getElementById('rep-sex').innerText = sexMap[patientObj.sex] || patientObj.sex || 'N/D';
+            document.getElementById('rep-blood').innerText = patientObj.bloodType || 'N/D';
+            document.getElementById('rep-allergies').innerText = patientObj.allergies || 'Nenhuma declarada';
+            document.getElementById('rep-conds').innerText = patientObj.conditions && patientObj.conditions.length > 0 ? patientObj.conditions.join(', ') : 'Nenhuma declarada';
+
+            // Meds
+            const medsBody = document.querySelector('#table-meds tbody');
+            if (pData.medications && pData.medications.length) {
+                medsBody.innerHTML = pData.medications.map(m => `<tr><td>${m.name}</td><td>${m.dose}</td><td>${m.freq}</td></tr>`).join('');
+            } else {
+                medsBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Nenhum medicamento registrado.</td></tr>`;
+            }
+
+            // Vitals tables mapping
+            const { pressure = [], glycemia = [], symptoms = [], history = [] } = pData.vitals || {};
+
+            const mapTable = (arr, tbodyId, cellHTML) => {
+                const tbody = document.querySelector(`#${tbodyId} tbody`);
+                if (arr && arr.length) {
+                    tbody.innerHTML = arr.sort((a,b) => b.timestamp - a.timestamp).map(cellHTML).join('');
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Sem registros no período.</td></tr>`;
+                }
+            };
+
+            mapTable(pressure, 'table-pressure', r => `<tr><td>${r.date}</td><td>${r.time}</td><td>${r.sys} / ${r.dia} mmHg</td></tr>`);
+            mapTable(glycemia, 'table-glycemia', r => `<tr><td>${r.date}</td><td>${r.time}</td><td>${r.value} mg/dL</td></tr>`);
+            
+            let occurrences = [];
+            if(symptoms.length) occurrences = occurrences.concat(symptoms.map(s => ({...s, type: 'Sintoma', desc: s.description})));
+            if(history.length) occurrences = occurrences.concat(history.map(h => ({...h, type: 'Evento', desc: `Inclusão de Histórico Médico: ${h.title} ${h.fileLabel ? `(${h.fileLabel})` : ''}`})));
+            
+            mapTable(occurrences, 'table-symptoms', r => `<tr><td>${r.date}</td><td>${r.time}</td><td><strong>[${r.type}]</strong> ${r.desc}</td></tr>`);
+
+            // Dispara para PDF nativo depois que os gráficos e tabelas textuais montarem.
+            setTimeout(() => {
+                window.print();
+            }, 800);
+        });
+    </script>
+</body>
+</html>

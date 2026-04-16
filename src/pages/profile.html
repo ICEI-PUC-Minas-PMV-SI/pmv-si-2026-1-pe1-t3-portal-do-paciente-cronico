@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Perfil - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .profile-header {
+            text-align: center;
+            margin-bottom: var(--sp-6);
+        }
+        .profile-avatar {
+            width: 80px; height: 80px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto var(--sp-4);
+        }
+        
+        .accordion { margin-bottom: var(--sp-4); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+        .accordion-header {
+            padding: var(--sp-4); width: 100%; display: flex; justify-content: space-between; align-items: center;
+            background: none; border: none; font-weight: 600; font-size: 1rem; color: var(--text-main); cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0; padding: 0 var(--sp-4); overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease; background: var(--surface);
+        }
+        .accordion-icon { transition: transform 0.3s; color: var(--primary); }
+
+        @media print {
+            .bottom-nav, .btn, .accordion-icon, .accordion-header { display: none !important; }
+            .accordion-content { max-height: none !important; padding: var(--sp-4); border: 1px solid #ccc; display: block !important; margin-bottom: 20px;}
+            .accordion { border: none; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container animate-fade-in">
+    <div class="profile-header mt-8">
+        <div class="profile-avatar" id="prof-avatar">M</div>
+        <h2 id="prof-name">Carregando...</h2>
+        <p style="color: var(--text-muted);" id="prof-cpf">CPF: ***</p>
+    </div>
+
+    <!-- Accordion Dados Clínicos -->
+    <div class="accordion">
+        <button class="accordion-header">
+            <span id="clinical-title" style="display: flex; align-items: center; gap: 8px;"><i data-lucide="clipboard-list" style="color:var(--primary)"></i> Dados Clínicos Básicos</span>
+            <i data-lucide="chevron-down" class="accordion-icon"></i>
+        </button>
+        <div class="accordion-content" id="clinic-container">
+            <!-- View Mode -->
+            <div id="clinic-view">
+                <p id="prof-age"><strong>Idade:</strong> Não informada</p>
+                <p class="mt-2" id="prof-sex"><strong>Sexo Biológico:</strong> Não informado</p>
+                <p class="mt-2" id="prof-blood"><strong>Tipo Sanguíneo:</strong> Não informado</p>
+                <p class="mt-2" id="prof-allergies"><strong>Alergias:</strong> Nenhuma declarada</p>
+                <p class="mt-2" id="prof-conds"><strong>Condições Fixas:</strong> Nenhuma</p>
+                
+                <button class="btn btn-outline mt-4 mb-4" id="btn-edit-clinic" style="width: 100%;" onclick="window.toggleClinicEdit(true)">
+                    <i data-lucide="edit-2"></i> Editar Dados
+                </button>
+            </div>
+
+            <!-- Edit Mode Form -->
+            <div id="clinic-edit" style="display:none; background: var(--surface-hover); padding: 12px; margin-top:12px; border-radius: 8px; margin-bottom:16px;">
+                <label style="font-weight:600; font-size:0.875rem;">Data de Nascimento</label>
+                <input type="date" id="edit-birth" class="form-control mb-2">
+                <label style="font-weight:600; font-size:0.875rem;">Sexo Biológico</label>
+                <select id="edit-sex" class="form-control mb-2">
+                    <option value="">Não informado</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                    <option value="O">Outro</option>
+                </select>
+                <label style="font-weight:600; font-size:0.875rem;">Tipo Sanguíneo</label>
+                <input type="text" id="edit-blood" class="form-control mb-2" placeholder="O+ / A- / AB+">
+                <label style="font-weight:600; font-size:0.875rem;">Alergias</label>
+                <input type="text" id="edit-allergies" class="form-control mb-2" placeholder="Nenhuma / Dipirona">
+                <label style="font-weight:600; font-size:0.875rem;">Doenças Crônicas</label>
+                <input type="text" id="edit-conds" class="form-control mb-2" placeholder="Asma, Diabetes">
+                
+                <div style="display:flex; gap:8px;" class="mt-2">
+                    <button class="btn btn-primary" onclick="window.saveClinicEdit()" style="flex:1;">Salvar</button>
+                    <button class="btn btn-outline" onclick="window.toggleClinicEdit(false)" style="flex:1;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion Cuidadores -->
+    <div class="accordion" id="accordion-cuidadores">
+        <button class="accordion-header">
+            <span style="display: flex; align-items: center; gap: 8px;"><i data-lucide="users" style="color:var(--primary)"></i> Meus Cuidadores</span>
+            <i data-lucide="chevron-down" class="accordion-icon"></i>
+        </button>
+        <div class="accordion-content">
+            <div id="caregivers-list"></div>
+            
+            <div id="form-invite-caregiver" style="display:none; background: var(--surface-hover); padding: 12px; margin-top:12px; border-radius: 8px;">
+                <input type="text" id="cg-name" class="form-control mb-2" placeholder="Nome do Cuidador">
+                <input type="text" id="cg-cpf" class="form-control mb-2" placeholder="CPF do Cuidador">
+                <input type="password" id="cg-pass" class="form-control mb-2" placeholder="Senha provisória">
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-primary" onclick="window.saveCaregiver()" style="flex:1;">Salvar</button>
+                    <button class="btn btn-outline" onclick="
+                        document.getElementById('form-invite-caregiver').style.display='none'; 
+                        document.getElementById('btn-show-invite').style.display='flex';
+                        const content = this.closest('.accordion-content');
+                        if(content) content.style.maxHeight = content.scrollHeight + 'px';
+                    " style="flex:1;">Cancelar</button>
+                </div>
+            </div>
+
+            <button id="btn-show-invite" class="btn btn-outline mt-2" style="width: 100%;" onclick="
+                document.getElementById('form-invite-caregiver').style.display='block'; 
+                this.style.display='none';
+                const content = this.closest('.accordion-content');
+                if(content) content.style.maxHeight = 'none';
+            ">
+                <i data-lucide="plus"></i> Adicionar Cuidador
+            </button>
+        </div>
+    </div>
+
+    <button class="btn btn-primary mt-4 mb-4" onclick="window.open('report.html', '_blank')">
+        <i data-lucide="file-output"></i> Gerar Relatório Clínico PDF
+    </button>
+    
+    <button class="btn mt-8" style="background: var(--danger-light); color: var(--danger);" onclick="window.location.href='../index.html'">
+        <i data-lucide="log-out"></i> Sair da Conta
+    </button>
+</div>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item">
+        <i data-lucide="home"></i>
+        <span>Início</span>
+    </a>
+    <a href="history.html" class="bottom-nav-item">
+        <i data-lucide="clock"></i>
+        <span>Histórico</span>
+    </a>
+    <a href="medications.html" class="bottom-nav-item">
+        <i data-lucide="pill"></i>
+        <span>Remédios</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item active">
+        <i data-lucide="user"></i>
+        <span>Perfil</span>
+    </a>
+</nav>
+
+<script src="../js/security.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/interactions.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        const user = appStore.getCurrentUser();
+        
+        document.getElementById('prof-name').innerText = user.name || 'Paciente';
+        document.getElementById('prof-avatar').innerText = (user.name || 'P').charAt(0).toUpperCase();
+        document.getElementById('prof-cpf').innerText = `CPF: ${user.cpf || '***'}`;
+        
+        // Atrela a visão clínica ao paciente alvo
+        const clinicalUser = appStore.getPatientUser();
+
+        let clinicUserForRender = clinicalUser;
+
+        function renderClinicalData() {
+            if (clinicUserForRender.birthDate) {
+                const birth = new Date(clinicUserForRender.birthDate);
+                const today = new Date();
+                let age = today.getFullYear() - birth.getFullYear();
+                if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+                document.getElementById('prof-age').innerHTML = `<strong>Idade:</strong> ${age} anos`;
+            } else {
+                document.getElementById('prof-age').innerHTML = `<strong>Idade:</strong> Não informada`;
+            }
+            
+            if (clinicUserForRender.sex) {
+                const sexMap = {'M': 'Masculino', 'F': 'Feminino', 'O': 'Outro'};
+                document.getElementById('prof-sex').innerHTML = `<strong>Sexo Biológico:</strong> ${sexMap[clinicUserForRender.sex] || clinicUserForRender.sex}`;
+            } else {
+                document.getElementById('prof-sex').innerHTML = `<strong>Sexo Biológico:</strong> Não informado`;
+            }
+
+            if (clinicUserForRender.bloodType) {
+                document.getElementById('prof-blood').innerHTML = `<strong>Tipo Sanguíneo:</strong> ${clinicUserForRender.bloodType}`;
+            } else {
+                document.getElementById('prof-blood').innerHTML = `<strong>Tipo Sanguíneo:</strong> Não informado`;
+            }
+            
+            if (clinicUserForRender.allergies) {
+                document.getElementById('prof-allergies').innerHTML = `<strong>Alergias:</strong> ${clinicUserForRender.allergies}`;
+            } else {
+                document.getElementById('prof-allergies').innerHTML = `<strong>Alergias:</strong> Nenhuma declarada`;
+            }
+            
+            if (clinicUserForRender.conditions && clinicUserForRender.conditions.length > 0) {
+                const arr = Array.isArray(clinicUserForRender.conditions) ? clinicUserForRender.conditions.join(', ') : clinicUserForRender.conditions;
+                document.getElementById('prof-conds').innerHTML = `<strong>Condições Crônicas:</strong> ${arr}`;
+            } else {
+                document.getElementById('prof-conds').innerHTML = `<strong>Condições Crônicas:</strong> Nenhuma`;
+            }
+        }
+        
+        renderClinicalData();
+
+        window.toggleClinicEdit = function(isEditing) {
+            document.getElementById('clinic-view').style.display = isEditing ? 'none' : 'block';
+            document.getElementById('clinic-edit').style.display = isEditing ? 'block' : 'none';
+            
+            if(isEditing) {
+                document.getElementById('edit-birth').value = clinicUserForRender.birthDate || '';
+                document.getElementById('edit-sex').value = clinicUserForRender.sex || '';
+                document.getElementById('edit-blood').value = clinicUserForRender.bloodType || '';
+                document.getElementById('edit-allergies').value = clinicUserForRender.allergies || '';
+                document.getElementById('edit-conds').value = Array.isArray(clinicUserForRender.conditions) ? clinicUserForRender.conditions.join(', ') : (clinicUserForRender.conditions || '');
+            }
+            
+            const content = document.getElementById('clinic-container');
+            if(content) content.style.maxHeight = content.scrollHeight + 'px';
+        };
+
+        window.saveClinicEdit = function() {
+            const birthDate = document.getElementById('edit-birth').value;
+            const sex = document.getElementById('edit-sex').value;
+            const bloodType = document.getElementById('edit-blood').value;
+            const allergies = document.getElementById('edit-allergies').value;
+            let conditions = document.getElementById('edit-conds').value;
+            if(conditions && typeof conditions === 'string') {
+                conditions = conditions.split(',').map(s=>s.trim()).filter(s=>s);
+            } else { conditions = []; }
+            
+            const newData = { birthDate, sex, bloodType, allergies, conditions };
+            if(appStore.updatePatientBasicData(clinicUserForRender.id, newData)) {
+                clinicUserForRender = { ...clinicUserForRender, ...newData };
+                renderClinicalData();
+                window.toggleClinicEdit(false);
+            }
+        };
+
+        function renderCaregivers() {
+            if (user.profile === 'cuidador') {
+                document.getElementById('accordion-cuidadores').style.display = 'none';
+                document.getElementById('clinical-title').innerHTML = `<i data-lucide="clipboard-list" style="color:var(--primary)"></i> Dados do Paciente: ${clinicalUser.name.split(' ')[0]}`;
+                lucide.createIcons();
+                return;
+            }
+
+            const cgs = appStore.getCaregivers();
+            const list = document.getElementById('caregivers-list');
+            if (cgs.length === 0) {
+                list.innerHTML = `<p style="color: var(--text-muted); text-align: center; margin-bottom: 16px; font-size: 0.875rem;">Nenhum cuidador vinculado a esta conta.</p>`;
+            } else {
+                list.innerHTML = cgs.map(c => `
+                    <div class="mb-4 pb-4" style="border-bottom: 1px solid var(--border);">
+                        <div class="flex-between">
+                            <div>
+                                <strong>${c.name}</strong>
+                                <p style="font-size: 0.875rem; color: var(--text-muted);">CPF: ${c.cpf}</p>
+                            </div>
+                            <span class="badge badge-success">Ativo</span>
+                        </div>
+                        <div style="display:flex; gap:8px; margin-top:12px;">
+                            <button class="btn btn-outline" style="padding:6px 12px; font-size:0.75rem;" onclick="window.editCaregiver('${c.cpf}', '${c.name}')"><i data-lucide="edit-2" style="width:14px; height:14px;"></i> Editar</button>
+                            <button class="btn btn-outline" style="padding:6px 12px; font-size:0.75rem; color:var(--danger); border-color:var(--danger);" onclick="window.deleteCaregiver(${c.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Excluir</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        renderCaregivers();
+
+        // Máscara de CPF ao digitar
+        document.getElementById('cg-cpf').addEventListener('input', function(e) {
+            let val = e.target.value.replace(/\\D/g, '');
+            if (val.length > 11) val = val.slice(0, 11);
+            let formatted = val;
+            if (val.length > 9) {
+                formatted = val.replace(/(\\d{3})(\\d{3})(\\d{3})(\\d{2})/, "$1.$2.$3-$4");
+            } else if (val.length > 6) {
+                formatted = val.replace(/(\\d{3})(\\d{3})(\\d{1,3})/, "$1.$2.$3");
+            } else if (val.length > 3) {
+                formatted = val.replace(/(\\d{3})(\\d{1,3})/, "$1.$2");
+            }
+            e.target.value = formatted;
+        });
+
+        window.editCaregiver = function(cpf, name) {
+            document.getElementById('cg-name').value = name;
+            document.getElementById('cg-cpf').value = cpf;
+            document.getElementById('cg-pass').value = '';
+            document.getElementById('form-invite-caregiver').style.display = 'block'; 
+            document.getElementById('btn-show-invite').style.display = 'none';
+        };
+
+        window.deleteCaregiver = function(id) {
+            if(confirm("Deseja realmente excluir este cuidador? O acesso dele será revogado.")) {
+                appStore.deleteCaregiver(id);
+                renderCaregivers();
+                lucide.createIcons();
+            }
+        };
+
+        window.saveCaregiver = function() {
+            const name = document.getElementById('cg-name').value;
+            const cpf = document.getElementById('cg-cpf').value;
+            const pass = document.getElementById('cg-pass').value;
+            
+            const cleanCpf = cpf.replace(/\\D/g, '');
+            if (cleanCpf.length !== 11) {
+                alert("Por favor, insira um CPF válido contendo exatamente 11 dígitos numéricos.");
+                return;
+            }
+
+            if(name && cpf && pass) {
+                const res = appStore.registerCaregiver(name, cpf, pass);
+                if (res) {
+                    alert('Cuidador salvo com sucesso!');
+                    document.getElementById('form-invite-caregiver').style.display = 'none';
+                    document.getElementById('btn-show-invite').style.display = 'flex';
+                    renderCaregivers();
+                    lucide.createIcons();
+                } else {
+                    alert('Este CPF já está cadastrado no sistema.');
+                }
+            } else {
+                alert('Preencha nome, CPF e senha do cuidador.');
+            }
+        };
+    });
+</script>
+</body>
+</html>

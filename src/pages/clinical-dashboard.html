@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Médico - Portal do Paciente Crônico</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/clinical.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="clinical-layout">
+    <!-- Sidebar -->
+    <aside class="clinical-sidebar">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 40px; color: var(--primary);">
+            <i data-lucide="heart-pulse"></i>
+            <h2 style="font-size: 1.25rem;">Portal Clínico</h2>
+        </div>
+        
+        <nav style="flex: 1;">
+            <a href="#" class="nav-link active"><i data-lucide="users"></i> Meus Pacientes</a>
+        </nav>
+        
+        <div style="border-top: 1px solid var(--border); padding-top: 16px;">
+            <p style="font-weight: 600; font-size: 0.875rem;">Dr. Roberto Silva</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">CRM-SP 123456</p>
+            <button class="btn btn-outline mt-4" style="padding: 8px;" onclick="window.location.href='../index.html'">Sair</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="clinical-main animate-fade-in">
+        <header class="clinical-header">
+            <div>
+                <h1 id="doctor-name-display">Gestão de Pacientes</h1>
+                <p style="color: var(--text-muted);">Visão geral de monitoramento remoto</p>
+            </div>
+            <div class="search-bar">
+                <i data-lucide="search" style="color: var(--text-muted);"></i>
+                <input type="text" id="patient-search" placeholder="Buscar por Nome...">
+            </div>
+        </header>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--sp-6);">
+            <!-- Coluna 1: Lista de Pacientes Ativos -->
+            <div>
+                <h3 class="mb-4">Meus Pacientes Ativos</h3>
+                <div id="doctor-patient-list">
+                    <!-- Cards renderizados dinamicamente aqui -->
+                </div>
+            </div>
+
+            <!-- Coluna 2: Detalhamento do Paciente Selecionado -->
+            <div id="patient-detail-area" style="display: none;">
+                
+                <!-- Ficha Clínica Replicada do Profile -->
+                <div class="card" style="margin-bottom: var(--sp-6); background: var(--surface-hover);">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--primary);"><i data-lucide="user" style="width:16px;height:16px;"></i> Ficha Clínica</h3>
+                            <p id="doc-prof-age" style="font-size: 0.875rem;"><strong>Idade:</strong> -</p>
+                            <p id="doc-prof-sex" style="font-size: 0.875rem;" class="mt-2"><strong>Sexo:</strong> -</p>
+                            <p id="doc-prof-blood" style="font-size: 0.875rem;" class="mt-2"><strong>Tipo Sang.:</strong> -</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--danger);"><i data-lucide="alert-circle" style="width:16px;height:16px;"></i> Alertas</h3>
+                            <p id="doc-prof-allergies" style="font-size: 0.875rem;"><strong>Alergias:</strong> -</p>
+                            <p id="doc-prof-conds" style="font-size: 0.875rem;" class="mt-2"><strong>Condições:</strong> -</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: var(--sp-6);">
+                    <div class="flex-between mb-4">
+                        <h2 style="margin:0" id="detail-patient-name">Evolução...</h2>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn btn-outline" style="padding: 8px;" onclick="renderCharts('glycemia')">Glicemia</button>
+                            <button class="btn btn-outline" style="padding: 8px;" onclick="renderCharts('pressure')">Pressão</button>
+                        </div>
+                    </div>
+                    <!-- Chart Area -->
+                    <div id="empty-chart-msg" style="display:none; text-align:center; padding: 40px; color: var(--text-muted);">Paciente não possui registros desse dado.</div>
+                    <div style="width: 100%; height: 260px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius-md);" id="chart-container">
+                        <canvas id="clinicalChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Nova Seção: Quadro de Medicação Atual e Últimos Sintomas -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-bottom: var(--sp-6);">
+                    <div class="card" style="margin-bottom: 0;">
+                        <h3 class="mb-4" style="font-size: 1rem;"><i data-lucide="pill" style="width:16px;height:16px;"></i> Prescrição Atual</h3>
+                        <div id="doc-meds-list" style="font-size: 0.875rem; color: var(--text-muted);">
+                            <!-- Renderizado via JS -->
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom: 0;">
+                        <h3 class="mb-4" style="font-size: 1rem;"><i data-lucide="activity" style="width:16px;height:16px;"></i> Últimos Sintomas</h3>
+                        <div id="doc-symptoms-list" style="font-size: 0.875rem; color: var(--text-muted);">
+                            <!-- Renderizado via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário de Observações e Prescrição -->
+                <div class="card">
+                    <h3 class="mb-4">Prontuário e Conduta</h3>
+                    <div class="form-group">
+                        <label>Observação Clínica / Anamnese Remota</label>
+                        <textarea class="form-control" rows="3" placeholder="Paciente apresenta picos de glicemia..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Ajuste de Prescrição</label>
+                        <textarea class="form-control" rows="2" placeholder="Ex: Alterar Metformina de 850mg para 1000mg."></textarea>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button class="btn btn-primary" style="width: auto;" onclick="alert('Conduta salva e notificação enviada ao app do paciente!')">
+                            <i data-lucide="send"></i> Salvar e Notificar o Paciente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="../js/security.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script>
+    let clinicalChartInstance;
+    let selectedPatientId = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        renderPatientList();
+
+        document.getElementById('patient-search').addEventListener('input', (e) => {
+            renderPatientList(e.target.value);
+        });
+    });
+
+    function renderPatientList(filterQuery = '') {
+        const patients = appStore.getAllPatients();
+        const container = document.getElementById('doctor-patient-list');
+        container.innerHTML = '';
+
+        const filtered = patients.filter(p => p.name.toLowerCase().includes(filterQuery.toLowerCase()));
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="color:var(--text-muted)">Nenhum paciente encontrado.</p>`;
+            return;
+        }
+
+        filtered.forEach(p => {
+            const isSelected = p.id === selectedPatientId;
+            // Valida se ele tem alerta pegando os dados via getPatientData
+            const dbData = appStore.getPatientData(p.id);
+            const hasGlycemiaHigh = dbData.vitals.glycemia.some(v => v.value > 150);
+            
+            const card = document.createElement('div');
+            card.className = `card`;
+            card.style.borderLeft = hasGlycemiaHigh ? `4px solid var(--danger)` : `4px solid var(--success)`;
+            card.style.cursor = `pointer`;
+            if (isSelected) card.style.background = `var(--primary-light)`;
+
+            card.innerHTML = `
+                <div class="flex-between mb-2">
+                    <h4 style="font-size: 1.1rem; margin:0;">${p.name}</h4>
+                    <span class="badge ${hasGlycemiaHigh ? 'badge-danger' : 'badge-success'}">${hasGlycemiaHigh ? 'Alerta!' : 'Estável'}</span>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted)">CPF: ${p.cpf}</p>
+            `;
+            
+            card.addEventListener('click', () => {
+                selectedPatientId = p.id;
+                document.getElementById('detail-patient-name').innerText = `Gráficos de Aferição`;
+                document.getElementById('patient-detail-area').style.display = 'block';
+                renderPatientList(filterQuery); // Re-render for selection style
+                window.renderClinicalDataBlocks(p);
+                window.renderCharts('glycemia'); 
+            });
+
+            container.appendChild(card);
+        });
+    }
+
+    window.renderCharts = function(type) {
+        if (!selectedPatientId) return;
+
+        const vitals = appStore.getPatientData(selectedPatientId).vitals;
+        const ctx = document.getElementById('clinicalChart').getContext('2d');
+        const emptyMsg = document.getElementById('empty-chart-msg');
+        const container = document.getElementById('chart-container');
+        
+        if (clinicalChartInstance) {
+            clinicalChartInstance.destroy();
+        }
+
+        // Handle Empty State
+        if ((type === 'glycemia' && vitals.glycemia.length === 0) || 
+            (type === 'pressure' && vitals.pressure.length === 0)) {
+            emptyMsg.style.display = 'block';
+            container.style.display = 'none';
+            return;
+        }
+
+        emptyMsg.style.display = 'none';
+        container.style.display = 'block';
+
+        const infoColor = '#0EA5E9';
+        
+        if (type === 'glycemia') {
+            config = {
+                type: 'line',
+                data: {
+                    labels: vitals.glycemia.map(v => v.date),
+                    datasets: [{
+                        label: 'Glicemia (mg/dL)',
+                        data: vitals.glycemia.map(v => v.value),
+                        borderColor: primaryColor,
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--primary-light').trim(),
+                        borderWidth: 3,
+                        pointBackgroundColor: primaryColor,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 60, max: 200 } } }
+            };
+        } else {
+            config = {
+                 type: 'line',
+                 data: {
+                     labels: vitals.pressure.map(v => v.date),
+                     datasets: [
+                         { 
+                            label: 'Sistólica (Alta)', 
+                            data: vitals.pressure.map(v => v.sys), 
+                            borderColor: dangerColor,
+                            backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--danger-light').trim(),
+                            borderWidth: 3,
+                            pointBackgroundColor: dangerColor,
+                            fill: false,
+                            tension: 0.3
+                         },
+                         { 
+                            label: 'Diastólica (Baixa)', 
+                            data: vitals.pressure.map(v => v.dia), 
+                            borderColor: infoColor,
+                            backgroundColor: 'transparent',
+                            borderWidth: 3,
+                            pointBackgroundColor: infoColor,
+                            fill: false,
+                            tension: 0.3
+                         }
+                     ]
+                 },
+                 options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { min: 60, max: 180 } } }
+            };
+        }
+
+        clinicalChartInstance = new Chart(ctx, config);
+    };
+
+    window.renderClinicalDataBlocks = function(patientUser) {
+        // Renderiza Ficha Base
+        if (patientUser.birthDate) {
+            const birth = new Date(patientUser.birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
+            document.getElementById('doc-prof-age').innerHTML = `<strong>Idade:</strong> ${age} anos`;
+        } else {
+            document.getElementById('doc-prof-age').innerHTML = `<strong>Idade:</strong> Não inf.`;
+        }
+        
+        const sexMap = {'M': 'Masculino', 'F': 'Feminino', 'O': 'Outro'};
+        document.getElementById('doc-prof-sex').innerHTML = `<strong>Sexo:</strong> ${sexMap[patientUser.sex] || patientUser.sex || 'Não inf.'}`;
+        document.getElementById('doc-prof-blood').innerHTML = `<strong>Tipo Sang.:</strong> ${patientUser.bloodType || 'Não inf.'}`;
+        document.getElementById('doc-prof-allergies').innerHTML = `<strong>Alergias:</strong> ${patientUser.allergies || 'Nenhuma'}`;
+        
+        const arr = Array.isArray(patientUser.conditions) ? patientUser.conditions.join(', ') : (patientUser.conditions || 'Nenhuma');
+        document.getElementById('doc-prof-conds').innerHTML = `<strong>Condições:</strong> ${arr}`;
+
+        const data = appStore.getPatientData(patientUser.id);
+        
+        // Renderiza Lista de Remédios
+        const medBox = document.getElementById('doc-meds-list');
+        if(data.medications && data.medications.length > 0) {
+            medBox.innerHTML = data.medications.map(m => `
+                <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                    <strong style="color:var(--text-main)">${m.name}</strong><br/>
+                    ${m.dose || m.dosage || ''} • ${m.frequency || ''}
+                </div>
+            `).join('');
+        } else {
+            medBox.innerHTML = 'Nenhuma medicação catalogada.';
+        }
+
+        // Renderiza Últimos Sintomas
+        const sympBox = document.getElementById('doc-symptoms-list');
+        if(data.vitals.symptoms && data.vitals.symptoms.length > 0) {
+            const recentes = [...data.vitals.symptoms].sort((a,b) => b.timestamp - a.timestamp).slice(0, 3);
+            sympBox.innerHTML = recentes.map(s => `
+                <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                    <span style="font-size:0.75rem; color:var(--danger)">${s.date} ${s.time || ''}</span><br/>
+                    ${s.description}
+                </div>
+            `).join('');
+        } else {
+            sympBox.innerHTML = 'Nenhum sintoma recente.';
+        }
+    };
+</script>
+</body>
+</html>

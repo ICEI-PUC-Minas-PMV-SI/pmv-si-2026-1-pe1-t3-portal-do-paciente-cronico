@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Histórico - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .search-area {
+            display: flex;
+            gap: 12px;
+            margin-bottom: var(--sp-6);
+        }
+        .search-area input { flex: 1; }
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px; top: 0; bottom: 0;
+            width: 2px;
+            background: var(--primary-light);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--sp-6);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 4px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--surface);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container animate-fade-in">
+    <h2 class="mt-4 mb-4">Meu Histórico</h2>
+
+    <div class="search-area">
+        <input type="text" class="form-control" placeholder="Buscar por exames, consultas...">
+        <button class="btn" style="width: auto; background: var(--surface); border: 1px solid var(--border);">
+            <i data-lucide="filter"></i>
+        </button>
+    </div>
+
+    <button class="btn btn-outline mb-6" id="btn-upload">
+        <i data-lucide="upload"></i> Anexar Exame/Laudo
+    </button>
+
+    <!-- Formulário Oculto (RF-07) -->
+    <div id="form-new-history" style="display:none; background: var(--surface); padding: 16px; border-radius: 12px; margin-top: 16px;">
+        <h4 style="margin-bottom: 12px; color: var(--primary);">Novo Registro Histórico</h4>
+        <div class="form-group">
+            <label>Título (Exame ou Consulta)</label>
+            <input type="text" id="hist-title" class="form-control" placeholder="Ex: Hemograma Completo">
+        </div>
+        <div class="form-group">
+            <label>Nome do Arquivo (Simulação)</label>
+            <input type="text" id="hist-file" class="form-control" placeholder="Ex: resultado_labs.pdf">
+        </div>
+        <div style="display:flex; gap:8px; margin-top: 12px;">
+            <button class="btn btn-primary" id="btn-save-hist" style="flex:1;">Salvar</button>
+            <button class="btn btn-outline" id="btn-cancel-hist" style="flex:1;">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="timeline mt-4" id="timeline-container">
+        <!-- Renderizado via JS -->
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item">
+        <i data-lucide="home"></i>
+        <span>Início</span>
+    </a>
+    <a href="history.html" class="bottom-nav-item active">
+        <i data-lucide="clock"></i>
+        <span>Histórico</span>
+    </a>
+    <a href="medications.html" class="bottom-nav-item">
+        <i data-lucide="pill"></i>
+        <span>Remédios</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item">
+        <i data-lucide="user"></i>
+        <span>Perfil</span>
+    </a>
+</nav>
+
+<script src="../js/security.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+
+        // Lógica RF-07 Formulário
+        const btnUpload = document.getElementById('btn-upload');
+        const formDiv = document.getElementById('form-new-history');
+        const btnCancel = document.getElementById('btn-cancel-hist');
+        const btnSave = document.getElementById('btn-save-hist');
+
+        btnUpload.addEventListener('click', () => {
+            document.getElementById('hist-title').value = '';
+            document.getElementById('hist-file').value = '';
+            formDiv.style.display = 'block';
+            btnUpload.style.display = 'none';
+        });
+
+        btnCancel.addEventListener('click', () => {
+            formDiv.style.display = 'none';
+            btnUpload.style.display = 'flex';
+        });
+
+        btnSave.addEventListener('click', () => {
+            const title = document.getElementById('hist-title').value;
+            const file = document.getElementById('hist-file').value;
+            if (title) {
+                appStore.addHistoryRecord(title, file);
+                formDiv.style.display = 'none';
+                btnUpload.style.display = 'flex';
+                renderTimeline();
+            } else {
+                alert("Preencha ao menos o Título.");
+            }
+        });
+
+        function renderTimeline() {
+            const vitals = appStore.getVitals();
+            const container = document.getElementById('timeline-container');
+            
+            let allRecords = [];
+            
+            // Coleta Pressões
+            if(vitals.pressure) {
+                vitals.pressure.forEach(p => {
+                    allRecords.push({
+                        type: 'pressure',
+                        title: 'Medição de Pressão',
+                        dateStr: `${p.date} às ${p.time || '12:00'}`,
+                        timestamp: p.timestamp || Date.parse(p.date + ' 2024'), 
+                        infoHTML: `<div class="card" style="margin-bottom:0;"><span style="font-size: 1.25rem; font-weight: bold; color: var(--danger);">${p.sys} / ${p.dia} mmHg</span></div>`
+                    });
+                });
+            }
+            
+            // Coleta Glicemias
+            if(vitals.glycemia) {
+                vitals.glycemia.forEach(g => {
+                    allRecords.push({
+                        type: 'glycemia',
+                        title: 'Medição de Glicemia',
+                        dateStr: `${g.date} às ${g.time || '12:00'}`,
+                        timestamp: g.timestamp || Date.parse(g.date + ' 2024'),
+                        infoHTML: `<div class="card" style="margin-bottom:0;"><span style="font-size: 1.25rem; font-weight: bold; color: var(--warning);">${g.value} mg/dL</span></div>`
+                    });
+                });
+            }
+
+            // Coleta Histórico Inserido
+            if(vitals.history) {
+                vitals.history.forEach(h => {
+                    const extra = h.fileLabel ? `<div class="card" style="margin-bottom: 0; display:flex; align-items:center; gap: 12px; background: var(--surface-hover);"><i data-lucide="file-text" style="color: var(--primary);"></i><strong style="font-size: 0.875rem;">${h.fileLabel}</strong></div>` : '';
+                    allRecords.push({
+                        type: 'history',
+                        title: h.title,
+                        dateStr: `${h.date} às ${h.time}`,
+                        timestamp: h.timestamp,
+                        infoHTML: extra
+                    });
+                });
+            }
+
+            // Coleta Sintomas
+            if(vitals.symptoms) {
+                vitals.symptoms.forEach(s => {
+                    allRecords.push({
+                        type: 'symptom',
+                        title: 'Relato de Sintomas',
+                        dateStr: `${s.date} às ${s.time || '12:00'}`,
+                        timestamp: s.timestamp || Date.parse(s.date + ' 2024'),
+                        infoHTML: `<div class="card" style="margin-bottom:0; background: var(--warning-light); border: 1px solid var(--warning);"><p style="font-size: 0.875rem; color: var(--text-main); margin:0;"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:var(--warning); vertical-align:middle; margin-right:4px;"></i> ${s.description}</p></div>`
+                    });
+                });
+            }
+
+            // Ordena por mais recente primeiro
+            allRecords.sort((a,b) => b.timestamp - a.timestamp);
+
+            // Se vazio
+            if(allRecords.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; margin-top:24px;">Nenhum evento registrado no seu histórico.\nAs suas aferições diárias aparecerão aqui.</p>`;
+            } else {
+                container.innerHTML = allRecords.map(r => `
+                    <div class="timeline-item">
+                        <h4 style="margin-bottom: 4px;">${r.title}</h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 8px;">${r.dateStr}</p>
+                        ${r.infoHTML}
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            }
+        }
+
+        renderTimeline();
+    });
+</script>
+</body>
+</html>
