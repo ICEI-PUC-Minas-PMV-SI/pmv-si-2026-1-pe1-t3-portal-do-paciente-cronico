@@ -56,6 +56,11 @@ Perfil   </p>
 
 ![homepage](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083449.png)
 
+<figure> 
+  <figcaption> - Tela home page
+</figure> 
+<hr>
+
 <h3><b>Tela- Histórico</b></h3>
 <p>A tela mostra a seção “Meu Histórico” focada no acompanhamento cronológico de registros médicos e medições.</p>
 <p>No topo há:<br>
@@ -76,6 +81,11 @@ Perfil assim como na tela anterior</p>
 
 ![Histórico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083536.png)
 
+<figure> 
+  <figcaption> - Tela Histórico
+</figure> 
+<hr>
+
 <h3><b>Tela - Remédios</b></h3>
 <p>A tela mostra a seção “Meus Medicamentos” voltada para gerenciamento de remédios e horários.<br>
 No topo há:<br>
@@ -85,12 +95,17 @@ Um botão grande com borda azul escrito:<br>
 “+ Novo Medicamento” usado para adicionar novos remédios.</p>
 <p>Abaixo aparecem cards individuais para cada medicamento cadastrado. Todos seguem um layout semelhante:<br>
 
-nome do remédio em destaque;<br>
-horário inicial;<br>
-frequência de uso em uma etiqueta verde;<br>
-botões de editar e excluir no canto direito.</p>
+Nome do remédio em destaque;<br>
+Horário inicial;<br>
+Frequência de uso em uma etiqueta verde;<br>
+Botões de editar e excluir no canto direito.</p>
 
 ![Remédios](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083600.png)
+
+<figure> 
+  <figcaption> - Tela Remédios
+</figure> 
+<hr>
 
 <h3><b>Tela - Perfil</b></h3>
 <p>Essa tela representa a aba de Perfil do aplicativo, com foco nas informações pessoais e gestão de cuidadores.<br>
@@ -100,8 +115,8 @@ Idade,
  Sexo biológico, 
  Tipo sanguíneo, 
  Alergias, 
- Condições crônicas, <br>
-A segunda seção é “Meus Cuidadores”, também em um card expansível. Ela mostra o nome do cuidador, o CPF e um selo para indicar se ele esta ativo ou inativo.<br>
+ Condições crônicas. <br>
+ A segunda seção é “Meus Cuidadores”, também em um card expansível. Ela mostra o nome do cuidador, o CPF e um selo para indicar se ele esta ativo ou inativo.<br>
 Abaixo existem dois botões se referindo ao cuidador:<br>
 
 Editar (azul)<br>
@@ -119,7 +134,10 @@ Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br
 
 ![Perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
 
-
+<figure> 
+  <figcaption> - Tela Perfil
+</figure> 
+<hr>
 </p>
 
 
