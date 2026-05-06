@@ -37,6 +37,7 @@ As telas do sistema apresentam uma estrutura comum que é apresentada na figura 
 
 <h3><b>Tela – Login</b></h3>
 <p>A tela de Login apresenta campos para a inserção da ocupação do usuario ( paciente, cuidador e médico), do CPF/e-mail, da senha, e a funcionalidade de recuperar a senha caso tenha esquecido.</p>
+
 ![login](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20094527.png)
 
 
@@ -45,12 +46,83 @@ As telas do sistema apresentam uma estrutura comum que é apresentada na figura 
 </figure>
 <hr>
 
+<h3><b>Tela - Home page</b></h3>
+<p>A tela de home page tem funções focadas no controle de medicamentos com visual limpo e moderno, focado em acompanhamento diário. Apresenta algumas funcionalidades disponiveis, como a seção “Próximos Remédios (Hoje)”, contendo medicamentos em cartões separados.<br> Cada item possui um botão circular à direita, para marcar o remédio como tomado.<p> Mais abaixo existe a seção “Evolução Glicêmica”, com um gráfico de linha azul mostrando a variação da glicemia do paciente ao decorrer de alguns dias.</p> <p>No canto inferior direito há um botão flutuante laranja com símbolo de “+”, sugerindo adicionar nova medição ou medicamento.</p><p> Na parte inferior da tela existe uma barra de navegação com 4 abas:</p> <br>
 
-### Exemplo
+Início (selecionada em azul)
+Histórico
+Remédios
+Perfil   </p>
 
-A tela inicial apresenta um menu lateral com as principais seções do portal, enquanto a navigation bar, ao topo, apresenta informações de envio de imagens ou navegação pela galeria de fotos. A área central apresenta a galeria de fotos na forma de uma grade. Nesta tela, são apresentados os seguintes requisitos
+![homepage](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083449.png)
 
-![Exemplo de Wireframe](img/wireframe-example.png)
+<h3><b>Tela- Histórico</b></h3>
+<p>A tela mostra a seção “Meu Histórico” focada no acompanhamento cronológico de registros médicos e medições.</p>
+<p>No topo há:<br>
+o título “Meu Histórico”;
+ uma barra de pesquisa com o texto: 
+ “Buscar por exames, consultas…”;
+e um botão de filtro com ícone de funil ao lado.</p>
+
+<P>Logo abaixo existe um botão grande com borda azul escrito:
+“Anexar Exame/Laudo”
+com um ícone de upload, indicando envio de documentos médicos.</p>
+<p>Na parte inferior há uma barra de navegação com:
+
+Início, 
+Histórico (selecionado em azul), 
+Remédios e 
+Perfil assim como na tela anterior</p>
+
+![Histórico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083536.png)
+
+<h3><b>Tela - Remédios</b></h3>
+<p>A tela mostra a seção “Meus Medicamentos” voltada para gerenciamento de remédios e horários.<br>
+No topo há:<br>
+
+O título “Meus Medicamentos”;<br>
+Um botão grande com borda azul escrito:<br>
+“+ Novo Medicamento” usado para adicionar novos remédios.</p>
+<p>Abaixo aparecem cards individuais para cada medicamento cadastrado. Todos seguem um layout semelhante:<br>
+
+nome do remédio em destaque;<br>
+horário inicial;<br>
+frequência de uso em uma etiqueta verde;<br>
+botões de editar e excluir no canto direito.</p>
+
+![Remédios](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083600.png)
+
+<h3><b>Tela - Perfil</b></h3>
+<p>Essa tela representa a aba de Perfil do aplicativo, com foco nas informações pessoais e gestão de cuidadores.<br>
+No topo aparece o nome de usuário e abaixo o CPF<br>
+Dados Clínicos Básicos; Um card com informações de saúde:<br>
+Idade, 
+ Sexo biológico, 
+ Tipo sanguíneo, 
+ Alergias, 
+ Condições crônicas, <br>
+A segunda seção é “Meus Cuidadores”, também em um card expansível. Ela mostra o nome do cuidador, o CPF e um selo para indicar se ele esta ativo ou inativo.<br>
+Abaixo existem dois botões se referindo ao cuidador:<br>
+
+Editar (azul)<br>
+Excluir (vermelho)<br>
+
+E logo abaixo:<br>
+
+botão “+ Adicionar Cuidador”.<br>
+
+Mais abaixo aparece um botão azul sólido grande:<br>
+“Gerar Relatório Clínico PDF” com ícone de documento, sugerindo exportação do histórico médico.<br>
+
+Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br>
+“Sair da Conta”
+
+![Perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
+
+
+</p>
+
+
 
  
 > **Links Úteis**:
