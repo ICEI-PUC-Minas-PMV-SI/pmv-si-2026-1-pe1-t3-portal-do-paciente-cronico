@@ -26,3 +26,11 @@ yarn-error.log
 
 # Docker
 .docker-cache/
+
+# TestSprite (configs internas e cache)
+.testsprite/
+testsprite_tests/tmp/
+
+# Builds e artefatos do PRD
+PRD.html
+PRD.pdf

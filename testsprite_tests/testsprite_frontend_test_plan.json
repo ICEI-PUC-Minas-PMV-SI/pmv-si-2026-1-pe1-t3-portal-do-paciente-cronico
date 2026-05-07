@@ -1,0 +1,2264 @@
+[
+  {
+    "id": "TC001",
+    "title": "Paciente entra e acessa seu dashboard",
+    "description": "Verifica que um paciente autenticado consegue entrar com seu perfil e chegar ao dashboard protegido correto.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the patient dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Médico entra no painel clínico",
+    "description": "Verifica que um médico autenticado consegue entrar com seu perfil e acessar o painel clínico protegido correto.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the medical profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid medical CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the medical password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the clinical dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Paciente acessa o painel após autenticar",
+    "description": "Verifica que um paciente consegue entrar com sucesso e chegar ao dashboard protegido da sua conta.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the patient dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Médico acessa o painel clínico após autenticar",
+    "description": "Verifica que um médico consegue entrar com sucesso e chegar ao painel clínico protegido da sua conta.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the doctor profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the clinical dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Cuidador entra e acessa o paciente vinculado",
+    "description": "Verifica que um cuidador autenticado entra com seu perfil e é redirecionado para a experiência vinculada ao paciente.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the caregiver profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid caregiver CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the caregiver password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the linked patient dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Usuário vê que o perfil de acesso direciona corretamente",
+    "description": "Verifica que a aplicação direciona cada perfil autenticado para a área correspondente.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Select the required profile"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the profile-specific area"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Sessão encerrada permanece bloqueada ao voltar",
+    "description": "Verifica que após sair da conta o acesso autenticado não retorna com navegação de retorno do navegador.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Log out of the account"
+      },
+      {
+        "type": "action",
+        "description": "Press the browser back action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated area remains blocked"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login screen is still displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Usuário sai da conta e não retorna ao acesso autenticado",
+    "description": "Verifica que ao sair da conta a área autenticada deixa de ficar acessível pelo navegador.",
+    "category": "Logout e bloqueio de retorno",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Log out of the account"
+      },
+      {
+        "type": "action",
+        "description": "Open a protected area of the application"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the access screen is shown instead of the protected content"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Cuidador acessa a experiência vinculada ao paciente",
+    "description": "Verifica que um cuidador consegue entrar com sucesso e acessar a experiência permitida do paciente associado.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the caregiver profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the caregiver-accessible patient experience is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Paciente sai da conta e bloqueia retorno ao acesso autenticado",
+    "description": "Verifica que o logout encerra a sessão do paciente e impede acesso visual ao conteúdo autenticado após sair.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Sign out of the account"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated area is no longer accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Usuário não autenticado é bloqueado das áreas protegidas",
+    "description": "Verifica que uma pessoa sem sessão válida não consegue acessar as telas protegidas da aplicação.",
+    "category": "Sessão e redirecionamento por perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /pages/dashboard.html"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the access screen is displayed instead of the protected page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Paciente faz logout e retorna ao login",
+    "description": "Verifica que sair da conta encerra a sessão e leva o usuário de volta à tela de autenticação.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Log out of the account"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login screen is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Médico alterna gráficos e salva conduta",
+    "description": "Verifica que o médico consegue revisar os gráficos do paciente e salvar uma conduta no prontuário.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the medical profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid medical CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the medical password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active patient"
+      },
+      {
+        "type": "action",
+        "description": "Open the patient clinical record"
+      },
+      {
+        "type": "action",
+        "description": "Switch the displayed chart to the pressure view"
+      },
+      {
+        "type": "action",
+        "description": "Switch the displayed chart to the glucose view"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the clinical conduct notes"
+      },
+      {
+        "type": "action",
+        "description": "Save the clinical note"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved conduct is displayed in the clinical record"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Usuário mantém a sessão ativa ao navegar entre áreas permitidas",
+    "description": "Verifica que a sessão autenticada permite navegar entre páginas protegidas sem perder o acesso.",
+    "category": "Sessão e redirecionamento por perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "action",
+        "description": "Open the medications page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the protected areas remain accessible during the session"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Perfil selecionado bloqueia acesso incompatível",
+    "description": "Verifica que tentar entrar com um CPF de outro perfil mostra um aviso de acesso negado e não autentica o usuário.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the medical profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid CPF from another profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the matching password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an access denied alert is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Médico salva prontuário com conduta",
+    "description": "Verifica que o médico consegue registrar observação e ajuste de conduta e ver o novo lançamento no histórico de condutas.",
+    "category": "Painel do médico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the doctor profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select a patient card"
+      },
+      {
+        "type": "action",
+        "description": "Fill in an observation note"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a prescription adjustment note"
+      },
+      {
+        "type": "action",
+        "description": "Save the clinical record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a new conduct entry appears in the record history"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Médico busca paciente ativo e abre a ficha clínica",
+    "description": "Verifica que o médico consegue localizar um paciente ativo na busca e acessar sua ficha clínica.",
+    "category": "Login multi-perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the medical profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid medical CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the medical password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active patient"
+      },
+      {
+        "type": "action",
+        "description": "Open the patient clinical record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the patient clinical record is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Novo paciente se cadastra com dados clínicos e aceita LGPD",
+    "description": "Verifica que um paciente consegue concluir o cadastro completo com seus dados clínicos e entrar na área correta.",
+    "category": "Cadastro de novo usuário",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a new patient name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a unique patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the birth date field with a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Select the sex field value"
+      },
+      {
+        "type": "action",
+        "description": "Select the blood type field value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the allergies field with a sample value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the chronic conditions field with a sample value"
+      },
+      {
+        "type": "action",
+        "description": "Accept the LGPD terms"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the patient dashboard is displayed after registration"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Paciente registra medições e sintomas no dashboard",
+    "description": "Verifica que um paciente consegue registrar pressão, glicemia e sintomas e ver os novos registros refletidos no acompanhamento.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the quick add panel on the dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Choose to add a pressure record"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid pressure reading"
+      },
+      {
+        "type": "action",
+        "description": "Save the pressure record"
+      },
+      {
+        "type": "action",
+        "description": "Open the quick add panel on the dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Choose to add a glucose record"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid glucose reading"
+      },
+      {
+        "type": "action",
+        "description": "Save the glucose record"
+      },
+      {
+        "type": "action",
+        "description": "Open the quick add panel on the dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Choose to add a symptom record"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a symptom description"
+      },
+      {
+        "type": "action",
+        "description": "Save the symptom record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new clinical records are displayed in the dashboard history or charts"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Paciente registra pressão no dashboard",
+    "description": "Verifica que o paciente consegue registrar uma pressão arterial e ver o registro refletido no dashboard.",
+    "category": "Dashboard do paciente",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the patient dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record panel"
+      },
+      {
+        "type": "action",
+        "description": "Choose to record blood pressure"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid blood pressure value"
+      },
+      {
+        "type": "action",
+        "description": "Save the blood pressure record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new blood pressure record is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the blood pressure chart updates with the new data"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Registrar glicemia e ver atualização no dashboard",
+    "description": "Verifies that a patient can save a new glucose reading and see the glucose chart update with the new entry.",
+    "category": "Registro de glicemia",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the credential field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the glucose tab"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid glucose value"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the glucose chart is updated with a new measurement"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Médico busca um paciente ativo e revisa sua ficha",
+    "description": "Verifica que o médico consegue localizar um paciente ativo e abrir seus dados clínicos, medicações e sintomas recentes.",
+    "category": "Painel do médico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the doctor profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active patient by name"
+      },
+      {
+        "type": "action",
+        "description": "Select the matching patient card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the patient's clinical details, current medications, and latest symptoms are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "Paciente registra glicemia no dashboard",
+    "description": "Verifica que o paciente consegue registrar uma glicemia e ver o registro refletido no dashboard.",
+    "category": "Dashboard do paciente",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the patient dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record panel"
+      },
+      {
+        "type": "action",
+        "description": "Choose to record glucose"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid glucose value"
+      },
+      {
+        "type": "action",
+        "description": "Save the glucose record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new glucose record is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the glucose chart updates with the new data"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC024",
+    "title": "Paciente registra pressão e vê novo dado no gráfico",
+    "description": "Verifica que o paciente consegue criar um registro de pressão e visualizar o novo ponto refletido no dashboard.",
+    "category": "Registro de pressão arterial",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the pressure entry type"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid systolic value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid diastolic value"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the pressure chart is updated with a new point"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC025",
+    "title": "Paciente registra um novo medicamento",
+    "description": "Verifica que o paciente consegue cadastrar um medicamento e vê-lo na lista com os dados salvos.",
+    "category": "CRUD de medicamentos",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the medications page"
+      },
+      {
+        "type": "action",
+        "description": "Open the new medication form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the medication name with a unique name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the dosage field with a valid dosage"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the first dose time field with a valid time"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid frequency"
+      },
+      {
+        "type": "action",
+        "description": "Save the medication"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new medication appears in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved medication details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC026",
+    "title": "Médico salva uma conduta no prontuário",
+    "description": "Verifica que o médico consegue registrar uma observação clínica e vê-la salva no painel do paciente.",
+    "category": "Painel clínico do médico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select a patient from the active patient list"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the clinical note field with a unique observation"
+      },
+      {
+        "type": "action",
+        "description": "Save the clinical note"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a saved clinical note is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the note is associated with the selected patient"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC027",
+    "title": "Marcar remédio como tomado e manter o estado no dia",
+    "description": "Verifies that a patient can mark a listed medication as taken and keep that state after reloading the dashboard on the same day.",
+    "category": "Marcar remédio como tomado",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the credential field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Find a medication scheduled for today"
+      },
+      {
+        "type": "action",
+        "description": "Mark the medication as taken"
+      },
+      {
+        "type": "action",
+        "description": "Reload the page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication remains marked as taken for today"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC028",
+    "title": "Paciente marca medicamento como tomado e vê a confirmação diária",
+    "description": "Verifica que um paciente consegue marcar um medicamento como tomado e que o estado permanece registrado para o dia atual.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Mark an upcoming medication as taken"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication is shown as taken for the current day"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC029",
+    "title": "Paciente marca medicamento como tomado",
+    "description": "Verifica que o paciente consegue marcar uma dose do dia como tomada e manter o estado salvo na experiência atual.",
+    "category": "Registro de pressão arterial",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Mark an upcoming medication dose as taken"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication dose is shown as taken"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC030",
+    "title": "Paciente cria um medicamento, edita e remove o item",
+    "description": "Verifica que um paciente consegue concluir o CRUD de medicamentos na sua lista ativa.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the medications page"
+      },
+      {
+        "type": "action",
+        "description": "Add a new medication with valid details"
+      },
+      {
+        "type": "action",
+        "description": "Edit the newly created medication"
+      },
+      {
+        "type": "action",
+        "description": "Delete the newly created medication"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication no longer appears in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC031",
+    "title": "Paciente registra glicemia e vê novo dado no gráfico",
+    "description": "Verifica que o paciente consegue criar um registro de glicemia e visualizar o novo ponto refletido no dashboard.",
+    "category": "Registro de pressão arterial",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the glucose entry type"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid glucose value"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the glucose chart is updated with a new point"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC032",
+    "title": "Registrar glicemia e manter o valor salvo",
+    "description": "Verifies that a saved glucose entry persists in the patient dashboard after leaving and returning to the view.",
+    "category": "Registro de glicemia",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the credential field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the glucose tab"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid glucose value"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "action",
+        "description": "Reload the page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the glucose measurement remains visible in the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC033",
+    "title": "Paciente edita um medicamento existente",
+    "description": "Verifica que o paciente consegue atualizar um medicamento existente e ver a lista refletir as alterações.",
+    "category": "CRUD de medicamentos",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the medications page"
+      },
+      {
+        "type": "action",
+        "description": "Choose an existing medication to edit"
+      },
+      {
+        "type": "action",
+        "description": "Update the medication name with a unique name"
+      },
+      {
+        "type": "action",
+        "description": "Update the dosage field with a valid dosage"
+      },
+      {
+        "type": "action",
+        "description": "Save the medication changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication list shows the updated record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the previous medication details are no longer shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC034",
+    "title": "Médico visualiza medicamentos e sintomas do paciente",
+    "description": "Verifica que o médico consegue revisar o tratamento atual e os sintomas recentes na ficha clínica.",
+    "category": "Painel clínico do médico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select a patient from the active patient list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current medication list is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify recent symptoms are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC035",
+    "title": "Novo médico se cadastra com CRM e entra no painel clínico",
+    "description": "Verifica que um médico consegue concluir o cadastro específico do perfil e acessar o painel clínico.",
+    "category": "Cadastro de novo usuário",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the medical profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a new medical name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a unique medical CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CRM field with a valid CRM value"
+      },
+      {
+        "type": "action",
+        "description": "Accept the LGPD terms"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the clinical dashboard is displayed after registration"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC036",
+    "title": "Paciente exclui um medicamento",
+    "description": "Verifica que o paciente consegue remover um medicamento e que ele desaparece da lista.",
+    "category": "CRUD de medicamentos",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the medications page"
+      },
+      {
+        "type": "action",
+        "description": "Choose an existing medication to remove"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the medication no longer appears in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC037",
+    "title": "Paciente consulta histórico com busca e filtro",
+    "description": "Verifica que um paciente consegue pesquisar e filtrar itens da linha do tempo do histórico clínico.",
+    "category": "Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "action",
+        "description": "Search for a clinical term present in the history"
+      },
+      {
+        "type": "action",
+        "description": "Filter the history by a record type"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the history timeline is narrowed to the matching records"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC038",
+    "title": "Paciente registra sintomas e vê o histórico atualizado",
+    "description": "Verifica que o paciente consegue registrar sintomas e encontrar o novo evento no histórico.",
+    "category": "Registro de pressão arterial",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the symptom entry type"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a symptom description"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new symptom appears in the history timeline"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC039",
+    "title": "Registrar sintomas com chips e descrição",
+    "description": "Verifies that a patient can save symptom chips with an optional text description and see the symptom entry recorded in history.",
+    "category": "Registro de sintomas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the credential field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the symptoms tab"
+      },
+      {
+        "type": "action",
+        "description": "Select one or more symptom chips"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a symptom description"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "action",
+        "description": "Open the history view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the symptom entry is visible in the timeline"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC040",
+    "title": "Médico alterna entre gráficos do paciente",
+    "description": "Verifica que o médico consegue trocar a visualização entre glicemia e pressão na ficha do paciente selecionado.",
+    "category": "Painel do médico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the doctor profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select a patient card"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the glucose chart view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the pressure chart view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected chart view is displayed for the chosen metric"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC041",
+    "title": "Paciente vê os próximos medicamentos no dashboard",
+    "description": "Verifica que o dashboard do paciente exibe corretamente a lista de medicações próximas.",
+    "category": "Dashboard do paciente",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the patient dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upcoming medications are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC042",
+    "title": "Registrar sintomas apenas com descrição",
+    "description": "Verifies that a patient can save a symptom entry without selecting chips and still see it recorded in history.",
+    "category": "Registro de sintomas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the credential field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new record action"
+      },
+      {
+        "type": "action",
+        "description": "Select the symptoms tab"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a symptom description"
+      },
+      {
+        "type": "action",
+        "description": "Save the record"
+      },
+      {
+        "type": "action",
+        "description": "Open the history view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the symptom entry is visible in the timeline"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC043",
+    "title": "Paciente consulta o histórico com busca em tempo real",
+    "description": "Verifica que o paciente pode filtrar a linha do tempo do histórico digitando um termo de busca e vendo os resultados se ajustarem imediatamente.",
+    "category": "Linha do tempo do histórico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "action",
+        "description": "Type a search term into the history search field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the timeline is filtered to matching history entries"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify non-matching entries are not shown"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC044",
+    "title": "Paciente cadastra conta nova com dados clínicos e cuidador",
+    "description": "Verifica que o cadastro por perfil permite criar uma conta de paciente com dados clínicos e vincular um cuidador.",
+    "category": "Cadastro de novo usuário por perfil",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the required registration fields with valid values"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the clinical data fields with valid values"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the caregiver linkage fields with valid values"
+      },
+      {
+        "type": "action",
+        "description": "Accept the LGPD consent"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new patient account is created"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the caregiver linkage is shown in the profile"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC045",
+    "title": "Paciente edita seus dados clínicos básicos",
+    "description": "Verifica que o paciente consegue atualizar dados clínicos básicos no perfil e ver as mudanças refletidas na tela.",
+    "category": "Editar dados clínicos",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Expand the basic clinical data section"
+      },
+      {
+        "type": "action",
+        "description": "Open the clinical data edit mode"
+      },
+      {
+        "type": "action",
+        "description": "Update the available clinical fields with valid values"
+      },
+      {
+        "type": "action",
+        "description": "Save the clinical data changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the profile shows the updated clinical data"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC046",
+    "title": "Cadastro rejeita CPF já usado",
+    "description": "Verifica que o cadastro informa duplicidade quando o usuário tenta reutilizar um CPF já existente.",
+    "category": "Cadastro de novo usuário",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a new patient name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a CPF already used by another account"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Accept the LGPD terms"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a duplicate CPF validation message is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC047",
+    "title": "Paciente filtra o histórico por pressão",
+    "description": "Verifica que o filtro de pressão mostra apenas entradas relacionadas à pressão arterial.",
+    "category": "Linha do tempo do histórico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "action",
+        "description": "Select the pressure filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only pressure-related history entries are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC048",
+    "title": "Paciente salva dados clínicos, vincula cuidador e gera relatório",
+    "description": "Verifica que um paciente consegue atualizar dados clínicos, gerir cuidadores e abrir a versão imprimível do relatório.",
+    "category": "Gestão de cuidadores",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the login identifier field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Expand the clinical data section"
+      },
+      {
+        "type": "action",
+        "description": "Update an editable clinical field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Expand the caregivers section"
+      },
+      {
+        "type": "action",
+        "description": "Add a caregiver with valid name, CPF, and password"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile changes"
+      },
+      {
+        "type": "action",
+        "description": "Open the printable report page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated clinical information and linked caregiver are reflected in the profile or report"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the printable report is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC049",
+    "title": "Paciente edita dados clínicos do perfil",
+    "description": "Verifica que o paciente consegue atualizar seus dados clínicos e ver as alterações refletidas no perfil.",
+    "category": "Cadastro de novo usuário",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Select the patient profile"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the CPF field with a valid patient CPF"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with the patient password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the profile page"
+      },
+      {
+        "type": "action",
+        "description": "Expand the clinical data section"
+      },
+      {
+        "type": "action",
+        "description": "Update a clinical field with a new valid value"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated clinical data is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC050",
+    "title": "Paciente adiciona um exame ao histórico",
+    "description": "Verifica que o paciente consegue registrar um exame no histórico e vê-lo aparecer na linha do tempo.",
+    "category": "Linha do tempo do histórico",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the history page"
+      },
+      {
+        "type": "action",
+        "description": "Open the exam entry form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a unique exam title"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a simulated file name for the exam"
+      },
+      {
+        "type": "action",
+        "description": "Save the exam entry"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new exam appears in the history timeline"
+      }
+    ],
+    "priority": "Medium"
+  }
+]

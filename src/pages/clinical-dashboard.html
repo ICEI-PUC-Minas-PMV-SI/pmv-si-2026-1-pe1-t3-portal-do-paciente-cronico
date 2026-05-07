@@ -136,6 +136,7 @@
 <script src="../js/security.js"></script>
 <script src="../js/store.js"></script>
 <script src="../js/main.js"></script>
+<script src="../js/toast.js"></script>
 <script>
     let clinicalChartInstance;
     let selectedPatientId = null;
@@ -160,20 +161,20 @@
         // Salvar prontuário/conduta
         document.getElementById('btn-save-observation').addEventListener('click', () => {
             if (!selectedPatientId) {
-                alert('Selecione um paciente antes de salvar a conduta.');
+                showToast('Selecione um paciente antes de salvar a conduta.', 'error');
                 return;
             }
             const text = document.getElementById('obs-text').value.trim();
             const prescription = document.getElementById('obs-prescription').value.trim();
             if (!text && !prescription) {
-                alert('Preencha ao menos a observação ou o ajuste de prescrição.');
+                showToast('Preencha ao menos a observação ou o ajuste de prescrição.', 'error');
                 return;
             }
             appStore.saveObservation(selectedPatientId, text, prescription);
             document.getElementById('obs-text').value = '';
             document.getElementById('obs-prescription').value = '';
             renderObservations(selectedPatientId);
-            alert('Conduta salva e notificação enviada ao app do paciente!');
+            showToast('Conduta salva! Notificação enviada ao paciente.', 'success');
         });
 
         renderPatientList();

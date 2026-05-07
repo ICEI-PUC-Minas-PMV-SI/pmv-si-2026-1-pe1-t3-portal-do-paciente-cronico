@@ -118,6 +118,7 @@
 <script src="../js/store.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/modal.js"></script>
+<script src="../js/toast.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
@@ -287,24 +288,24 @@
                 const sys = document.getElementById('val-sys').value;
                 const dia = document.getElementById('val-dia').value;
                 if (!sys || !dia) {
-                    alert("Preencha sistólica e diastólica.");
+                    showToast("Preencha sistólica e diastólica.", 'error');
                     return;
                 }
                 appStore.addPressure(sys, dia);
                 renderPressureChart();
                 document.getElementById('val-sys').value = '';
                 document.getElementById('val-dia').value = '';
-                alert("Pressão salva com sucesso!");
+                showToast("Pressão salva com sucesso!", 'success');
             } else if (currentTab === 'tab-glicemia') {
                 const val = document.getElementById('val-glicose').value;
                 if (!val) {
-                    alert("Informe o valor da glicemia.");
+                    showToast("Informe o valor da glicemia.", 'error');
                     return;
                 }
                 appStore.addGlycemia(val);
                 renderGlycemiaChart();
                 document.getElementById('val-glicose').value = '';
-                alert("Glicemia salva com sucesso!");
+                showToast("Glicemia salva com sucesso!", 'success');
             } else {
                 const chips = Array.from(document.querySelectorAll('#sintomas-chips .chip.selected')).map(c => c.innerText);
                 const desc = document.getElementById('val-sintoma-desc').value;
@@ -314,13 +315,13 @@
                 if (desc) finalDesc.push(desc);
 
                 if (finalDesc.length === 0) {
-                    alert("Por favor, selecione um sintoma ou descreva em texto livre.");
+                    showToast("Selecione um sintoma ou descreva em texto livre.", 'error');
                     return;
                 }
                 appStore.addSymptom(finalDesc.join(' - '));
                 document.getElementById('val-sintoma-desc').value = '';
                 document.querySelectorAll('#sintomas-chips .chip.selected').forEach(c => c.classList.remove('selected'));
-                alert("Sintomas salvos com sucesso!");
+                showToast("Sintomas salvos com sucesso!", 'success');
             }
 
             // Fecha modal
