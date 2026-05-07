@@ -304,9 +304,12 @@ class Store {
     }
     
     getVitals() {
-        const data = this.getPatientData(this.getActivePatientId()).vitals;
-        if (!data.history) data.history = []; // Backward compatibility handler
-        if (!data.symptoms) data.symptoms = []; // Backward compatibility handler
+        const data = this.getPatientData(this.getActivePatientId()).vitals || {};
+        // Garante que todos os arrays existem (defesa contra dados antigos / parciais)
+        if (!data.pressure) data.pressure = [];
+        if (!data.glycemia) data.glycemia = [];
+        if (!data.history) data.history = [];
+        if (!data.symptoms) data.symptoms = [];
         return data;
     }
 

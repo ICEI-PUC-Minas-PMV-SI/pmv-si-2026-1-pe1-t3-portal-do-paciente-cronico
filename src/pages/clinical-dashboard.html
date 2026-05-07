@@ -202,12 +202,36 @@
         `).join('');
     }
 
+    function selectPatient(p, filterQuery) {
+        selectedPatientId = p.id;
+        document.getElementById('detail-patient-name').innerText = `Evolução de ${p.name.split(' ')[0]}`;
+        document.getElementById('patient-detail-area').style.display = 'block';
+        renderPatientList(filterQuery || ''); // Re-render para destaque de selecionado
+        window.renderClinicalDataBlocks(p);
+        window.renderCharts(lastChartType || 'glycemia');
+        renderObservations(p.id);
+    }
+
+    function clearPatientDetail() {
+        selectedPatientId = null;
+        document.getElementById('patient-detail-area').style.display = 'none';
+        if (clinicalChartInstance) {
+            clinicalChartInstance.destroy();
+            clinicalChartInstance = null;
+        }
+    }
+
     function renderPatientList(filterQuery = '') {
         const patients = appStore.getAllPatients();
         const container = document.getElementById('doctor-patient-list');
         container.innerHTML = '';
 
         const filtered = patients.filter(p => p.name.toLowerCase().includes(filterQuery.toLowerCase()));
+
+        // Se a busca ocultou o paciente atualmente selecionado, limpa o painel de detalhe
+        if (selectedPatientId && !filtered.some(p => p.id === selectedPatientId)) {
+            clearPatientDetail();
+        }
 
         if (filtered.length === 0) {
             container.innerHTML = `<p style="color:var(--text-muted)">Nenhum paciente encontrado.</p>`;
@@ -216,10 +240,10 @@
 
         filtered.forEach(p => {
             const isSelected = p.id === selectedPatientId;
-            // Valida se ele tem alerta pegando os dados via getPatientData
             const dbData = appStore.getPatientData(p.id);
-            const hasGlycemiaHigh = dbData.vitals.glycemia.some(v => v.value > 150);
-            
+            const glyc = (dbData.vitals && dbData.vitals.glycemia) || [];
+            const hasGlycemiaHigh = glyc.some(v => v.value > 150);
+
             const card = document.createElement('div');
             card.className = `card`;
             card.style.borderLeft = hasGlycemiaHigh ? `4px solid var(--danger)` : `4px solid var(--success)`;
@@ -233,20 +257,27 @@
                 </div>
                 <p style="font-size: 0.875rem; color: var(--text-muted)">CPF: ${p.cpf}</p>
             `;
-            
-            card.addEventListener('click', () => {
-                selectedPatientId = p.id;
-                document.getElementById('detail-patient-name').innerText = `Evolução de ${p.name.split(' ')[0]}`;
-                document.getElementById('patient-detail-area').style.display = 'block';
-                renderPatientList(filterQuery); // Re-render for selection style
-                window.renderClinicalDataBlocks(p);
-                window.renderCharts('glycemia');
-                renderObservations(p.id);
-            });
+
+            card.addEventListener('click', () => selectPatient(p, filterQuery));
 
             container.appendChild(card);
         });
     }
+
+    // Auto-seleção: pressionar Enter na busca abre o primeiro paciente da lista filtrada
+    document.addEventListener('DOMContentLoaded', () => {
+        const search = document.getElementById('patient-search');
+        if (search) {
+            search.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const q = search.value.toLowerCase();
+                    const first = appStore.getAllPatients().find(p => p.name.toLowerCase().includes(q));
+                    if (first) selectPatient(first, search.value);
+                }
+            });
+        }
+    });
 
     window.renderCharts = function(type) {
         if (!selectedPatientId) return;
