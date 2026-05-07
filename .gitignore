@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code (config local de cada máquina)
+.claude/settings.local.json
+
+# Logs e dependências (caso futuramente alguém adicione)
+node_modules/
+npm-debug.log
+yarn-error.log
+*.log
+
+# Variáveis de ambiente
+.env
+.env.local
+
+# Configuração de MCP local (contém chaves de API)
+.mcp.json
+
+# Docker
+.docker-cache/

@@ -56,9 +56,12 @@
     </table>
 
     <script src="../js/store.js"></script>
+    <script src="../js/security.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tempUser = appStore.getCurrentUser();
+            if (!tempUser) return; // security.js já redirecionou
+
             // Puxa do id ativo se o requerente for cuidador
             const targetId = appStore.getActivePatientId ? appStore.getActivePatientId() : tempUser.id;
             

@@ -1,19 +1,25 @@
 // js/security.js
 // RNF-07: Segurança de Acesso - Timeout de Inatividade
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Evita rodar na página de login e cadastro (onde não há sessão autenticada)
-    const isAuthPage = window.location.pathname.includes('index.html') || window.location.pathname.includes('register.html');
+// Checagem síncrona (executa no parse, antes do DOMContentLoaded) para impedir que
+// scripts da página tentem renderizar dados protegidos sem sessão.
+(function () {
+    const path = window.location.pathname;
+    const isAuthPage = path.endsWith('/') || path.endsWith('/index.html') || path.endsWith('/register.html');
     if (isAuthPage) return;
-
-    // Se tentar acessar uma página restrita sem usuário, chuta pra fora localmente
-    if (typeof appStore !== 'undefined') {
-        const currentUser = JSON.parse(localStorage.getItem('ppc_currentUser'));
-        if (!currentUser) {
-            window.location.href = '../index.html';
-            return;
-        }
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem('ppc_currentUser')); } catch (e) { session = null; }
+    if (!session || typeof session.id === 'undefined' || !session.profile) {
+        // Limpa qualquer resíduo inválido antes de redirecionar
+        localStorage.removeItem('ppc_currentUser');
+        window.location.replace('../index.html');
     }
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    const isAuthPage = path.endsWith('/') || path.endsWith('/index.html') || path.endsWith('/register.html');
+    if (isAuthPage) return;
 
     let timeoutId;
     const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos em milissegundos

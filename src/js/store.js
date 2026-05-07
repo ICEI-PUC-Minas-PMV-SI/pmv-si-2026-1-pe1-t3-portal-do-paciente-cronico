@@ -19,8 +19,8 @@ class Store {
         
         // Se o CPF teste já existir (de um teste antigo), garantimos que a senha seja '123' para a demonstração não falhar
         defaultUsers.forEach(defUser => {
-            const cleanDefCpf = String(defUser.cpf).replace(/\\D/g, '');
-            const existingIndex = users.findIndex(u => String(u.cpf).replace(/\\D/g, '') === cleanDefCpf);
+            const cleanDefCpf = String(defUser.cpf).replace(/\D/g, '');
+            const existingIndex = users.findIndex(u => String(u.cpf).replace(/\D/g, '') === cleanDefCpf);
             
             if (existingIndex === -1) {
                 users.push(defUser);
@@ -39,7 +39,7 @@ class Store {
         // Sincronizar o usuário logado atualmente (evita que a tela use o ID antigo após recarregar)
         let currentUser = JSON.parse(localStorage.getItem('ppc_currentUser'));
         if (currentUser && currentUser.cpf) {
-            let updatedUser = users.find(u => String(u.cpf).replace(/\\D/g, '') === String(currentUser.cpf).replace(/\\D/g, ''));
+            let updatedUser = users.find(u => String(u.cpf).replace(/\D/g, '') === String(currentUser.cpf).replace(/\D/g, ''));
             if (updatedUser) {
                 localStorage.setItem('ppc_currentUser', JSON.stringify(updatedUser));
             }
@@ -93,28 +93,37 @@ class Store {
     // --- Autenticação e Perfis ---
 
     registerUser(name, cpf, profile, additionalData = {}) {
-        const users = JSON.parse(localStorage.getItem('ppc_users'));
-        const newUser = { 
-            id: Date.now(), 
-            name, 
-            cpf, 
+        const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
+        const cleanCpf = String(cpf || '').replace(/\D/g, '');
+
+        if (cleanCpf.length !== 11) {
+            return { error: 'CPF_INVALID', message: 'CPF inválido. Deve conter 11 dígitos.' };
+        }
+        const dup = users.find(u => String(u.cpf || '').replace(/\D/g, '') === cleanCpf);
+        if (dup) {
+            return { error: 'CPF_DUPLICATE', message: 'Já existe uma conta com este CPF. Faça login ou recupere a senha.' };
+        }
+
+        const newUser = {
+            id: Date.now(),
+            name: String(name || '').trim(),
+            cpf: String(cpf || '').trim(),
             profile,
             birthDate: additionalData.birthDate || '',
             sex: additionalData.sex || '',
             bloodType: additionalData.bloodType || '',
             allergies: additionalData.allergies || '',
             crm: additionalData.crm || '',
-            password: additionalData.password || '',
+            password: String(additionalData.password || '').trim(),
             conditions: additionalData.conditions || []
         };
         users.push(newUser);
         localStorage.setItem('ppc_users', JSON.stringify(users));
-        
-        // Cria estrutura abstrata de dados 
+
         const data = JSON.parse(localStorage.getItem('ppc_data')) || {};
-        data[newUser.id] = { medications: [], vitals: { pressure: [], glycemia: [], history: [] } };
+        data[newUser.id] = { medications: [], vitals: { pressure: [], glycemia: [], history: [], symptoms: [] } };
         localStorage.setItem('ppc_data', JSON.stringify(data));
-        
+
         this.loginUser(newUser);
         return newUser;
     }
@@ -134,15 +143,48 @@ class Store {
     }
 
     loginUser(user) {
+        // Defesa: só cria sessão se o usuário realmente existir no banco mock
+        if (!user || typeof user.id === 'undefined') return false;
+        const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
+        const exists = users.some(u => u.id === user.id && u.profile === user.profile);
+        if (!exists) return false;
         localStorage.setItem('ppc_currentUser', JSON.stringify(user));
+        return true;
+    }
+
+    logout() {
+        localStorage.removeItem('ppc_currentUser');
+    }
+
+    saveObservation(patientId, text, prescription) {
+        const data = JSON.parse(localStorage.getItem('ppc_data')) || {};
+        if (!data[patientId]) {
+            data[patientId] = { medications: [], vitals: { pressure: [], glycemia: [], history: [], symptoms: [] } };
+        }
+        if (!data[patientId].observations) data[patientId].observations = [];
+        data[patientId].observations.push({
+            timestamp: Date.now(),
+            date: new Date().toLocaleDateString('pt-BR'),
+            time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            text: String(text || '').trim(),
+            prescription: String(prescription || '').trim()
+        });
+        localStorage.setItem('ppc_data', JSON.stringify(data));
+        return true;
+    }
+
+    getObservations(patientId) {
+        const data = JSON.parse(localStorage.getItem('ppc_data')) || {};
+        return (data[patientId] && data[patientId].observations) || [];
     }
 
     getCurrentUser() {
-        return JSON.parse(localStorage.getItem('ppc_currentUser')) || { id: 1, name: 'João Aparecido', profile: 'paciente' };
+        return JSON.parse(localStorage.getItem('ppc_currentUser'));
     }
 
     getActivePatientId() {
         const user = this.getCurrentUser();
+        if (!user) return null;
         if (user.profile === 'cuidador' && user.linkedPatientId) {
             return user.linkedPatientId;
         }
@@ -151,6 +193,7 @@ class Store {
 
     getPatientUser() {
         const targetId = this.getActivePatientId();
+        if (!targetId) return null;
         const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
         return users.find(u => u.id === targetId) || this.getCurrentUser();
     }

@@ -123,67 +123,77 @@
         lucide.createIcons();
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'short'});
 
-        // Preenche com o nome logado
         const currentUser = appStore.getCurrentUser();
+        if (!currentUser) return; // security.js já redirecionou
         document.getElementById('user-greeting').innerText = `Olá, ${currentUser.name.split(' ')[0]}`;
         document.getElementById('user-avatar-icon').innerText = currentUser.name.charAt(0).toUpperCase();
 
-        // Render Home Meds
-        const meds = appStore.getMedications().slice(0, 3); // top 3
-        const medList = document.getElementById('home-med-list');
-        if(meds.length > 0) {
-            medList.innerHTML = meds.map(m => `
-                <div class="med-card">
-                    <div>
-                        <h4 style="margin:0;">${m.name}</h4>
-                        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top:2px;">
-                            <strong style="color:var(--primary);"><i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px;"></i> ${m.firstDose || 'Avisar'}</strong> • ${m.dose || m.dosage || 'Dose padrão'}
-                        </p>
-                    </div>
-                    <button class="btn" style="width: auto; padding: 12px; background: var(--surface-hover);" onclick="toggleMedication(this)"><i data-lucide="circle"></i></button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-            
-            // Função para alternar checado
-            window.toggleMedication = function(btn) {
-                if (btn.innerHTML.includes('check-circle')) {
-                    btn.innerHTML = '<i data-lucide="circle"></i>';
-                } else {
-                    btn.innerHTML = '<i data-lucide="check-circle" style="color:var(--success);"></i>';
-                }
-                lucide.createIcons();
-            }
-        } else {
-            medList.innerHTML = `<p style="padding:16px; text-align:center; color:var(--text-muted); font-size:0.875rem">Nenhum remédio cadastrado para hoje. Adicione em 'Remédios'.</p>`;
+        // Estado em memória dos checks de remédio (apenas durante a sessão diária)
+        const todayKey = 'ppc_meds_taken_' + new Date().toISOString().slice(0, 10);
+        const taken = new Set(JSON.parse(localStorage.getItem(todayKey) || '[]'));
+
+        function persistTaken() {
+            localStorage.setItem(todayKey, JSON.stringify(Array.from(taken)));
         }
 
-        // Initialize Chart
-        const ctx = document.getElementById('glycemiaChart').getContext('2d');
-        let chartInstance;
-        
-        function renderChart() {
-            const vitals = appStore.getVitals();
-            if(vitals.glycemia.length === 0) {
-                // Se estiver vazio para um paciente novo, previne erro no gráfico.
-                if(chartInstance) chartInstance.destroy();
-                return;
+        function renderHomeMeds() {
+            const meds = appStore.getMedications().slice(0, 3);
+            const medList = document.getElementById('home-med-list');
+            if (meds.length > 0) {
+                medList.innerHTML = meds.map(m => `
+                    <div class="med-card">
+                        <div>
+                            <h4 style="margin:0;">${m.name}</h4>
+                            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top:2px;">
+                                <strong style="color:var(--primary);"><i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px;"></i> ${m.firstDose || 'Avisar'}</strong> • ${m.dose || m.dosage || 'Dose padrão'}
+                            </p>
+                        </div>
+                        <button class="btn" data-med-id="${m.id}" style="width: auto; padding: 12px; background: var(--surface-hover);">
+                            <i data-lucide="${taken.has(m.id) ? 'check-circle' : 'circle'}" ${taken.has(m.id) ? 'style="color:var(--success);"' : ''}></i>
+                        </button>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+                medList.querySelectorAll('button[data-med-id]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = Number(btn.getAttribute('data-med-id'));
+                        if (taken.has(id)) {
+                            taken.delete(id);
+                            btn.innerHTML = '<i data-lucide="circle"></i>';
+                        } else {
+                            taken.add(id);
+                            btn.innerHTML = '<i data-lucide="check-circle" style="color:var(--success);"></i>';
+                        }
+                        persistTaken();
+                        lucide.createIcons();
+                    });
+                });
+            } else {
+                medList.innerHTML = `<p style="padding:16px; text-align:center; color:var(--text-muted); font-size:0.875rem">Nenhum remédio cadastrado para hoje. Adicione em 'Remédios'.</p>`;
             }
-            const labels = vitals.glycemia.map(v => v.date);
-            const data = vitals.glycemia.map(v => v.value);
-            
-            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-            const primaryLight = getComputedStyle(document.documentElement).getPropertyValue('--primary-light').trim();
+        }
+        renderHomeMeds();
 
-            if (chartInstance) chartInstance.destroy();
-            
-            chartInstance = new Chart(ctx, {
+        // Glycemia Chart
+        const ctx = document.getElementById('glycemiaChart').getContext('2d');
+        let glycemiaChartInstance;
+
+        function renderGlycemiaChart() {
+            const vitals = appStore.getVitals();
+            if (glycemiaChartInstance) glycemiaChartInstance.destroy();
+            if (!vitals.glycemia || vitals.glycemia.length === 0) return;
+
+            const cs = getComputedStyle(document.documentElement);
+            const primaryColor = cs.getPropertyValue('--primary').trim() || '#2563EB';
+            const primaryLight = cs.getPropertyValue('--primary-light').trim() || '#DBEAFE';
+
+            glycemiaChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: vitals.glycemia.map(v => v.date),
                     datasets: [{
                         label: 'Glicemia (mg/dL)',
-                        data: data,
+                        data: vitals.glycemia.map(v => v.value),
                         borderColor: primaryColor,
                         backgroundColor: primaryLight,
                         borderWidth: 3,
@@ -203,32 +213,30 @@
                 }
             });
         }
-        renderChart();
+        renderGlycemiaChart();
 
-        // Initialize Pressure Chart
+        // Pressure Chart (now stores instance to avoid stacking)
+        const ctxP = document.getElementById('pressureChart').getContext('2d');
+        let pressureChartInstance;
+
         function renderPressureChart() {
-            const canvasP = document.getElementById('pressureChart');
-            if(!canvasP) return;
-            const ctxP = canvasP.getContext('2d');
             const vitals = appStore.getVitals();
-            if(vitals.pressure.length === 0) return;
-            
-            const labels = vitals.pressure.map(v => v.date);
-            const dataSys = vitals.pressure.map(v => v.sys);
-            const dataDia = vitals.pressure.map(v => v.dia);
-            
-            const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim();
-            const dangerLight = getComputedStyle(document.documentElement).getPropertyValue('--danger-light').trim();
-            const infoColor = '#0EA5E9'; // fixed hex for consistency
+            if (pressureChartInstance) pressureChartInstance.destroy();
+            if (!vitals.pressure || vitals.pressure.length === 0) return;
 
-            new Chart(ctxP, {
+            const cs = getComputedStyle(document.documentElement);
+            const dangerColor = cs.getPropertyValue('--danger').trim() || '#DC2626';
+            const dangerLight = cs.getPropertyValue('--danger-light').trim() || '#FEE2E2';
+            const infoColor = '#0EA5E9';
+
+            pressureChartInstance = new Chart(ctxP, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: vitals.pressure.map(v => v.date),
                     datasets: [
                         {
                             label: 'Sistólica (Alta)',
-                            data: dataSys,
+                            data: vitals.pressure.map(v => v.sys),
                             borderColor: dangerColor,
                             backgroundColor: dangerLight,
                             borderWidth: 3,
@@ -238,7 +246,7 @@
                         },
                         {
                             label: 'Diastólica (Baixa)',
-                            data: dataDia,
+                            data: vitals.pressure.map(v => v.dia),
                             borderColor: infoColor,
                             backgroundColor: 'transparent',
                             borderWidth: 3,
@@ -278,37 +286,44 @@
             if (currentTab === 'tab-pressao') {
                 const sys = document.getElementById('val-sys').value;
                 const dia = document.getElementById('val-dia').value;
-                if(sys && dia) {
-                    appStore.addPressure(sys, dia);
-                    alert("Pressão salva com sucesso!");
+                if (!sys || !dia) {
+                    alert("Preencha sistólica e diastólica.");
+                    return;
                 }
+                appStore.addPressure(sys, dia);
+                renderPressureChart();
+                document.getElementById('val-sys').value = '';
+                document.getElementById('val-dia').value = '';
+                alert("Pressão salva com sucesso!");
             } else if (currentTab === 'tab-glicemia') {
                 const val = document.getElementById('val-glicose').value;
-                if(val) {
-                    appStore.addGlycemia(val);
-                    renderChart(); // Dinamicamente atualiza Chart.js!
-                    document.getElementById('val-glicose').value = '';
+                if (!val) {
+                    alert("Informe o valor da glicemia.");
+                    return;
                 }
+                appStore.addGlycemia(val);
+                renderGlycemiaChart();
+                document.getElementById('val-glicose').value = '';
+                alert("Glicemia salva com sucesso!");
             } else {
                 const chips = Array.from(document.querySelectorAll('#sintomas-chips .chip.selected')).map(c => c.innerText);
-                let desc = document.getElementById('val-sintoma-desc').value;
-                
+                const desc = document.getElementById('val-sintoma-desc').value;
+
                 let finalDesc = [];
                 if (chips.length > 0) finalDesc.push(chips.join(', '));
                 if (desc) finalDesc.push(desc);
-                
-                if (finalDesc.length > 0) {
-                    appStore.addSymptom(finalDesc.join(' - '));
-                    document.getElementById('val-sintoma-desc').value = '';
-                    document.querySelectorAll('#sintomas-chips .chip.selected').forEach(c => c.classList.remove('selected'));
-                    alert("Sintomas salvos com sucesso!");
-                } else {
+
+                if (finalDesc.length === 0) {
                     alert("Por favor, selecione um sintoma ou descreva em texto livre.");
-                    return; // Previne que o modal feche para tentar de novo
+                    return;
                 }
+                appStore.addSymptom(finalDesc.join(' - '));
+                document.getElementById('val-sintoma-desc').value = '';
+                document.querySelectorAll('#sintomas-chips .chip.selected').forEach(c => c.classList.remove('selected'));
+                alert("Sintomas salvos com sucesso!");
             }
-            
-            // Força o close do modal
+
+            // Fecha modal
             document.getElementById('modal-overlay').classList.remove('active');
             document.getElementById('quick-action-sheet').classList.remove('active');
             document.body.style.overflow = '';

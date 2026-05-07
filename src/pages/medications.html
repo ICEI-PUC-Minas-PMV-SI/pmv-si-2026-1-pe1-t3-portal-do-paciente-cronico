@@ -144,9 +144,9 @@
             const meds = appStore.getMedications();
             const med = meds.find(m => m.id === id);
             if(med) {
-                document.getElementById('med-name').value = med.name;
-                document.getElementById('med-dose').value = med.dose;
-                document.getElementById('med-freq').value = med.frequency;
+                document.getElementById('med-name').value = med.name || '';
+                document.getElementById('med-dose').value = med.dose || med.dosage || '';
+                document.getElementById('med-freq').value = med.frequency || '';
                 document.getElementById('med-first-dose').value = med.firstDose || '';
                 document.querySelector('#form-new-med h4').innerText = 'Editar Medicamento';
                 editingMedId = id;
@@ -175,12 +175,13 @@
             meds.forEach(med => {
                 const card = document.createElement('div');
                 card.className = `card med-item ${med.warning ? 'warning' : ''}`;
+                const doseLabel = med.dose || med.dosage || 'Dose padrão';
                 card.innerHTML = `
                     <div class="flex-between">
                         <div>
                             <h3 style="margin-bottom: 4px;">${med.name}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.875rem;">${med.dose} • Início: ${med.firstDose || '--:--'}</p>
-                            <span class="badge ${med.warning ? '' : 'badge-success'} mt-2" style="display:inline-block; background: ${med.warning ? 'var(--bg-color)' : ''}; color: ${med.warning ? 'var(--text-main)' : ''}">${med.frequency}</span>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">${doseLabel} • Início: ${med.firstDose || '--:--'}</p>
+                            <span class="badge ${med.warning ? '' : 'badge-success'} mt-2" style="display:inline-block; background: ${med.warning ? 'var(--bg-color)' : ''}; color: ${med.warning ? 'var(--text-main)' : ''}">${med.frequency || ''}</span>
                         </div>
                         <div class="actions">
                             <button class="btn-icon" onclick="editMed(${med.id})"><i data-lucide="edit-2" style="width:18px;height:18px"></i></button>

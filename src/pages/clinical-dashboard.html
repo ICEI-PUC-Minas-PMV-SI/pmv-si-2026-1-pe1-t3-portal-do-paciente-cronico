@@ -22,13 +22,13 @@
         </div>
         
         <nav style="flex: 1;">
-            <a href="#" class="nav-link active"><i data-lucide="users"></i> Meus Pacientes</a>
+            <a href="javascript:void(0)" class="nav-link active"><i data-lucide="users"></i> Meus Pacientes</a>
         </nav>
         
         <div style="border-top: 1px solid var(--border); padding-top: 16px;">
-            <p style="font-weight: 600; font-size: 0.875rem;">Dr. Roberto Silva</p>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">CRM-SP 123456</p>
-            <button class="btn btn-outline mt-4" style="padding: 8px;" onclick="window.location.href='../index.html'">Sair</button>
+            <p style="font-weight: 600; font-size: 0.875rem;" id="sidebar-doc-name">Carregando...</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);" id="sidebar-doc-crm">CRM</p>
+            <button class="btn btn-outline mt-4" style="padding: 8px;" id="btn-logout-doc">Sair</button>
         </div>
     </aside>
 
@@ -110,16 +110,21 @@
                     <h3 class="mb-4">Prontuário e Conduta</h3>
                     <div class="form-group">
                         <label>Observação Clínica / Anamnese Remota</label>
-                        <textarea class="form-control" rows="3" placeholder="Paciente apresenta picos de glicemia..."></textarea>
+                        <textarea id="obs-text" class="form-control" rows="3" placeholder="Paciente apresenta picos de glicemia..."></textarea>
                     </div>
                     <div class="form-group">
                         <label>Ajuste de Prescrição</label>
-                        <textarea class="form-control" rows="2" placeholder="Ex: Alterar Metformina de 850mg para 1000mg."></textarea>
+                        <textarea id="obs-prescription" class="form-control" rows="2" placeholder="Ex: Alterar Metformina de 850mg para 1000mg."></textarea>
                     </div>
                     <div style="display: flex; justify-content: flex-end;">
-                        <button class="btn btn-primary" style="width: auto;" onclick="alert('Conduta salva e notificação enviada ao app do paciente!')">
+                        <button class="btn btn-primary" style="width: auto;" id="btn-save-observation">
                             <i data-lucide="send"></i> Salvar e Notificar o Paciente
                         </button>
+                    </div>
+
+                    <div id="obs-history" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+                        <h4 style="font-size: 0.95rem; margin-bottom: 8px;">Histórico de Condutas</h4>
+                        <div id="obs-history-list" style="font-size: 0.875rem; color: var(--text-muted);">Sem registros anteriores.</div>
                     </div>
                 </div>
             </div>
@@ -134,15 +139,67 @@
 <script>
     let clinicalChartInstance;
     let selectedPatientId = null;
+    let lastChartType = 'glycemia';
 
     document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
+
+        // Mostra o médico real logado na sidebar
+        const docUser = appStore.getCurrentUser();
+        if (docUser) {
+            document.getElementById('sidebar-doc-name').innerText = docUser.name || 'Médico';
+            document.getElementById('sidebar-doc-crm').innerText = docUser.crm ? `CRM ${docUser.crm}` : 'CRM não informado';
+        }
+
+        // Logout que limpa sessão
+        document.getElementById('btn-logout-doc').addEventListener('click', () => {
+            appStore.logout();
+            window.location.href = '../index.html';
+        });
+
+        // Salvar prontuário/conduta
+        document.getElementById('btn-save-observation').addEventListener('click', () => {
+            if (!selectedPatientId) {
+                alert('Selecione um paciente antes de salvar a conduta.');
+                return;
+            }
+            const text = document.getElementById('obs-text').value.trim();
+            const prescription = document.getElementById('obs-prescription').value.trim();
+            if (!text && !prescription) {
+                alert('Preencha ao menos a observação ou o ajuste de prescrição.');
+                return;
+            }
+            appStore.saveObservation(selectedPatientId, text, prescription);
+            document.getElementById('obs-text').value = '';
+            document.getElementById('obs-prescription').value = '';
+            renderObservations(selectedPatientId);
+            alert('Conduta salva e notificação enviada ao app do paciente!');
+        });
+
         renderPatientList();
 
         document.getElementById('patient-search').addEventListener('input', (e) => {
             renderPatientList(e.target.value);
         });
     });
+
+    function renderObservations(patientId) {
+        const list = appStore.getObservations(patientId);
+        const box = document.getElementById('obs-history-list');
+        if (!box) return;
+        if (!list || list.length === 0) {
+            box.innerHTML = 'Sem registros anteriores.';
+            return;
+        }
+        const ordered = [...list].sort((a, b) => b.timestamp - a.timestamp);
+        box.innerHTML = ordered.map(o => `
+            <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                <span style="font-size: 0.75rem; color: var(--primary);">${o.date} ${o.time}</span>
+                ${o.text ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Obs:</strong> ${o.text}</p>` : ''}
+                ${o.prescription ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Conduta:</strong> ${o.prescription}</p>` : ''}
+            </div>
+        `).join('');
+    }
 
     function renderPatientList(filterQuery = '') {
         const patients = appStore.getAllPatients();
@@ -178,11 +235,12 @@
             
             card.addEventListener('click', () => {
                 selectedPatientId = p.id;
-                document.getElementById('detail-patient-name').innerText = `Gráficos de Aferição`;
+                document.getElementById('detail-patient-name').innerText = `Evolução de ${p.name.split(' ')[0]}`;
                 document.getElementById('patient-detail-area').style.display = 'block';
                 renderPatientList(filterQuery); // Re-render for selection style
                 window.renderClinicalDataBlocks(p);
-                window.renderCharts('glycemia'); 
+                window.renderCharts('glycemia');
+                renderObservations(p.id);
             });
 
             container.appendChild(card);
@@ -191,19 +249,19 @@
 
     window.renderCharts = function(type) {
         if (!selectedPatientId) return;
+        lastChartType = type;
 
         const vitals = appStore.getPatientData(selectedPatientId).vitals;
         const ctx = document.getElementById('clinicalChart').getContext('2d');
         const emptyMsg = document.getElementById('empty-chart-msg');
         const container = document.getElementById('chart-container');
-        
+
         if (clinicalChartInstance) {
             clinicalChartInstance.destroy();
         }
 
-        // Handle Empty State
-        if ((type === 'glycemia' && vitals.glycemia.length === 0) || 
-            (type === 'pressure' && vitals.pressure.length === 0)) {
+        if ((type === 'glycemia' && (!vitals.glycemia || vitals.glycemia.length === 0)) ||
+            (type === 'pressure' && (!vitals.pressure || vitals.pressure.length === 0))) {
             emptyMsg.style.display = 'block';
             container.style.display = 'none';
             return;
@@ -212,8 +270,14 @@
         emptyMsg.style.display = 'none';
         container.style.display = 'block';
 
+        const cs = getComputedStyle(document.documentElement);
+        const primaryColor = cs.getPropertyValue('--primary').trim() || '#2563EB';
+        const primaryLight = cs.getPropertyValue('--primary-light').trim() || '#DBEAFE';
+        const dangerColor = cs.getPropertyValue('--danger').trim() || '#DC2626';
+        const dangerLight = cs.getPropertyValue('--danger-light').trim() || '#FEE2E2';
         const infoColor = '#0EA5E9';
-        
+
+        let config;
         if (type === 'glycemia') {
             config = {
                 type: 'line',
@@ -223,7 +287,7 @@
                         label: 'Glicemia (mg/dL)',
                         data: vitals.glycemia.map(v => v.value),
                         borderColor: primaryColor,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--primary-light').trim(),
+                        backgroundColor: primaryLight,
                         borderWidth: 3,
                         pointBackgroundColor: primaryColor,
                         pointRadius: 4,
@@ -235,33 +299,33 @@
             };
         } else {
             config = {
-                 type: 'line',
-                 data: {
-                     labels: vitals.pressure.map(v => v.date),
-                     datasets: [
-                         { 
-                            label: 'Sistólica (Alta)', 
-                            data: vitals.pressure.map(v => v.sys), 
+                type: 'line',
+                data: {
+                    labels: vitals.pressure.map(v => v.date),
+                    datasets: [
+                        {
+                            label: 'Sistólica (Alta)',
+                            data: vitals.pressure.map(v => v.sys),
                             borderColor: dangerColor,
-                            backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--danger-light').trim(),
+                            backgroundColor: dangerLight,
                             borderWidth: 3,
                             pointBackgroundColor: dangerColor,
                             fill: false,
                             tension: 0.3
-                         },
-                         { 
-                            label: 'Diastólica (Baixa)', 
-                            data: vitals.pressure.map(v => v.dia), 
+                        },
+                        {
+                            label: 'Diastólica (Baixa)',
+                            data: vitals.pressure.map(v => v.dia),
                             borderColor: infoColor,
                             backgroundColor: 'transparent',
                             borderWidth: 3,
                             pointBackgroundColor: infoColor,
                             fill: false,
                             tension: 0.3
-                         }
-                     ]
-                 },
-                 options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { min: 60, max: 180 } } }
+                        }
+                    ]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { min: 60, max: 180 } } }
             };
         }
 

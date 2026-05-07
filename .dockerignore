@@ -1,0 +1,16 @@
+.git
+.gitignore
+.DS_Store
+**/.DS_Store
+.claude
+.vscode
+.idea
+node_modules
+*.log
+README.md
+docs
+help
+presentation
+CITATION.cff
+docker-compose.yml
+.dockerignore

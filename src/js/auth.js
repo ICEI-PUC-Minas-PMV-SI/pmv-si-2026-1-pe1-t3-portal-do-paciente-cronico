@@ -20,24 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
             btnLogin.style.opacity = '0.7';
             
             setTimeout(() => {
-                let user;
-                if (profileSelected === 'medico') {
-                    // Se for Médico, mockamos fixo
-                    user = { id: 999, name: 'Dr. Roberto', profile: 'medico' };
-                    appStore.loginUser(user);
+                // Autenticação real para todos os perfis (sem bypass de médico)
+                const user = appStore.loginUserByCpf(cpf, password);
+                if (!user || user.profile !== profileSelected) {
+                    alert("Cadastro não encontrado, senha incorreta ou perfil selecionado errado (você selecionou '" + profileSelected + "').");
+                    btnLogin.innerHTML = 'Entrar <i data-lucide="arrow-right"></i>';
+                    btnLogin.style.opacity = '1';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                    return;
+                }
+
+                if (user.profile === 'medico') {
                     window.location.href = './pages/clinical-dashboard.html';
                 } else {
-                    // Cadastra ou recupera
-                    user = appStore.loginUserByCpf(cpf, password);
-                    if (!user || user.profile !== profileSelected) {
-                        alert("Cadastro não encontrado, senha incorreta ou perfil selecionado errado (você selecionou '" + profileSelected + "').");
-                        btnLogin.innerHTML = 'Entrar <i data-lucide="arrow-right"></i>';
-                        btnLogin.style.opacity = '1';
-                        if (typeof lucide !== 'undefined') lucide.createIcons();
-                        return;
-                    }
-                    
-                    appStore.loginUser(user);
                     window.location.href = './pages/dashboard.html';
                 }
             }, 600);
@@ -88,15 +83,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert("A senha é muito fraca. Digite pelo menos 4 caracteres.");
                     return;
                 }
+                if (String(cpf).replace(/\D/g, '').length !== 11) {
+                    alert("CPF inválido. Deve conter 11 dígitos numéricos.");
+                    return;
+                }
                 if (!lgpd) {
                     alert("Para utilizar a plataforma, é obrigatório aceitar os termos da LGPD.");
                     return;
                 }
                 btnTextElement.innerText = 'Criando Conta...';
-                
-                // Registra de fato no banco falso com os dados extras e a senha
-                appStore.registerUser(name, cpf, profile, { birthDate, sex, conditions, bloodType, allergies, password, crm });
-                
+
+                const result = appStore.registerUser(name, cpf, profile, { birthDate, sex, conditions, bloodType, allergies, password, crm });
+
+                if (result && result.error) {
+                    alert(result.message || 'Não foi possível concluir o cadastro.');
+                    btnTextElement.innerText = 'Cadastrar';
+                    return;
+                }
+
                 setTimeout(() => {
                     if (profile === 'medico') {
                         window.location.href = './pages/clinical-dashboard.html';
@@ -116,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const cpf = prompt("Por favor, digite o seu CPF para recuperação:");
         if (cpf) {
             const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
-            let userIndex = users.findIndex(u => u.cpf === cpf);
+            const cleanInput = String(cpf).replace(/\D/g, '');
+            let userIndex = users.findIndex(u => String(u.cpf || '').replace(/\D/g, '') === cleanInput);
             
             if (userIndex > -1) {
                 const userName = users[userIndex].name.split(' ')[0];

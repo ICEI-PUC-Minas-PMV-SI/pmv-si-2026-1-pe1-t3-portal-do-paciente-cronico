@@ -50,10 +50,17 @@
     <h2 class="mt-4 mb-4">Meu Histórico</h2>
 
     <div class="search-area">
-        <input type="text" class="form-control" placeholder="Buscar por exames, consultas...">
-        <button class="btn" style="width: auto; background: var(--surface); border: 1px solid var(--border);">
+        <input type="text" id="hist-search" class="form-control" placeholder="Buscar por exames, consultas, sintomas...">
+        <button class="btn" id="hist-filter-btn" style="width: auto; background: var(--surface); border: 1px solid var(--border);" title="Filtrar por tipo">
             <i data-lucide="filter"></i>
         </button>
+    </div>
+    <div id="hist-filter-bar" style="display:none; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <button class="btn btn-outline hist-filter-chip active" data-filter="all" style="width:auto; padding:6px 12px; font-size:0.75rem;">Todos</button>
+        <button class="btn btn-outline hist-filter-chip" data-filter="pressure" style="width:auto; padding:6px 12px; font-size:0.75rem;">Pressão</button>
+        <button class="btn btn-outline hist-filter-chip" data-filter="glycemia" style="width:auto; padding:6px 12px; font-size:0.75rem;">Glicemia</button>
+        <button class="btn btn-outline hist-filter-chip" data-filter="symptom" style="width:auto; padding:6px 12px; font-size:0.75rem;">Sintomas</button>
+        <button class="btn btn-outline hist-filter-chip" data-filter="history" style="width:auto; padding:6px 12px; font-size:0.75rem;">Exames/Laudos</button>
     </div>
 
     <button class="btn btn-outline mb-6" id="btn-upload">
@@ -139,6 +146,27 @@
             }
         });
 
+        let activeFilter = 'all';
+        let activeQuery = '';
+
+        // Toggle filtro / busca
+        document.getElementById('hist-filter-btn').addEventListener('click', () => {
+            const bar = document.getElementById('hist-filter-bar');
+            bar.style.display = (bar.style.display === 'flex') ? 'none' : 'flex';
+        });
+        document.querySelectorAll('.hist-filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.hist-filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                activeFilter = chip.getAttribute('data-filter');
+                renderTimeline();
+            });
+        });
+        document.getElementById('hist-search').addEventListener('input', (e) => {
+            activeQuery = e.target.value.trim().toLowerCase();
+            renderTimeline();
+        });
+
         function renderTimeline() {
             const vitals = appStore.getVitals();
             const container = document.getElementById('timeline-container');
@@ -198,12 +226,26 @@
                 });
             }
 
+            // Aplica filtro por tipo
+            if (activeFilter && activeFilter !== 'all') {
+                allRecords = allRecords.filter(r => r.type === activeFilter);
+            }
+            // Aplica busca textual
+            if (activeQuery) {
+                allRecords = allRecords.filter(r => {
+                    const blob = (r.title + ' ' + r.dateStr + ' ' + r.infoHTML).toLowerCase();
+                    return blob.includes(activeQuery);
+                });
+            }
+
             // Ordena por mais recente primeiro
             allRecords.sort((a,b) => b.timestamp - a.timestamp);
 
-            // Se vazio
             if(allRecords.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; margin-top:24px;">Nenhum evento registrado no seu histórico.\nAs suas aferições diárias aparecerão aqui.</p>`;
+                const empty = (activeQuery || activeFilter !== 'all')
+                    ? 'Nenhum registro encontrado para o filtro/busca atual.'
+                    : 'Nenhum evento registrado no seu histórico.\nAs suas aferições diárias aparecerão aqui.';
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; margin-top:24px; white-space:pre-line;">${empty}</p>`;
             } else {
                 container.innerHTML = allRecords.map(r => `
                     <div class="timeline-item">
