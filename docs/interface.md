@@ -14,8 +14,8 @@ As telas do sistema apresentam uma estrutura comum que é apresentada na figura.
 <h3><b>Tela – Paciente/Cuidador</b></h3> 
 <ul>
   <li>Cabeçalho - apresenta o nome presente no cadastro do usuário, além da data;</li>
-  <li>Conteúdo - apresenta o progresso do paciente em relação as atividades propostas, nesse caso a meditação, proposta pelos profissionais da saúde designados para o monitoramento do paciente, além disso possui a lista do uso de medicamentos, indicando o nome, o horário e a dose, além de uma checklist, e no final se pode observar uma análise da evolução glicêmica e pressão arterial;</li>
-  <li>Rodapé - redirecionamento para outras divisões presentes no aplicativo, essas nas quais informam ou possuem funções específicas como exibir um relatório geral do paciente.</li>
+  <li>Conteúdo - apresenta o progresso do paciente em relação as atividades propostas, nesse caso a meditação, proposta pelos profissionais da saúde designados para o monitoramento do paciente, exibir um relatório geral do paciente, mudar suas informações de cadastro, além disso possui a lista do uso de medicamentos, indicando o nome, o horário e a dose, além de uma checklist, e no final se pode observar uma análise da evolução glicêmica e pressão arterial;</li>
+  <li>Rodapé - redirecionamento para outras divisões presentes no aplicativo, essas nas quais informam ou possuem funções específicas.</li>
 </ul>
 [Template (2).pdf](https://github.com/user-attachments/files/27489591/Template.2.pdf) 
 <h3><b>Tela – Médico</b></h3> 
