@@ -10,18 +10,14 @@ Nesse documento, apresentamos a interface principal do nosso aplicativo, explica
 
 ## Protótipo de baixa fidelidade
 
-As telas do sistema apresentam uma estrutura comum que é apresentada na figura 2. Nesta estrutura existem 3 grandes blocos, descritos a seguir. São eles:
+As telas do sistema apresentam uma estrutura comum que é apresentada na figura. Nesta estrutura existem 3 grandes blocos, descritos a seguir. São eles:
 <ul>
-  <li>Cabeçalho - local onde estão dispostos o nome da aplicação web e navegação principal do site (menu da aplicação);</li>
-  <li>Conteúdo - apresenta o conteúdo da tela em questão;</li>
-  <li>Rodapé - apresenta informações sobre os direitos autorais.</li>
+  <li>Cabeçalho - apresenta o nome presente no cadastro do usuário, além da data;</li>
+  <li>Conteúdo - apresenta o progresso do paciente em relação as atividades propostas, nesse caso a meditação, proposta pelos profissionais da saúde designados para o monitoramento do paciente, além disso possui a lista do uso de medicamentos, indicando o nome, o horário e a dose, além de uma checklist, e no final se pode observar uma análise da evolução glicêmica e pressão arterial;</li>
+  <li>Rodapé - redirecionamentos para outras divisões presentes no aplicativo.</li>
 </ul>
+[Template (2).pdf](https://github.com/user-attachments/files/27489591/Template.2.pdf)
 
-<figure> 
-  <img src="https://user-images.githubusercontent.com/100447878/164074128-7b006e50-8621-4964-b0fd-07a90e626673.png"
-    <figcaption>Figura 2 - Estrutura padrão do site
-</figure> 
-<hr>
 
 <h3><b>Tela – Cadastro</b></h3>
 <p>A tela de cadastro apresenta os seguintes campos para a inserção das informações pessoais do usuário paciente: Nome Completo, CPF, Senha, data de nascimento, sexo do paciente, qual a doença crônica, tipo sanguineo, alergias, opção para aceitar os termos de uso e botão de cadastro.</p> <p>Também tem a o cadastro para o Cuidador, que assim como o paciente apresenta CPF e senha.</p> <p>E para finalizar a area de cadastro, temos o cadastro do médico, que requer nome completo, CPF, CRM, e senha.</p>
