@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Médico - Portal do Paciente Crônico</title>
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/clinical.css">
+    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
+    <link rel="stylesheet" href="../css/global.css?v=1778181033">
+    <link rel="stylesheet" href="../css/components.css?v=1778181033">
+    <link rel="stylesheet" href="../css/clinical.css?v=1778181033">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=1778181033"></script>
 </head>
 <body>
 
@@ -133,10 +133,10 @@
     </main>
 </div>
 
-<script src="../js/security.js"></script>
-<script src="../js/store.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/toast.js"></script>
+<script src="../js/security.js?v=1778181033"></script>
+<script src="../js/store.js?v=1778181033"></script>
+<script src="../js/main.js?v=1778181033"></script>
+<script src="../js/toast.js?v=1778181033"></script>
 <script>
     let clinicalChartInstance;
     let selectedPatientId = null;
@@ -154,8 +154,12 @@
 
         // Logout que limpa sessão
         document.getElementById('btn-logout-doc').addEventListener('click', () => {
-            appStore.logout();
-            window.location.href = '../index.html';
+            showConfirm('Encerrar a sessão?', { okLabel: 'Sair', danger: true })
+                .then(ok => {
+                    if (!ok) return;
+                    appStore.logout();
+                    window.location.href = '../index.html';
+                });
         });
 
         // Salvar prontuário/conduta
@@ -195,15 +199,16 @@
         const ordered = [...list].sort((a, b) => b.timestamp - a.timestamp);
         box.innerHTML = ordered.map(o => `
             <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
-                <span style="font-size: 0.75rem; color: var(--primary);">${o.date} ${o.time}</span>
-                ${o.text ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Obs:</strong> ${o.text}</p>` : ''}
-                ${o.prescription ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Conduta:</strong> ${o.prescription}</p>` : ''}
+                <span style="font-size: 0.75rem; color: var(--primary);">${escapeHtml(o.date)} ${escapeHtml(o.time)}</span>
+                ${o.text ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Obs:</strong> ${escapeHtml(o.text)}</p>` : ''}
+                ${o.prescription ? `<p style="margin: 4px 0; color: var(--text-main);"><strong>Conduta:</strong> ${escapeHtml(o.prescription)}</p>` : ''}
             </div>
         `).join('');
     }
 
     function selectPatient(p, filterQuery) {
         selectedPatientId = p.id;
+        // innerText já é seguro (browser não interpreta HTML)
         document.getElementById('detail-patient-name').innerText = `Evolução de ${p.name.split(' ')[0]}`;
         document.getElementById('patient-detail-area').style.display = 'block';
         renderPatientList(filterQuery || ''); // Re-render para destaque de selecionado
@@ -252,10 +257,10 @@
 
             card.innerHTML = `
                 <div class="flex-between mb-2">
-                    <h4 style="font-size: 1.1rem; margin:0;">${p.name}</h4>
+                    <h4 style="font-size: 1.1rem; margin:0;">${escapeHtml(p.name)}</h4>
                     <span class="badge ${hasGlycemiaHigh ? 'badge-danger' : 'badge-success'}">${hasGlycemiaHigh ? 'Alerta!' : 'Estável'}</span>
                 </div>
-                <p style="font-size: 0.875rem; color: var(--text-muted)">CPF: ${p.cpf}</p>
+                <p style="font-size: 0.875rem; color: var(--text-muted)">CPF: ${escapeHtml(p.cpf)}</p>
             `;
 
             card.addEventListener('click', () => selectPatient(p, filterQuery));
@@ -391,8 +396,8 @@
         if(data.medications && data.medications.length > 0) {
             medBox.innerHTML = data.medications.map(m => `
                 <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
-                    <strong style="color:var(--text-main)">${m.name}</strong><br/>
-                    ${m.dose || m.dosage || ''} • ${m.frequency || ''}
+                    <strong style="color:var(--text-main)">${escapeHtml(m.name)}</strong><br/>
+                    ${escapeHtml(m.dose || m.dosage || '')} • ${escapeHtml(m.frequency || '')}
                 </div>
             `).join('');
         } else {
@@ -405,8 +410,8 @@
             const recentes = [...data.vitals.symptoms].sort((a,b) => b.timestamp - a.timestamp).slice(0, 3);
             sympBox.innerHTML = recentes.map(s => `
                 <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
-                    <span style="font-size:0.75rem; color:var(--danger)">${s.date} ${s.time || ''}</span><br/>
-                    ${s.description}
+                    <span style="font-size:0.75rem; color:var(--danger)">${escapeHtml(s.date)} ${escapeHtml(s.time || '')}</span><br/>
+                    ${escapeHtml(s.description)}
                 </div>
             `).join('');
         } else {

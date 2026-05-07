@@ -9,8 +9,8 @@ services:
       - "8080:80"
     restart: unless-stopped
     # Hot-reload em dev: monta o src/ como volume (descomente para desenvolver)
-    # volumes:
-    #   - ./src:/usr/share/nginx/html:ro
+    volumes:
+      - ./src:/usr/share/nginx/html:ro
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
       interval: 30s

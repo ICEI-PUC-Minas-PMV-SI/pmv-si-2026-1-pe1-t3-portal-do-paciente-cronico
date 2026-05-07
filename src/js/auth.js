@@ -2,7 +2,9 @@
 // Lógica de Autenticação Reestruturada
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
+    const notify = (msg, type) => (typeof showToast === 'function' ? showToast(msg, type) : alert(msg));
+
     // ----------- Lógica Index (Login) -----------
     const btnLogin = document.getElementById('btn-login');
     if (btnLogin) {
@@ -10,20 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const profileSelected = document.getElementById('login-profile').value;
             const cpf = document.getElementById('cpf').value.trim();
             const password = document.getElementById('password') ? document.getElementById('password').value.trim() : '';
-            
+
             if (!cpf || !password) {
-                alert("Por favor, preencha seu CPF e senha.");
+                notify("Por favor, preencha seu CPF e senha.", 'error');
                 return;
             }
 
             btnLogin.innerHTML = 'Entrando...';
             btnLogin.style.opacity = '0.7';
-            
+
             setTimeout(() => {
-                // Autenticação real para todos os perfis (sem bypass de médico)
                 const user = appStore.loginUserByCpf(cpf, password);
                 if (!user || user.profile !== profileSelected) {
-                    alert("Cadastro não encontrado, senha incorreta ou perfil selecionado errado (você selecionou '" + profileSelected + "').");
+                    notify("Cadastro não encontrado, senha incorreta ou perfil errado.", 'error');
                     btnLogin.innerHTML = 'Entrar <i data-lucide="arrow-right"></i>';
                     btnLogin.style.opacity = '1';
                     if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ----------- Lógica Register (Cadastro) -----------
     const btnRegister = document.getElementById('btn-register');
-    
+
     if (btnRegister) {
         btnRegister.addEventListener('click', () => {
             const selectedRadio = document.querySelector('input[name="reg-profile"]:checked');
@@ -52,12 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (profile === 'cuidador') {
                 if (!cpf || !password) {
-                    alert("Por favor, preencha o CPF e a senha que o paciente cadastrou para você.");
+                    notify("Preencha o CPF e a senha cadastrados pelo paciente.", 'error');
                     return;
                 }
                 const user = appStore.loginUserByCpf(cpf, password);
                 if (!user || user.profile !== 'cuidador') {
-                    alert("Acesso negado. CPF não registrado como cuidador ou senha inválida.");
+                    notify("Acesso negado. CPF não registrado como cuidador ou senha inválida.", 'error');
                     return;
                 }
                 btnTextElement.innerText = 'Autenticando...';
@@ -68,8 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const name = document.getElementById('reg-name').value;
             const crm = document.getElementById('reg-crm') ? document.getElementById('reg-crm').value : '';
-            
-            // Novos campos
+
             const birthDate = document.getElementById('reg-birth') ? document.getElementById('reg-birth').value : '';
             const sex = document.getElementById('reg-sex') ? document.getElementById('reg-sex').value : '';
             const bloodType = document.getElementById('reg-blood') ? document.getElementById('reg-blood').value : '';
@@ -80,15 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (selectedRadio && name && cpf && password) {
                 if (password.length < 4) {
-                    alert("A senha é muito fraca. Digite pelo menos 4 caracteres.");
+                    notify("Senha muito fraca. Use ao menos 4 caracteres.", 'error');
                     return;
                 }
                 if (String(cpf).replace(/\D/g, '').length !== 11) {
-                    alert("CPF inválido. Deve conter 11 dígitos numéricos.");
+                    notify("CPF inválido. Deve conter 11 dígitos.", 'error');
                     return;
                 }
                 if (!lgpd) {
-                    alert("Para utilizar a plataforma, é obrigatório aceitar os termos da LGPD.");
+                    notify("É obrigatório aceitar os termos da LGPD.", 'error');
                     return;
                 }
                 btnTextElement.innerText = 'Criando Conta...';
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = appStore.registerUser(name, cpf, profile, { birthDate, sex, conditions, bloodType, allergies, password, crm });
 
                 if (result && result.error) {
-                    alert(result.message || 'Não foi possível concluir o cadastro.');
+                    notify(result.message || 'Não foi possível concluir o cadastro.', 'error');
                     btnTextElement.innerText = 'Cadastrar';
                     return;
                 }
@@ -109,34 +109,46 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }, 800);
             } else {
-                alert("Preencha todos os campos do cadastro, incluindo a senha.");
+                notify("Preencha todos os campos do cadastro, incluindo a senha.", 'error');
             }
         });
     }
 
-    // ----------- Lógica de Recuperação de Senha (MVP) -----------
+    // ----------- Recuperação de Senha (MVP) -----------
+    // NOTE: em produção, este fluxo deve usar e-mail/SMS verificado.
+    // Como o app é offline (localStorage), aceitamos a redefinição mediante
+    // confirmação do CPF + data de nascimento cadastrados.
     window.recoverPassword = function(event) {
         event.preventDefault();
-        const cpf = prompt("Por favor, digite o seu CPF para recuperação:");
-        if (cpf) {
-            const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
-            const cleanInput = String(cpf).replace(/\D/g, '');
-            let userIndex = users.findIndex(u => String(u.cpf || '').replace(/\D/g, '') === cleanInput);
-            
-            if (userIndex > -1) {
-                const userName = users[userIndex].name.split(' ')[0];
-                const newPassword = prompt(`Conta localizada para ${userName}.\nDigite a sua nova senha (mínimo 4 caracteres):`);
-                
-                if (newPassword && newPassword.length >= 4) {
-                    users[userIndex].password = newPassword;
-                    localStorage.setItem('ppc_users', JSON.stringify(users));
-                    alert("A sua senha foi atualizada com sucesso! Você já pode fazer o login.");
-                } else if (newPassword) {
-                    alert("A senha deve ter pelo menos 4 caracteres. Operação cancelada.");
-                }
-            } else {
-                alert("CPF não encontrado em nossa base de dados. Verifique os dados digitados.");
+        const cpf = prompt("Digite o seu CPF para recuperação:");
+        if (!cpf) return;
+        const cleanInput = String(cpf).replace(/\D/g, '');
+        const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
+        const userIndex = users.findIndex(u => String(u.cpf || '').replace(/\D/g, '') === cleanInput);
+
+        if (userIndex === -1) {
+            notify("CPF não encontrado.", 'error');
+            return;
+        }
+
+        const target = users[userIndex];
+        // Para usuários que tenham birthDate cadastrado, exigimos a data como prova.
+        if (target.birthDate) {
+            const provided = prompt("Para confirmar, digite sua data de nascimento (AAAA-MM-DD):");
+            if (!provided || provided.trim() !== target.birthDate) {
+                notify("Dados não conferem. Operação cancelada.", 'error');
+                return;
             }
         }
+
+        const newPassword = prompt(`Conta localizada para ${target.name.split(' ')[0]}.\nDigite a NOVA senha (mínimo 4 caracteres):`);
+        if (!newPassword) return;
+        if (newPassword.length < 4) {
+            notify("A senha deve ter pelo menos 4 caracteres.", 'error');
+            return;
+        }
+        users[userIndex].password = newPassword;
+        localStorage.setItem('ppc_users', JSON.stringify(users));
+        notify("Senha atualizada com sucesso! Faça login.", 'success');
     };
 });

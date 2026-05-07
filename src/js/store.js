@@ -48,46 +48,62 @@ class Store {
         // Injeta dados clínicos ricos para os pacientes para testes em grupo visuais
         let data = JSON.parse(localStorage.getItem('ppc_data')) || {};
         
-        // Forçamos a rescrita do Paciente 1 independente do log anterior para popular os gráficos perfeitamente
-        // Calcula timestamps baseados em agora para garantir uma ordenação perfeita, independente da string de data
+        // Só injeta dados default se o paciente 101 ainda não existir (preserva edições do usuário)
         const now = Date.now();
         const DayMs = 86400000;
         
-        data[101] = { 
-            medications: [
-                {id: 1, name: 'Losartana', frequency: 'A cada 12h', firstDose: '08:00', dosage: '50mg', warning: false},
-                {id: 2, name: 'Metformina', frequency: 'A cada 8h', firstDose: '06:00', dosage: '500mg', warning: false},
-                {id: 3, name: 'Sinvastatina', frequency: 'A cada 24h', firstDose: '22:00', dosage: '20mg', warning: false}
-            ], 
-            vitals: { 
-                pressure: [
-                    {date: '10 abr.', time: '08:00', sys: 130, dia: 85, timestamp: now - 4*DayMs},
-                    {date: '11 abr.', time: '07:30', sys: 125, dia: 80, timestamp: now - 3*DayMs},
-                    {date: '12 abr.', time: '08:15', sys: 140, dia: 90, timestamp: now - 2*DayMs},
-                    {date: '13 abr.', time: '08:00', sys: 135, dia: 85, timestamp: now - 1*DayMs},
-                    {date: '14 abr.', time: '07:45', sys: 120, dia: 80, timestamp: now - 2000000}
+        if (!data[101]) {
+            data[101] = { 
+                medications: [
+                    {id: 1, name: 'Losartana', frequency: 'A cada 12h', firstDose: '08:00', dosage: '50mg', warning: false},
+                    {id: 2, name: 'Metformina', frequency: 'A cada 8h', firstDose: '06:00', dosage: '500mg', warning: false},
+                    {id: 3, name: 'Sinvastatina', frequency: 'A cada 24h', firstDose: '22:00', dosage: '20mg', warning: false}
                 ], 
-                glycemia: [
-                    {date: '08/04', time: '07:00', value: 115, timestamp: now - 6*DayMs},
-                    {date: '09/04', time: '07:00', value: 142, timestamp: now - 5*DayMs},
-                    {date: '10/04', time: '07:00', value: 110, timestamp: now - 4*DayMs},
-                    {date: '11/04', time: '07:00', value: 125, timestamp: now - 3*DayMs},
-                    {date: '12/04', time: '07:00', value: 105, timestamp: now - 2*DayMs},
-                    {date: '13/04', time: '07:00', value: 130, timestamp: now - 1*DayMs},
-                    {date: '14/04', time: '07:00', value: 95, timestamp: now - 1000000}
-                ], 
-                history: [], 
-                symptoms: [
-                    {date: '12 abr.', time: '14:30', description: 'Tontura, Dor de cabeça - Tive bastante enjoô após o almoço...', timestamp: now - 2*DayMs + 1000},
-                    {date: '14 abr.', time: '09:00', description: 'Cansaço leve pela manhã', timestamp: now - 500000}
-                ] 
-            } 
-        };
+                vitals: { 
+                    pressure: [
+                        {date: '10 abr.', time: '08:00', sys: 130, dia: 85, timestamp: now - 4*DayMs},
+                        {date: '11 abr.', time: '07:30', sys: 125, dia: 80, timestamp: now - 3*DayMs},
+                        {date: '12 abr.', time: '08:15', sys: 140, dia: 90, timestamp: now - 2*DayMs},
+                        {date: '13 abr.', time: '08:00', sys: 135, dia: 85, timestamp: now - 1*DayMs},
+                        {date: '14 abr.', time: '07:45', sys: 120, dia: 80, timestamp: now - 2000000}
+                    ], 
+                    glycemia: [
+                        {date: '08/04', time: '07:00', value: 115, timestamp: now - 6*DayMs},
+                        {date: '09/04', time: '07:00', value: 142, timestamp: now - 5*DayMs},
+                        {date: '10/04', time: '07:00', value: 110, timestamp: now - 4*DayMs},
+                        {date: '11/04', time: '07:00', value: 125, timestamp: now - 3*DayMs},
+                        {date: '12/04', time: '07:00', value: 105, timestamp: now - 2*DayMs},
+                        {date: '13/04', time: '07:00', value: 130, timestamp: now - 1*DayMs},
+                        {date: '14/04', time: '07:00', value: 95, timestamp: now - 1000000}
+                    ], 
+                    history: [], 
+                    symptoms: [
+                        {date: '12 abr.', time: '14:30', description: 'Tontura, Dor de cabeça - Tive bastante enjoô após o almoço...', timestamp: now - 2*DayMs + 1000},
+                        {date: '14 abr.', time: '09:00', description: 'Cansaço leve pela manhã', timestamp: now - 500000}
+                    ] 
+                } 
+            };
+        }
         
         if (!data[104]) {
             data[104] = { medications: [], vitals: { pressure: [], glycemia: [], history: [], symptoms: [] } };
         }
         localStorage.setItem('ppc_data', JSON.stringify(data));
+
+        // Housekeeping: remove chaves antigas de "remédios tomados" (> 7 dias)
+        try {
+            const cutoff = Date.now() - 7 * DayMs;
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith('ppc_meds_taken_')) {
+                    const isoDate = k.replace('ppc_meds_taken_', '');
+                    const t = Date.parse(isoDate + 'T00:00:00');
+                    if (!isNaN(t) && t < cutoff) {
+                        localStorage.removeItem(k);
+                    }
+                }
+            }
+        } catch (_) { /* localStorage indisponível: ignore */ }
     }
 
     // --- Autenticação e Perfis ---
@@ -205,7 +221,7 @@ class Store {
             users[index] = { ...users[index], ...updateData };
             // Se o usuário atual for ele, reflete a mudança no currentUser também para UX imediata
             const currentUser = this.getCurrentUser();
-            if(currentUser.id === id) {
+            if(currentUser && currentUser.id === id) {
                 this.loginUser(users[index]);
             }
             localStorage.setItem('ppc_users', JSON.stringify(users));

@@ -2,201 +2,426 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Remédios - Portal do Paciente</title>
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/components.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Remédios - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
+    <link rel="stylesheet" href="../css/global.css?v=1778181033">
+    <link rel="stylesheet" href="../css/components.css?v=1778181033">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .med-item {
-            border-left: 4px solid var(--primary);
+        /* ── Cabeçalho da página ──────────────────────── */
+        .page-header { margin-bottom: var(--sp-6); }
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: var(--fw-bold);
+            color: var(--text-main);
         }
-        .med-item.warning { border-left-color: var(--warning); }
-        .actions { display: flex; gap: var(--sp-2); }
-        .btn-icon { padding: var(--sp-2); border-radius: var(--radius-sm); background: var(--surface-hover); color: var(--text-muted); }
-        
-        /* Modal Form New Med */
+        .page-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ── KPI Row ─────────────────────────────────── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--sp-4);
+            margin-bottom: var(--sp-6);
+        }
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--sp-4);
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .kpi-card.blue::after   { background: var(--primary); }
+        .kpi-card.green::after  { background: var(--success); }
+        .kpi-card.orange::after { background: var(--warning); }
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: var(--fw-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+        }
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: var(--fw-bold);
+            line-height: 1;
+        }
+        .kpi-card.blue   .kpi-value { color: var(--primary); }
+        .kpi-card.green  .kpi-value { color: var(--success); }
+        .kpi-card.orange .kpi-value { color: var(--warning); }
+
+        /* ── Toolbar ─────────────────────────────────── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: var(--sp-3);
+            margin-bottom: var(--sp-5);
+        }
+        .toolbar .btn {
+            width: auto;          /* sobrescreve .btn { width: 100% } */
+            padding: 10px var(--sp-5);
+            white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+            .toolbar .btn { width: 100%; justify-content: center; }
+        }
+
+        /* ── Formulário inline ───────────────────────── */
         #form-new-med {
             display: none;
             background: var(--surface);
-            padding: var(--sp-4);
-            border-radius: var(--radius-lg);
-            border: 1px dashed var(--primary);
+            border: 1.5px solid var(--primary);
+            border-radius: var(--radius-xl);
+            padding: var(--sp-5);
             margin-bottom: var(--sp-6);
+            box-shadow: var(--shadow-sm);
         }
+        #form-new-med h4 {
+            color: var(--primary);
+            font-size: 0.9375rem;
+            font-weight: var(--fw-semibold);
+            margin-bottom: var(--sp-4);
+        }
+        .form-row { display: flex; gap: var(--sp-3); }
+        .form-row .form-group { flex: 1; }
+
+        /* ── Tabela de medicamentos (Spaced Rows) ────── */
+        .med-table-wrap {
+            /* Removido wrap box para deixar as linhas soltas */
+        }
+        .med-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            font-size: 0.9375rem; /* Fonte maior */
+        }
+        .med-table thead th {
+            padding: 0 var(--sp-5) var(--sp-2) var(--sp-5);
+            text-align: left;
+            font-size: 0.8125rem;
+            font-weight: var(--fw-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: none;
+        }
+        .med-table tbody tr {
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .med-table tbody tr:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+        .med-table td {
+            padding: var(--sp-4) var(--sp-5); /* Mais espaço */
+            vertical-align: middle;
+            color: var(--text-main);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .med-table td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: var(--radius-lg);
+            border-bottom-left-radius: var(--radius-lg);
+        }
+        .med-table td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
+        }
+        .med-table .td-name {
+            font-weight: var(--fw-semibold);
+        }
+        .med-table .td-muted {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        .med-table .td-actions {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* ── Ícones de ação ──────────────────────────── */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+        }
+        .btn-icon:hover { background: var(--surface-hover); color: var(--primary); }
+        .btn-icon--danger:hover { background: var(--danger-light); color: var(--danger); }
+
+        /* ── Badge de frequência ──────────────────────── */
+        .freq-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: var(--fw-semibold);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .freq-badge.warning {
+            background: #FEF9C3;
+            color: #854D0E;
+        }
+
+        /* ── Estado vazio ────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: var(--sp-8) var(--sp-4);
+            color: var(--text-muted);
+        }
+        .empty-state p { font-size: 0.875rem; }
     </style>
 </head>
 <body>
 
 <div class="container animate-fade-in">
-    <h2 class="mt-4 mb-4">Meus Medicamentos</h2>
 
-    <button class="btn btn-outline mb-4" id="btn-show-form">
-        <i data-lucide="plus"></i> Novo Medicamento
-    </button>
+    <!-- Cabeçalho -->
+    <div class="page-header mt-4">
+        <p style="font-size:0.75rem; color:var(--text-subtle); margin-bottom:4px;">
+            Portal do Paciente · Remédios
+        </p>
+        <h1>Meus Medicamentos</h1>
+        <p>Gerencie sua lista de remédios</p>
+    </div>
 
-    <!-- Formulário Escondido -->
+    <!-- KPI Cards -->
+    <div class="kpi-row" id="kpi-row">
+        <!-- Renderizado via JS -->
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button class="btn btn-primary" id="btn-show-form">
+            <i data-lucide="plus" style="width:16px;height:16px;"></i>
+            Novo Medicamento
+        </button>
+    </div>
+
+    <!-- Formulário inline -->
     <div id="form-new-med">
-        <h4 class="mb-4">Adicionar Medicamento</h4>
+        <h4 id="form-title">Adicionar Medicamento</h4>
         <div class="form-group">
             <label>Nome do Remédio</label>
-            <input type="text" id="med-name" class="form-control" placeholder="Ex: Dipirona" required>
+            <input type="text" id="med-name" class="form-control"
+                   placeholder="Ex: Losartana, Metformina...">
         </div>
-        <div class="form-group">
-            <label>Dosagem</label>
-            <input type="text" id="med-dose" class="form-control" placeholder="10mg" required>
-        </div>
-        <div style="display:flex; gap:12px; margin-top:12px;">
-            <div class="form-group" style="flex:1;">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Dosagem</label>
+                <input type="text" id="med-dose" class="form-control" placeholder="50mg">
+            </div>
+            <div class="form-group">
                 <label>Primeira dose</label>
-                <input type="time" id="med-first-dose" class="form-control" required>
+                <input type="time" id="med-first-dose" class="form-control">
             </div>
-            <div class="form-group" style="flex:2;">
+            <div class="form-group">
                 <label>Frequência</label>
-                <input type="text" id="med-freq" class="form-control" placeholder="A cada 8h" required>
+                <input type="text" id="med-freq" class="form-control" placeholder="A cada 8h">
             </div>
         </div>
-        <div class="flex-between mt-2">
-            <button class="btn btn-outline" id="btn-cancel-med" style="width: auto;">Cancelar</button>
-            <button class="btn btn-primary" id="btn-save-med" style="width: auto;">Salvar</button>
+        <div style="display:flex; gap:var(--sp-3); margin-top:var(--sp-4);">
+            <button class="btn btn-outline" id="btn-cancel-med" style="flex:1;">Cancelar</button>
+            <button class="btn btn-primary" id="btn-save-med" style="flex:1;">Salvar</button>
         </div>
     </div>
 
-    <!-- Lista Dinâmica -->
-    <div id="med-list-container">
-        <!-- Renderizado via JS -->
+    <!-- Tabela de medicamentos -->
+    <div class="med-table-wrap">
+        <table class="med-table">
+            <thead>
+                <tr>
+                    <th>Medicamento</th>
+                    <th>Dosagem</th>
+                    <th>Primeira dose</th>
+                    <th>Frequência</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="med-list-container">
+                <!-- Renderizado via JS -->
+            </tbody>
+        </table>
     </div>
 
 </div>
 
+<!-- Navegação inferior -->
 <nav class="bottom-nav">
     <a href="dashboard.html" class="bottom-nav-item">
-        <i data-lucide="home"></i>
-        <span>Início</span>
+        <i data-lucide="home"></i><span>Início</span>
     </a>
     <a href="history.html" class="bottom-nav-item">
-        <i data-lucide="clock"></i>
-        <span>Histórico</span>
+        <i data-lucide="clock"></i><span>Histórico</span>
     </a>
     <a href="medications.html" class="bottom-nav-item active">
-        <i data-lucide="pill"></i>
-        <span>Remédios</span>
+        <i data-lucide="pill"></i><span>Remédios</span>
     </a>
     <a href="profile.html" class="bottom-nav-item">
-        <i data-lucide="user"></i>
-        <span>Perfil</span>
+        <i data-lucide="user"></i><span>Perfil</span>
     </a>
 </nav>
 
-<script src="../js/security.js"></script>
-<script src="../js/store.js"></script>
-<script src="../js/main.js"></script>
+<script src="../js/security.js?v=1778181033"></script>
+<script src="../js/store.js?v=1778181033"></script>
+<script src="../js/main.js?v=1778181033"></script>
+<script src="../js/toast.js?v=1778181033"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('med-list-container');
-        const formDiv = document.getElementById('form-new-med');
-        const btnShow = document.getElementById('btn-show-form');
-        const btnCancel = document.getElementById('btn-cancel-med');
-        const btnSave = document.getElementById('btn-save-med');
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
 
-        let editingMedId = null;
+    const tbody    = document.getElementById('med-list-container');
+    const formDiv  = document.getElementById('form-new-med');
+    const btnShow  = document.getElementById('btn-show-form');
+    const btnCancel= document.getElementById('btn-cancel-med');
+    const btnSave  = document.getElementById('btn-save-med');
+    let editingId  = null;
 
-        // Toggle Form
-        btnShow.addEventListener('click', () => {
-            editingMedId = null; // Reinicia pra adição
-            document.getElementById('med-name').value = '';
-            document.getElementById('med-dose').value = '';
-            document.getElementById('med-freq').value = '';
-            document.getElementById('med-first-dose').value = '';
-            document.querySelector('#form-new-med h4').innerText = 'Adicionar Medicamento';
-            formDiv.style.display = 'block';
-            btnShow.style.display = 'none';
-        });
+    // ── Controles do formulário ──────────────────────
+    function openForm(title = 'Adicionar Medicamento') {
+        document.getElementById('form-title').innerText = title;
+        formDiv.style.display = 'block';
+        formDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function closeForm() {
+        formDiv.style.display = 'none';
+        editingId = null;
+        ['med-name','med-dose','med-first-dose','med-freq'].forEach(id =>
+            document.getElementById(id).value = '');
+    }
 
-        btnCancel.addEventListener('click', () => {
-            formDiv.style.display = 'none';
-            btnShow.style.display = 'flex';
-        });
+    btnShow.addEventListener('click', () => openForm());
+    btnCancel.addEventListener('click', closeForm);
 
-        // Save Logic
-        btnSave.addEventListener('click', () => {
-            const name = document.getElementById('med-name').value;
-            const dose = document.getElementById('med-dose').value;
-            const freq = document.getElementById('med-freq').value;
-            const firstDose = document.getElementById('med-first-dose').value;
-
-            if (name && dose && freq && firstDose) {
-                if (editingMedId) {
-                    appStore.updateMedication(editingMedId, { name, dose, frequency: freq, firstDose });
-                } else {
-                    appStore.addMedication({ name, dose, frequency: freq, firstDose, warning: false });
-                }
-                formDiv.style.display = 'none';
-                btnShow.style.display = 'flex';
-                renderList();
-            } else {
-                alert("Preencha todos os campos, incluindo a primeira dose.");
-            }
-        });
-
-        window.editMed = function(id) {
-            const meds = appStore.getMedications();
-            const med = meds.find(m => m.id === id);
-            if(med) {
-                document.getElementById('med-name').value = med.name || '';
-                document.getElementById('med-dose').value = med.dose || med.dosage || '';
-                document.getElementById('med-freq').value = med.frequency || '';
-                document.getElementById('med-first-dose').value = med.firstDose || '';
-                document.querySelector('#form-new-med h4').innerText = 'Editar Medicamento';
-                editingMedId = id;
-                formDiv.style.display = 'block';
-                btnShow.style.display = 'none';
-            }
-        };
-
-        // Delete Logic attached to global window for inline onclick
-        window.deleteMed = function(id) {
-            if(confirm("Tem certeza que deseja apagar este medicamento?")){
-                appStore.deleteMedication(id);
-                renderList();
-            }
-        };
-
-        function renderList() {
-            container.innerHTML = '';
-            const meds = appStore.getMedications();
-            
-            if (meds.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Nenhum medicamento registrado.</p>';
-                return;
-            }
-
-            meds.forEach(med => {
-                const card = document.createElement('div');
-                card.className = `card med-item ${med.warning ? 'warning' : ''}`;
-                const doseLabel = med.dose || med.dosage || 'Dose padrão';
-                card.innerHTML = `
-                    <div class="flex-between">
-                        <div>
-                            <h3 style="margin-bottom: 4px;">${med.name}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.875rem;">${doseLabel} • Início: ${med.firstDose || '--:--'}</p>
-                            <span class="badge ${med.warning ? '' : 'badge-success'} mt-2" style="display:inline-block; background: ${med.warning ? 'var(--bg-color)' : ''}; color: ${med.warning ? 'var(--text-main)' : ''}">${med.frequency || ''}</span>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-icon" onclick="editMed(${med.id})"><i data-lucide="edit-2" style="width:18px;height:18px"></i></button>
-                            <button class="btn-icon" style="color: var(--danger);" onclick="deleteMed(${med.id})"><i data-lucide="trash-2" style="width:18px;height:18px"></i></button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-            lucide.createIcons();
+    btnSave.addEventListener('click', () => {
+        const name      = document.getElementById('med-name').value.trim();
+        const dose      = document.getElementById('med-dose').value.trim();
+        const freq      = document.getElementById('med-freq').value.trim();
+        const firstDose = document.getElementById('med-first-dose').value.trim();
+        if (!name || !dose || !freq || !firstDose) {
+            showToast('Preencha todos os campos.', 'error');
+            return;
         }
-
-        // Init
+        if (editingId) {
+            appStore.updateMedication(editingId, { name, dose, frequency: freq, firstDose });
+            showToast('Medicamento atualizado.', 'success');
+        } else {
+            appStore.addMedication({ name, dose, frequency: freq, firstDose, warning: false });
+            showToast('Medicamento adicionado.', 'success');
+        }
+        closeForm();
         renderList();
     });
+
+    // ── Editar / Deletar (globais para onclick no HTML) ──
+    window.editMed = function(id) {
+        const med = appStore.getMedications().find(m => m.id === id);
+        if (!med) return;
+        document.getElementById('med-name').value      = med.name || '';
+        document.getElementById('med-dose').value      = med.dose || med.dosage || '';
+        document.getElementById('med-freq').value      = med.frequency || '';
+        document.getElementById('med-first-dose').value = med.firstDose || '';
+        editingId = id;
+        openForm('Editar Medicamento');
+    };
+
+    window.deleteMed = function(id) {
+        showConfirm('Apagar este medicamento? Esta ação não pode ser desfeita.', { okLabel: 'Apagar', danger: true })
+            .then(ok => {
+                if (!ok) return;
+                appStore.deleteMedication(id);
+                renderList();
+                showToast('Medicamento apagado.', 'info');
+            });
+    };
+
+    // ── Render da tabela ─────────────────────────────
+    function renderList() {
+        const meds = appStore.getMedications();
+
+        // KPIs
+        const total   = meds.length;
+        const normal  = meds.filter(m => !m.warning).length;
+        const warning = meds.filter(m => m.warning).length;
+        document.getElementById('kpi-row').innerHTML = `
+            <div class="kpi-card blue">
+                <p class="kpi-label">Total</p>
+                <p class="kpi-value">${total}</p>
+            </div>
+            <div class="kpi-card green">
+                <p class="kpi-label">Em dia</p>
+                <p class="kpi-value">${normal}</p>
+            </div>
+            <div class="kpi-card orange">
+                <p class="kpi-label">Atenção</p>
+                <p class="kpi-value">${warning}</p>
+            </div>`;
+
+        if (meds.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <i data-lucide="pill" style="width:36px;height:36px;margin:0 auto var(--sp-3);display:block;color:var(--text-subtle);"></i>
+                    <p>Nenhum medicamento registrado.</p>
+                  </td>
+                </tr>`;
+            lucide.createIcons();
+            return;
+        }
+
+        tbody.innerHTML = meds.map(med => {
+            const doseLabel = escapeHtml(med.dose || med.dosage || '—');
+            const freqClass = med.warning ? 'freq-badge warning' : 'freq-badge';
+            return `
+              <tr>
+                <td class="td-name">${escapeHtml(med.name)}</td>
+                <td class="td-muted">${doseLabel}</td>
+                <td class="td-muted">${escapeHtml(med.firstDose || '—')}</td>
+                <td>
+                  <span class="${freqClass}">${escapeHtml(med.frequency || '—')}</span>
+                </td>
+                <td class="td-actions">
+                  <button class="btn-icon" onclick="editMed(${med.id})" title="Editar">
+                    <i data-lucide="edit-2" style="width:15px;height:15px;"></i>
+                  </button>
+                  <button class="btn-icon btn-icon--danger" onclick="deleteMed(${med.id})" title="Excluir">
+                    <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+                  </button>
+                </td>
+              </tr>`;
+        }).join('');
+
+        lucide.createIcons();
+    }
+
+    // Init
+    renderList();
+});
 </script>
 </body>
 </html>

@@ -26,9 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function logoutByInactivity() {
         // Limpa apenas o usuário ativo, mantendo o banco ppc_users intacto para retorno
-        localStorage.removeItem('ppc_currentUser'); 
-        alert("Sua sessão expirou devido a um período de 15 minutos de inatividade. Por motivos de segurança (Proteção de Dados Médicos), você foi desconectado.");
-        window.location.href = '../index.html'; 
+        localStorage.removeItem('ppc_currentUser');
+        if (typeof showToast === 'function') {
+            showToast("Sessão expirou (15 min de inatividade). Redirecionando…", 'info', 2000);
+            setTimeout(() => { window.location.href = '../index.html'; }, 1800);
+        } else {
+            window.location.href = '../index.html';
+        }
     }
 
     function resetTimer() {

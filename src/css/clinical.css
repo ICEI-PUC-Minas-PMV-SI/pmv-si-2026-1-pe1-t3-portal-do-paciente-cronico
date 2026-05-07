@@ -3,7 +3,7 @@
 
 .clinical-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 260px 1fr;
   min-height: 100vh;
   background-color: var(--bg-color);
 }
@@ -11,10 +11,9 @@
 .clinical-sidebar {
   background-color: var(--surface);
   border-right: 1px solid var(--border);
-  padding: var(--sp-6) var(--sp-4);
+  padding: var(--sp-6) var(--sp-5);
   display: flex;
   flex-direction: column;
-  /* Fica fixa enquanto o usuário rola o conteúdo principal */
   position: sticky;
   top: 0;
   height: 100vh;
@@ -30,17 +29,37 @@
   display: flex;
   align-items: center;
   gap: var(--sp-3);
-  padding: var(--sp-3);
+  padding: 10px var(--sp-3);
   border-radius: var(--radius-md);
   color: var(--text-muted);
-  font-weight: 500;
-  margin-bottom: var(--sp-2);
+  font-weight: var(--fw-medium);
+  font-size: 0.875rem;
+  margin-bottom: 2px;
+  transition: var(--transition-fast);
+  position: relative;
 }
 
-.clinical-sidebar .nav-link:hover,
+.clinical-sidebar .nav-link:hover {
+  background-color: var(--surface-hover);
+  color: var(--text-secondary);
+}
+
 .clinical-sidebar .nav-link.active {
   background-color: var(--primary-light);
   color: var(--primary);
+  font-weight: var(--fw-semibold);
+}
+
+/* Indicador lateral ativo */
+.clinical-sidebar .nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--primary);
 }
 
 .clinical-main {
@@ -60,13 +79,18 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background: white;
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--sp-2) var(--sp-4);
   width: 100%;
   max-width: 400px;
   min-width: 240px;
+  transition: var(--transition-fast);
+}
+.search-bar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .search-bar input {
@@ -75,6 +99,7 @@
   width: 100%;
   margin-left: var(--sp-2);
   background: transparent;
+  font-size: 0.875rem;
 }
 
 @media (max-width: 768px) {
@@ -83,13 +108,8 @@
     align-items: stretch;
     gap: var(--sp-4);
   }
-  .search-bar {
-    max-width: 100%;
-  }
-  .clinical-main {
-    padding: var(--sp-4);
-  }
-  /* Stack das colunas detalhe quando estiver apertado */
+  .search-bar { max-width: 100%; }
+  .clinical-main { padding: var(--sp-4); }
   .clinical-main > div[style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
   }
@@ -106,6 +126,6 @@
     grid-template-columns: 1fr;
   }
   .clinical-sidebar {
-    display: none; /* Simplificado; precisaríamos de menu hambúrguer para mobile */
+    display: none;
   }
 }

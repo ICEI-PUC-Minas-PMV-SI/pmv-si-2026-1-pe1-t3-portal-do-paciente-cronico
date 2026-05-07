@@ -92,7 +92,7 @@
             // Meds
             const medsBody = document.querySelector('#table-meds tbody');
             if (pData.medications && pData.medications.length) {
-                medsBody.innerHTML = pData.medications.map(m => `<tr><td>${m.name}</td><td>${m.dose}</td><td>${m.freq}</td></tr>`).join('');
+                medsBody.innerHTML = pData.medications.map(m => `<tr><td>${m.name || '—'}</td><td>${m.dose || m.dosage || '—'}</td><td>${m.frequency || '—'}</td></tr>`).join('');
             } else {
                 medsBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Nenhum medicamento registrado.</td></tr>`;
             }

@@ -2,264 +2,442 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Histórico - Portal do Paciente</title>
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/components.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Histórico - Portal do Paciente</title>
+    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
+    <link rel="stylesheet" href="../css/global.css?v=1778181033">
+    <link rel="stylesheet" href="../css/components.css?v=1778181033">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .search-area {
+        /* ── Cabeçalho da página ──────────────────────── */
+        .page-header { margin-bottom: var(--sp-6); }
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: var(--fw-bold);
+            color: var(--text-main);
+        }
+        .page-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ── Barra de busca e ações ───────────────────── */
+        .toolbar {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: var(--sp-3);
+            margin-bottom: var(--sp-6);
+            width: 100%;
+        }
+        .toolbar input {
+            flex: 1 1 auto;
+            min-width: 0;          /* impede que o flex item recuse encolher */
+            width: auto;
+        }
+        .toolbar .btn-outline {
+            flex: 0 0 auto;        /* não cresce, não encolhe */
+            width: auto;           /* sobrescreve .btn { width: 100% } */
+            white-space: nowrap;
+            padding: 10px var(--sp-4);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        @media (max-width: 600px) {
+            .toolbar { flex-wrap: wrap; }
+            .toolbar input { flex: 1 1 100%; }
+            .toolbar .btn-outline { flex: 1 1 100%; justify-content: center; }
+        }
+
+        /* ── KPI Cards (estilo Central de Laudos) ─────── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--sp-4);
             margin-bottom: var(--sp-6);
         }
-        .search-area input { flex: 1; }
-        
-        .timeline {
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--sp-4);
             position: relative;
-            padding-left: 24px;
+            overflow: hidden;
         }
-        .timeline::before {
+        .kpi-card::after {
             content: '';
             position: absolute;
-            left: 7px; top: 0; bottom: 0;
-            width: 2px;
-            background: var(--primary-light);
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
         }
-        .timeline-item {
-            position: relative;
+        .kpi-card.blue::after  { background: var(--primary); }
+        .kpi-card.green::after { background: var(--success); }
+        .kpi-card.orange::after{ background: var(--warning); }
+        .kpi-card.red::after   { background: var(--danger); }
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: var(--fw-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+        }
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: var(--fw-bold);
+            line-height: 1;
+        }
+        .kpi-card.blue  .kpi-value { color: var(--primary); }
+        .kpi-card.green .kpi-value { color: var(--success); }
+        .kpi-card.orange .kpi-value{ color: var(--warning); }
+        .kpi-card.red   .kpi-value { color: var(--danger);  }
+
+        /* ── Tabela de registros (Spaced Rows) ────────── */
+        .records-table-wrap {
+            /* Removido o wrap container box para deixar as linhas soltas */
+        }
+        .records-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            font-size: 0.9375rem; /* Fonte maior */
+        }
+        .records-table thead th {
+            padding: 0 var(--sp-5) var(--sp-2) var(--sp-5);
+            text-align: left;
+            font-size: 0.8125rem;
+            font-weight: var(--fw-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: none;
+        }
+        .records-table tbody tr {
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .records-table tbody tr:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+        .records-table td {
+            padding: var(--sp-4) var(--sp-5); /* Mais espaço (colado -> agradável) */
+            color: var(--text-main);
+            vertical-align: middle;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .records-table td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: var(--radius-lg);
+            border-bottom-left-radius: var(--radius-lg);
+        }
+        .records-table td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
+        }
+        .records-table .td-date {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .records-table .td-value {
+            font-weight: var(--fw-semibold);
+        }
+
+        /* ── Badges de tipo ──────────────────────────── */
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: var(--fw-semibold);
+            white-space: nowrap;
+        }
+        .type-badge.pressure  { background: #FEE2E2; color: #B91C1C; }
+        .type-badge.glycemia  { background: #FEF9C3; color: #854D0E; }
+        .type-badge.symptom   { background: #FFF7ED; color: #9A3412; }
+        .type-badge.history   { background: #EFF6FF; color: #1D4ED8; }
+
+        /* ── Estado vazio ────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: var(--sp-8) var(--sp-4);
+            color: var(--text-muted);
+        }
+        .empty-state svg { margin: 0 auto var(--sp-3); display: block; }
+        .empty-state p   { font-size: 0.875rem; }
+
+        /* ── Formulário inline ───────────────────────── */
+        #form-new-history {
+            display: none;
+            background: var(--surface);
+            border: 1.5px solid var(--primary);
+            border-radius: var(--radius-xl);
+            padding: var(--sp-5);
             margin-bottom: var(--sp-6);
+            box-shadow: var(--shadow-sm);
         }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -24px;
-            top: 4px;
-            width: 16px; height: 16px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid var(--surface);
-            box-shadow: 0 0 0 2px var(--primary-light);
+        #form-new-history h4 {
+            color: var(--primary);
+            font-size: 0.9375rem;
+            font-weight: var(--fw-semibold);
+            margin-bottom: var(--sp-4);
         }
+        .form-row {
+            display: flex;
+            gap: var(--sp-3);
+        }
+        .form-row .form-group { flex: 1; }
     </style>
 </head>
 <body>
 
 <div class="container animate-fade-in">
-    <h2 class="mt-4 mb-4">Meu Histórico</h2>
 
-    <div class="search-area">
-        <input type="text" id="hist-search" class="form-control" placeholder="Buscar por exames, consultas, sintomas...">
-        <button class="btn" id="hist-filter-btn" style="width: auto; background: var(--surface); border: 1px solid var(--border);" title="Filtrar por tipo">
-            <i data-lucide="filter"></i>
-        </button>
-    </div>
-    <div id="hist-filter-bar" style="display:none; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
-        <button class="btn btn-outline hist-filter-chip active" data-filter="all" style="width:auto; padding:6px 12px; font-size:0.75rem;">Todos</button>
-        <button class="btn btn-outline hist-filter-chip" data-filter="pressure" style="width:auto; padding:6px 12px; font-size:0.75rem;">Pressão</button>
-        <button class="btn btn-outline hist-filter-chip" data-filter="glycemia" style="width:auto; padding:6px 12px; font-size:0.75rem;">Glicemia</button>
-        <button class="btn btn-outline hist-filter-chip" data-filter="symptom" style="width:auto; padding:6px 12px; font-size:0.75rem;">Sintomas</button>
-        <button class="btn btn-outline hist-filter-chip" data-filter="history" style="width:auto; padding:6px 12px; font-size:0.75rem;">Exames/Laudos</button>
+    <!-- Cabeçalho -->
+    <div class="page-header mt-4">
+        <p style="font-size:0.75rem; color:var(--text-subtle); margin-bottom:4px;">
+            Portal do Paciente · Histórico
+        </p>
+        <h1>Meu Histórico</h1>
+        <p>Acompanhe todas as suas medições e registros</p>
     </div>
 
-    <button class="btn btn-outline mb-6" id="btn-upload">
-        <i data-lucide="upload"></i> Anexar Exame/Laudo
-    </button>
-
-    <!-- Formulário Oculto (RF-07) -->
-    <div id="form-new-history" style="display:none; background: var(--surface); padding: 16px; border-radius: 12px; margin-top: 16px;">
-        <h4 style="margin-bottom: 12px; color: var(--primary);">Novo Registro Histórico</h4>
-        <div class="form-group">
-            <label>Título (Exame ou Consulta)</label>
-            <input type="text" id="hist-title" class="form-control" placeholder="Ex: Hemograma Completo">
-        </div>
-        <div class="form-group">
-            <label>Nome do Arquivo (Simulação)</label>
-            <input type="text" id="hist-file" class="form-control" placeholder="Ex: resultado_labs.pdf">
-        </div>
-        <div style="display:flex; gap:8px; margin-top: 12px;">
-            <button class="btn btn-primary" id="btn-save-hist" style="flex:1;">Salvar</button>
-            <button class="btn btn-outline" id="btn-cancel-hist" style="flex:1;">Cancelar</button>
-        </div>
-    </div>
-
-    <div class="timeline mt-4" id="timeline-container">
+    <!-- KPI Cards -->
+    <div class="kpi-row" id="kpi-row">
         <!-- Renderizado via JS -->
     </div>
+
+    <!-- Toolbar: busca + botão -->
+    <div class="toolbar">
+        <input type="text" id="hist-search" class="form-control"
+               placeholder="Buscar por exames, consultas, sintomas...">
+        <button class="btn btn-outline" id="btn-upload">
+            <i data-lucide="plus" style="width:16px;height:16px;"></i>
+            Anexar Exame/Laudo
+        </button>
+    </div>
+
+    <!-- Formulário inline -->
+    <div id="form-new-history">
+        <h4>Adicionar Registro</h4>
+        <div class="form-group">
+            <label>Título do Registro</label>
+            <input type="text" id="hist-title" class="form-control"
+                   placeholder="Ex: Consulta Cardiologista, Hemograma...">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Arquivo/Laudo (opcional)</label>
+                <input type="text" id="hist-file" class="form-control"
+                       placeholder="Nome do arquivo">
+            </div>
+        </div>
+        <div style="display:flex; gap:var(--sp-3); margin-top:var(--sp-3);">
+            <button class="btn btn-outline" id="btn-cancel-hist" style="flex:1;">Cancelar</button>
+            <button class="btn btn-primary" id="btn-save-hist" style="flex:1;">Salvar</button>
+        </div>
+    </div>
+
+    <!-- Tabela de registros -->
+    <div class="records-table-wrap">
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Data / Hora</th>
+                    <th>Valor / Descrição</th>
+                </tr>
+            </thead>
+            <tbody id="timeline-container">
+                <!-- Renderizado via JS -->
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
+<!-- Navegação inferior -->
 <nav class="bottom-nav">
     <a href="dashboard.html" class="bottom-nav-item">
-        <i data-lucide="home"></i>
-        <span>Início</span>
+        <i data-lucide="home"></i><span>Início</span>
     </a>
     <a href="history.html" class="bottom-nav-item active">
-        <i data-lucide="clock"></i>
-        <span>Histórico</span>
+        <i data-lucide="clock"></i><span>Histórico</span>
     </a>
     <a href="medications.html" class="bottom-nav-item">
-        <i data-lucide="pill"></i>
-        <span>Remédios</span>
+        <i data-lucide="pill"></i><span>Remédios</span>
     </a>
     <a href="profile.html" class="bottom-nav-item">
-        <i data-lucide="user"></i>
-        <span>Perfil</span>
+        <i data-lucide="user"></i><span>Perfil</span>
     </a>
 </nav>
 
-<script src="../js/security.js"></script>
-<script src="../js/store.js"></script>
-<script src="../js/main.js"></script>
+<script src="../js/security.js?v=1778181033"></script>
+<script src="../js/store.js?v=1778181033"></script>
+<script src="../js/main.js?v=1778181033"></script>
+<script src="../js/toast.js?v=1778181033"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        lucide.createIcons();
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
 
-        // Lógica RF-07 Formulário
-        const btnUpload = document.getElementById('btn-upload');
-        const formDiv = document.getElementById('form-new-history');
-        const btnCancel = document.getElementById('btn-cancel-hist');
-        const btnSave = document.getElementById('btn-save-hist');
+    // ── Formulário Inline ────────────────────────────
+    const formDiv    = document.getElementById('form-new-history');
+    const btnUpload  = document.getElementById('btn-upload');
+    const btnCancel  = document.getElementById('btn-cancel-hist');
+    const btnSave    = document.getElementById('btn-save-hist');
 
-        btnUpload.addEventListener('click', () => {
-            document.getElementById('hist-title').value = '';
-            document.getElementById('hist-file').value = '';
-            formDiv.style.display = 'block';
-            btnUpload.style.display = 'none';
-        });
+    btnUpload.addEventListener('click', () => {
+        document.getElementById('hist-title').value = '';
+        document.getElementById('hist-file').value  = '';
+        formDiv.style.display = 'block';
+    });
+    btnCancel.addEventListener('click', () => { formDiv.style.display = 'none'; });
+    btnSave.addEventListener('click', () => {
+        const title = document.getElementById('hist-title').value.trim();
+        const file  = document.getElementById('hist-file').value.trim();
+        if (!title) { showToast('Preencha ao menos o Título.', 'error'); return; }
+        appStore.addHistoryRecord(title, file);
+        formDiv.style.display = 'none';
+        renderTable();
+        showToast('Registro adicionado.', 'success');
+    });
 
-        btnCancel.addEventListener('click', () => {
-            formDiv.style.display = 'none';
-            btnUpload.style.display = 'flex';
-        });
+    // ── Busca ────────────────────────────────────────
+    let activeQuery = '';
+    document.getElementById('hist-search').addEventListener('input', e => {
+        activeQuery = e.target.value.trim().toLowerCase();
+        renderTable();
+    });
 
-        btnSave.addEventListener('click', () => {
-            const title = document.getElementById('hist-title').value;
-            const file = document.getElementById('hist-file').value;
-            if (title) {
-                appStore.addHistoryRecord(title, file);
-                formDiv.style.display = 'none';
-                btnUpload.style.display = 'flex';
-                renderTimeline();
-            } else {
-                alert("Preencha ao menos o Título.");
-            }
-        });
+    // ── Mapa de labels de tipo ────────────────────────
+    const typeConfig = {
+        pressure: { label: 'Medição de Pressão',  css: 'pressure', icon: 'heart'         },
+        glycemia: { label: 'Medição de Glicemia', css: 'glycemia', icon: 'activity'       },
+        symptom:  { label: 'Relato de Sintomas',  css: 'symptom',  icon: 'alert-triangle' },
+        history:  { label: 'Exame/Laudo',         css: 'history',  icon: 'file-text'      },
+    };
 
-        let activeFilter = 'all';
-        let activeQuery = '';
+    // ── Render principal ─────────────────────────────
+    function renderTable() {
+        const vitals = appStore.getVitals();
+        const tbody  = document.getElementById('timeline-container');
+        let allRecords = [];
 
-        // Toggle filtro / busca
-        document.getElementById('hist-filter-btn').addEventListener('click', () => {
-            const bar = document.getElementById('hist-filter-bar');
-            bar.style.display = (bar.style.display === 'flex') ? 'none' : 'flex';
-        });
-        document.querySelectorAll('.hist-filter-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.hist-filter-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                activeFilter = chip.getAttribute('data-filter');
-                renderTimeline();
-            });
-        });
-        document.getElementById('hist-search').addEventListener('input', (e) => {
-            activeQuery = e.target.value.trim().toLowerCase();
-            renderTimeline();
-        });
+        // Coleta pressão
+        (vitals.pressure || []).forEach(p => allRecords.push({
+            type: 'pressure',
+            dateStr: `${p.date} · ${p.time || '12:00'}`,
+            timestamp: p.timestamp || Date.parse(p.date + ' 2024'),
+            valueHTML: `${p.sys} / ${p.dia} <small style="font-weight:400;color:var(--text-muted)">mmHg</small>`,
+        }));
 
-        function renderTimeline() {
-            const vitals = appStore.getVitals();
-            const container = document.getElementById('timeline-container');
-            
-            let allRecords = [];
-            
-            // Coleta Pressões
-            if(vitals.pressure) {
-                vitals.pressure.forEach(p => {
-                    allRecords.push({
-                        type: 'pressure',
-                        title: 'Medição de Pressão',
-                        dateStr: `${p.date} às ${p.time || '12:00'}`,
-                        timestamp: p.timestamp || Date.parse(p.date + ' 2024'), 
-                        infoHTML: `<div class="card" style="margin-bottom:0;"><span style="font-size: 1.25rem; font-weight: bold; color: var(--danger);">${p.sys} / ${p.dia} mmHg</span></div>`
-                    });
-                });
-            }
-            
-            // Coleta Glicemias
-            if(vitals.glycemia) {
-                vitals.glycemia.forEach(g => {
-                    allRecords.push({
-                        type: 'glycemia',
-                        title: 'Medição de Glicemia',
-                        dateStr: `${g.date} às ${g.time || '12:00'}`,
-                        timestamp: g.timestamp || Date.parse(g.date + ' 2024'),
-                        infoHTML: `<div class="card" style="margin-bottom:0;"><span style="font-size: 1.25rem; font-weight: bold; color: var(--warning);">${g.value} mg/dL</span></div>`
-                    });
-                });
-            }
+        // Coleta glicemia
+        (vitals.glycemia || []).forEach(g => allRecords.push({
+            type: 'glycemia',
+            dateStr: `${g.date} · ${g.time || '12:00'}`,
+            timestamp: g.timestamp || Date.parse(g.date + ' 2024'),
+            valueHTML: `${g.value} <small style="font-weight:400;color:var(--text-muted)">mg/dL</small>`,
+        }));
 
-            // Coleta Histórico Inserido
-            if(vitals.history) {
-                vitals.history.forEach(h => {
-                    const extra = h.fileLabel ? `<div class="card" style="margin-bottom: 0; display:flex; align-items:center; gap: 12px; background: var(--surface-hover);"><i data-lucide="file-text" style="color: var(--primary);"></i><strong style="font-size: 0.875rem;">${h.fileLabel}</strong></div>` : '';
-                    allRecords.push({
-                        type: 'history',
-                        title: h.title,
-                        dateStr: `${h.date} às ${h.time}`,
-                        timestamp: h.timestamp,
-                        infoHTML: extra
-                    });
-                });
-            }
+        // Coleta sintomas
+        (vitals.symptoms || []).forEach(s => allRecords.push({
+            type: 'symptom',
+            dateStr: `${s.date} · ${s.time || '12:00'}`,
+            timestamp: s.timestamp || Date.parse(s.date + ' 2024'),
+            valueHTML: escapeHtml(s.description),
+        }));
 
-            // Coleta Sintomas
-            if(vitals.symptoms) {
-                vitals.symptoms.forEach(s => {
-                    allRecords.push({
-                        type: 'symptom',
-                        title: 'Relato de Sintomas',
-                        dateStr: `${s.date} às ${s.time || '12:00'}`,
-                        timestamp: s.timestamp || Date.parse(s.date + ' 2024'),
-                        infoHTML: `<div class="card" style="margin-bottom:0; background: var(--warning-light); border: 1px solid var(--warning);"><p style="font-size: 0.875rem; color: var(--text-main); margin:0;"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:var(--warning); vertical-align:middle; margin-right:4px;"></i> ${s.description}</p></div>`
-                    });
-                });
-            }
+        // Coleta histórico manual
+        (vitals.history || []).forEach(h => allRecords.push({
+            type: 'history',
+            dateStr: `${h.date} · ${h.time}`,
+            timestamp: h.timestamp,
+            valueHTML: h.fileLabel
+                ? `${escapeHtml(h.title)} <span style="color:var(--primary);font-size:0.8rem;margin-left:8px;">📎 ${escapeHtml(h.fileLabel)}</span>`
+                : escapeHtml(h.title),
+        }));
 
-            // Aplica filtro por tipo
-            if (activeFilter && activeFilter !== 'all') {
-                allRecords = allRecords.filter(r => r.type === activeFilter);
-            }
-            // Aplica busca textual
-            if (activeQuery) {
-                allRecords = allRecords.filter(r => {
-                    const blob = (r.title + ' ' + r.dateStr + ' ' + r.infoHTML).toLowerCase();
-                    return blob.includes(activeQuery);
-                });
-            }
-
-            // Ordena por mais recente primeiro
-            allRecords.sort((a,b) => b.timestamp - a.timestamp);
-
-            if(allRecords.length === 0) {
-                const empty = (activeQuery || activeFilter !== 'all')
-                    ? 'Nenhum registro encontrado para o filtro/busca atual.'
-                    : 'Nenhum evento registrado no seu histórico.\nAs suas aferições diárias aparecerão aqui.';
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; margin-top:24px; white-space:pre-line;">${empty}</p>`;
-            } else {
-                container.innerHTML = allRecords.map(r => `
-                    <div class="timeline-item">
-                        <h4 style="margin-bottom: 4px;">${r.title}</h4>
-                        <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 8px;">${r.dateStr}</p>
-                        ${r.infoHTML}
-                    </div>
-                `).join('');
-                lucide.createIcons();
-            }
+        // Aplica busca
+        if (activeQuery) {
+            allRecords = allRecords.filter(r =>
+                (typeConfig[r.type]?.label + ' ' + r.dateStr + ' ' + r.valueHTML)
+                    .toLowerCase().includes(activeQuery)
+            );
         }
 
-        renderTimeline();
-    });
+        // Ordena por mais recente
+        allRecords.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Atualiza KPIs
+        updateKPIs(vitals, allRecords);
+
+        // Render linhas da tabela
+        if (allRecords.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                  <td colspan="3" class="empty-state">
+                    <i data-lucide="inbox" style="width:36px;height:36px;"></i>
+                    <p>Nenhum registro encontrado.</p>
+                  </td>
+                </tr>`;
+            lucide.createIcons();
+            return;
+        }
+
+        tbody.innerHTML = allRecords.map(r => {
+            const cfg = typeConfig[r.type] || { label: r.type, css: 'history', icon: 'file' };
+            return `
+              <tr>
+                <td>
+                  <span class="type-badge ${cfg.css}">
+                    <i data-lucide="${cfg.icon}" style="width:12px;height:12px;"></i>
+                    ${cfg.label}
+                  </span>
+                </td>
+                <td class="td-date">${r.dateStr}</td>
+                <td class="td-value">${r.valueHTML}</td>
+              </tr>`;
+        }).join('');
+
+        lucide.createIcons();
+    }
+
+    // ── KPIs ─────────────────────────────────────────
+    function updateKPIs(vitals, allRecords) {
+        const pressureCount  = (vitals.pressure  || []).length;
+        const glycemiaCount  = (vitals.glycemia  || []).length;
+        const symptomsCount  = (vitals.symptoms  || []).length;
+        const historyCount   = (vitals.history   || []).length;
+
+        document.getElementById('kpi-row').innerHTML = `
+            <div class="kpi-card blue">
+                <p class="kpi-label">Pressão</p>
+                <p class="kpi-value">${pressureCount}</p>
+            </div>
+            <div class="kpi-card orange">
+                <p class="kpi-label">Glicemia</p>
+                <p class="kpi-value">${glycemiaCount}</p>
+            </div>
+            <div class="kpi-card red">
+                <p class="kpi-label">Sintomas</p>
+                <p class="kpi-value">${symptomsCount}</p>
+            </div>
+            <div class="kpi-card green">
+                <p class="kpi-label">Exames</p>
+                <p class="kpi-value">${historyCount}</p>
+            </div>`;
+    }
+
+    // Init
+    renderTable();
+});
 </script>
 </body>
 </html>

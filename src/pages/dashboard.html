@@ -2,25 +2,201 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Portal do Paciente</title>
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
+    <link rel="stylesheet" href="../css/global.css?v=1778181033">
+    <link rel="stylesheet" href="../css/components.css?v=1778181033">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=1778181033"></script>
     <style>
-        .header-dash { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-6); }
-        .user-avatar { width: 48px; height: 48px; background-color: var(--primary-light); border-radius: var(--radius-fab); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
-        .status-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: var(--sp-4); border-radius: var(--radius-xl); margin-bottom: var(--sp-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); }
-        .medication-list { margin-bottom: var(--sp-8); }
-        .med-card { display: flex; justify-content: space-between; align-items: center; padding: var(--sp-3); border-bottom: 1px solid var(--border); }
+        .header-dash {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sp-6);
+        }
+        .greeting-text {
+            font-size: 1.5rem;
+            font-weight: var(--fw-bold);
+            letter-spacing: var(--ls-tight);
+        }
+        .greeting-date {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-light);
+            border-radius: var(--radius-fab);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: var(--fw-bold);
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 2px solid transparent;
+        }
+        .user-avatar:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Status Card — Gradiente premium */
+        .status-card {
+            background: var(--primary-gradient);
+            color: white;
+            padding: var(--sp-5);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--sp-6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .status-card::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+        .status-card h2 {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: var(--fw-semibold);
+        }
+        .status-card p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.875rem;
+        }
+        .status-icon {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-fab);
+            padding: 12px;
+            backdrop-filter: blur(4px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Medication List */
+        .medication-list { margin-bottom: var(--sp-6); }
+        .med-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--sp-3) var(--sp-4);
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition-fast);
+        }
         .med-card:last-child { border-bottom: none; }
-        .tab-btn { flex: 1; padding: var(--sp-3); text-align: center; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; cursor: pointer;}
+        .med-card:hover { background: var(--surface-hover); }
+        .med-card h4 {
+            font-size: 0.9375rem;
+            font-weight: var(--fw-semibold);
+            margin: 0;
+        }
+        .med-card-info {
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .med-card-time {
+            color: var(--primary);
+            font-weight: var(--fw-semibold);
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .med-check-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-hover);
+            transition: var(--transition-fast);
+        }
+        .med-check-btn:hover { background: var(--primary-light); }
+
+        /* Chart Section */
+        .chart-section {
+            margin-bottom: var(--sp-6);
+        }
+        .chart-section h3 {
+            display: flex;
+            align-items: center;
+            gap: var(--sp-2);
+            margin-bottom: var(--sp-3);
+        }
+        .chart-card {
+            padding: var(--sp-4);
+        }
+
+        /* Grid responsivo para gráficos em desktop */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-6);
+        }
+        @media (min-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Tabs */
+        .tab-btn {
+            flex: 1;
+            padding: var(--sp-3);
+            text-align: center;
+            font-weight: var(--fw-semibold);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .tab-btn:hover { color: var(--text-secondary); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
         .tab-content { display: none; padding-top: var(--sp-4); }
         .tab-content.active { display: block; }
-        .chip { padding: 8px 16px; background: var(--surface-hover); border-radius: 20px; display: inline-block; margin: 4px; color: var(--text-main); font-size: 0.875rem; border: 1px solid var(--border); cursor:pointer;}
-        .chip.selected { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
+
+        /* Chips */
+        .chip {
+            padding: 8px 16px;
+            background: var(--surface-hover);
+            border-radius: 999px;
+            display: inline-block;
+            margin: 4px;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            font-weight: var(--fw-medium);
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .chip:hover { border-color: var(--text-subtle); }
+        .chip.selected {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -29,38 +205,56 @@
     <!-- Header -->
     <header class="header-dash mt-4">
         <div>
-            <h1 style="font-size: 1.5rem;" id="user-greeting">Olá, Carregando...</h1>
-            <p style="color: var(--text-muted);" id="current-date">Hoje</p>
+            <h1 class="greeting-text" id="user-greeting">Olá, Carregando...</h1>
+            <p class="greeting-date" id="current-date">Hoje</p>
         </div>
         <div class="user-avatar" id="user-avatar-icon" onclick="window.location.href='profile.html'">-</div>
     </header>
 
-    <div class="status-card">
+    <div class="status-card" id="status-card">
         <div>
-            <h2 style="color: white; font-size: 1.25rem;">Muito bem!</h2>
-            <p style="opacity: 0.9;">Medições em dia.</p>
+            <h2 id="status-title">Bem-vindo!</h2>
+            <p id="status-msg">Carregando suas medições…</p>
         </div>
-        <div style="background: rgba(255,255,255,0.2); border-radius: 50%; padding: 12px;">
-            <i data-lucide="award" style="color: white;"></i>
+        <div class="status-icon">
+            <i id="status-icon" data-lucide="award" style="color: white; width: 24px; height: 24px;"></i>
         </div>
     </div>
 
-    <!-- Próximos Remédios Dinâmico (Mock de 2 fixos da LS) -->
-    <h3 class="mb-4">Próximos Remédios (Hoje)</h3>
-    <div class="card medication-list" id="home-med-list">
-        <!-- Render via JS abaixo -->
+    <!-- Próximos Remédios -->
+    <div class="chart-section">
+        <h3>
+            <i data-lucide="pill" style="width: 18px; height: 18px; color: var(--primary);"></i>
+            Meus Remédios
+        </h3>
+        <div class="card medication-list" id="home-med-list" style="padding: 0; overflow: hidden;">
+            <!-- Render via JS abaixo -->
+        </div>
     </div>
 
-    <h3 class="mb-4">Evolução Glicêmica</h3>
-    <div class="card" style="padding: var(--sp-2); margin-bottom: var(--sp-6);">
-        <!-- Chart.js Canvas -->
-        <canvas id="glycemiaChart" height="200"></canvas>
-    </div>
+    <!-- Gráficos: lado a lado em desktop -->
+    <div class="charts-grid">
+        <!-- Glicemia Chart -->
+        <div class="chart-section">
+            <h3>
+                <i data-lucide="activity" style="width: 18px; height: 18px; color: var(--warning);"></i>
+                Evolução Glicêmica
+            </h3>
+            <div class="card chart-card">
+                <canvas id="glycemiaChart" height="200"></canvas>
+            </div>
+        </div>
 
-    <h3 class="mb-4">Pressão Arterial</h3>
-    <div class="card" style="padding: var(--sp-2);">
-        <!-- Chart.js Canvas -->
-        <canvas id="pressureChart" height="200"></canvas>
+        <!-- Pressão Chart -->
+        <div class="chart-section">
+            <h3>
+                <i data-lucide="heart" style="width: 18px; height: 18px; color: var(--danger);"></i>
+                Pressão Arterial
+            </h3>
+            <div class="card chart-card">
+                <canvas id="pressureChart" height="200"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -78,26 +272,35 @@
 <div class="bottom-sheet" id="quick-action-sheet">
     <div class="sheet-drag-handle"></div>
     <h3 class="mb-4 text-center">Novo Registro</h3>
-    
+
     <div style="display: flex; border-bottom: 1px solid var(--border); margin-bottom: 16px;">
-        <div class="tab-btn active border-b-2 border-primary text-primary" data-target="tab-pressao" id="t-pressao">Pressão</div>
+        <div class="tab-btn active" data-target="tab-pressao" id="t-pressao">Pressão</div>
         <div class="tab-btn" data-target="tab-glicemia" id="t-glicose">Glicose</div>
         <div class="tab-btn" data-target="tab-sintomas" id="t-sintomas">Sintomas</div>
     </div>
 
     <div id="tab-pressao" class="tab-content active" style="display: block;">
         <div class="form-group row" style="display: flex; gap: 16px;">
-            <div style="flex: 1;"><label>Sistólica (Maior)</label><input type="number" id="val-sys" class="form-control" placeholder="120" style="font-size: 1.25rem; text-align: center;"></div>
-            <div style="flex: 1;"><label>Diastólica (Menor)</label><input type="number" id="val-dia" class="form-control" placeholder="80" style="font-size: 1.25rem; text-align: center;"></div>
+            <div style="flex: 1;">
+                <label>Sistólica (Maior)</label>
+                <input type="number" id="val-sys" class="form-control" placeholder="120" style="font-size: 1.25rem; text-align: center;">
+            </div>
+            <div style="flex: 1;">
+                <label>Diastólica (Menor)</label>
+                <input type="number" id="val-dia" class="form-control" placeholder="80" style="font-size: 1.25rem; text-align: center;">
+            </div>
         </div>
     </div>
 
     <div id="tab-glicemia" class="tab-content">
-        <div class="form-group"><label>Nível (mg/dL)</label><input type="number" id="val-glicose" class="form-control" placeholder="95" style="font-size: 1.5rem; text-align: center; font-weight: bold; color: var(--primary);"></div>
+        <div class="form-group">
+            <label>Nível (mg/dL)</label>
+            <input type="number" id="val-glicose" class="form-control" placeholder="95" style="font-size: 1.5rem; text-align: center; font-weight: 600; color: var(--primary);">
+        </div>
     </div>
 
     <div id="tab-sintomas" class="tab-content">
-        <p style="margin-bottom: 8px;">Como você está se sentindo?</p>
+        <p style="margin-bottom: 8px; font-size: 0.875rem; color: var(--text-muted);">Como você está se sentindo?</p>
         <div id="sintomas-chips">
             <div class="chip">Tontura</div><div class="chip">Dor de cabeça</div>
             <div class="chip">Cansaço</div><div class="chip">Falta de ar</div>
@@ -108,17 +311,17 @@
         </div>
     </div>
 
-    <div style="display: flex; gap: 16px; margin-top: 24px;">
+    <div style="display: flex; gap: 12px; margin-top: 24px;">
         <button class="btn btn-outline" id="btn-cancel-action" style="flex: 1;">Cancelar</button>
         <button class="btn btn-primary" id="btn-save-record" style="flex: 1;">Salvar</button>
     </div>
 </div>
 
-<script src="../js/security.js"></script>
-<script src="../js/store.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/modal.js"></script>
-<script src="../js/toast.js"></script>
+<script src="../js/security.js?v=1778181033"></script>
+<script src="../js/store.js?v=1778181033"></script>
+<script src="../js/main.js?v=1778181033"></script>
+<script src="../js/modal.js?v=1778181033"></script>
+<script src="../js/toast.js?v=1778181033"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
@@ -129,6 +332,49 @@
         document.getElementById('user-greeting').innerText = `Olá, ${currentUser.name.split(' ')[0]}`;
         document.getElementById('user-avatar-icon').innerText = currentUser.name.charAt(0).toUpperCase();
 
+        // Status card dinâmico baseado nos vitals mais recentes
+        function updateStatusCard() {
+            const vitals = appStore.getVitals();
+            const lastG = (vitals.glycemia || []).slice(-1)[0];
+            const lastP = (vitals.pressure || []).slice(-1)[0];
+
+            const alerts = [];
+            if (lastG && (lastG.value > 180 || lastG.value < 70)) {
+                alerts.push(`Glicemia ${lastG.value} mg/dL`);
+            }
+            if (lastP && (lastP.sys >= 140 || lastP.dia >= 90)) {
+                alerts.push(`Pressão ${lastP.sys}/${lastP.dia} mmHg`);
+            }
+
+            const title = document.getElementById('status-title');
+            const msg   = document.getElementById('status-msg');
+            const icon  = document.getElementById('status-icon');
+            const card  = document.getElementById('status-card');
+            if (!title || !msg || !icon || !card) return;
+
+            if (alerts.length > 0) {
+                title.textContent = 'Atenção!';
+                msg.textContent = alerts.join(' · ') + ' fora do alvo';
+                icon.setAttribute('data-lucide', 'alert-triangle');
+                card.style.background = 'linear-gradient(135deg, #DC2626, #B91C1C)';
+                card.style.boxShadow = '0 8px 24px rgba(220, 38, 38, 0.25)';
+            } else if (!lastG && !lastP) {
+                title.textContent = 'Comece agora';
+                msg.textContent = 'Registre sua primeira medição.';
+                icon.setAttribute('data-lucide', 'sparkles');
+                card.style.background = '';
+                card.style.boxShadow = '';
+            } else {
+                title.textContent = 'Muito bem!';
+                msg.textContent = 'Medições em dia.';
+                icon.setAttribute('data-lucide', 'award');
+                card.style.background = '';
+                card.style.boxShadow = '';
+            }
+            lucide.createIcons();
+        }
+        updateStatusCard();
+
         // Estado em memória dos checks de remédio (apenas durante a sessão diária)
         const todayKey = 'ppc_meds_taken_' + new Date().toISOString().slice(0, 10);
         const taken = new Set(JSON.parse(localStorage.getItem(todayKey) || '[]'));
@@ -138,19 +384,24 @@
         }
 
         function renderHomeMeds() {
-            const meds = appStore.getMedications().slice(0, 3);
+            const meds = appStore.getMedications();
             const medList = document.getElementById('home-med-list');
             if (meds.length > 0) {
                 medList.innerHTML = meds.map(m => `
                     <div class="med-card">
                         <div>
-                            <h4 style="margin:0;">${m.name}</h4>
-                            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top:2px;">
-                                <strong style="color:var(--primary);"><i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px;"></i> ${m.firstDose || 'Avisar'}</strong> • ${m.dose || m.dosage || 'Dose padrão'}
+                            <h4>${escapeHtml(m.name)}</h4>
+                            <p class="med-card-info">
+                                <span class="med-card-time">
+                                    <i data-lucide="clock" style="width:13px;height:13px;"></i>
+                                    ${escapeHtml(m.firstDose || 'Avisar')}
+                                </span>
+                                <span>•</span>
+                                <span>${escapeHtml(m.dose || m.dosage || 'Dose padrão')}</span>
                             </p>
                         </div>
-                        <button class="btn" data-med-id="${m.id}" style="width: auto; padding: 12px; background: var(--surface-hover);">
-                            <i data-lucide="${taken.has(m.id) ? 'check-circle' : 'circle'}" ${taken.has(m.id) ? 'style="color:var(--success);"' : ''}></i>
+                        <button class="med-check-btn" data-med-id="${m.id}">
+                            <i data-lucide="${taken.has(m.id) ? 'check-circle' : 'circle'}" ${taken.has(m.id) ? 'style="color:var(--success);"' : 'style="color:var(--text-subtle);"'}></i>
                         </button>
                     </div>
                 `).join('');
@@ -160,7 +411,7 @@
                         const id = Number(btn.getAttribute('data-med-id'));
                         if (taken.has(id)) {
                             taken.delete(id);
-                            btn.innerHTML = '<i data-lucide="circle"></i>';
+                            btn.innerHTML = '<i data-lucide="circle" style="color:var(--text-subtle);"></i>';
                         } else {
                             taken.add(id);
                             btn.innerHTML = '<i data-lucide="check-circle" style="color:var(--success);"></i>';
@@ -170,7 +421,8 @@
                     });
                 });
             } else {
-                medList.innerHTML = `<p style="padding:16px; text-align:center; color:var(--text-muted); font-size:0.875rem">Nenhum remédio cadastrado para hoje. Adicione em 'Remédios'.</p>`;
+                medList.style.padding = 'var(--sp-4)';
+                medList.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.8125rem">Nenhum remédio cadastrado. Adicione em 'Remédios'.</p>`;
             }
         }
         renderHomeMeds();
@@ -184,10 +436,6 @@
             if (glycemiaChartInstance) glycemiaChartInstance.destroy();
             if (!vitals.glycemia || vitals.glycemia.length === 0) return;
 
-            const cs = getComputedStyle(document.documentElement);
-            const primaryColor = cs.getPropertyValue('--primary').trim() || '#2563EB';
-            const primaryLight = cs.getPropertyValue('--primary-light').trim() || '#DBEAFE';
-
             glycemiaChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -195,11 +443,14 @@
                     datasets: [{
                         label: 'Glicemia (mg/dL)',
                         data: vitals.glycemia.map(v => v.value),
-                        borderColor: primaryColor,
-                        backgroundColor: primaryLight,
-                        borderWidth: 3,
-                        pointBackgroundColor: primaryColor,
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.06)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#2563EB',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
                         pointRadius: 4,
+                        pointHoverRadius: 6,
                         fill: true,
                         tension: 0.4
                     }]
@@ -208,15 +459,15 @@
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: false, min: 60, max: 200 },
-                        x: { grid: { display: false } }
+                        y: { beginAtZero: false, suggestedMin: 60, suggestedMax: 200, ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { color: '#F1F5F9' } },
+                        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#94A3B8' } }
                     }
                 }
             });
         }
         renderGlycemiaChart();
 
-        // Pressure Chart (now stores instance to avoid stacking)
+        // Pressure Chart
         const ctxP = document.getElementById('pressureChart').getContext('2d');
         let pressureChartInstance;
 
@@ -225,33 +476,32 @@
             if (pressureChartInstance) pressureChartInstance.destroy();
             if (!vitals.pressure || vitals.pressure.length === 0) return;
 
-            const cs = getComputedStyle(document.documentElement);
-            const dangerColor = cs.getPropertyValue('--danger').trim() || '#DC2626';
-            const dangerLight = cs.getPropertyValue('--danger-light').trim() || '#FEE2E2';
-            const infoColor = '#0EA5E9';
-
             pressureChartInstance = new Chart(ctxP, {
                 type: 'line',
                 data: {
                     labels: vitals.pressure.map(v => v.date),
                     datasets: [
                         {
-                            label: 'Sistólica (Alta)',
+                            label: 'Sistólica',
                             data: vitals.pressure.map(v => v.sys),
-                            borderColor: dangerColor,
-                            backgroundColor: dangerLight,
-                            borderWidth: 3,
-                            pointBackgroundColor: dangerColor,
+                            borderColor: '#DC2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.04)',
+                            borderWidth: 2.5,
+                            pointBackgroundColor: '#DC2626',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
                             fill: false,
                             tension: 0.3
                         },
                         {
-                            label: 'Diastólica (Baixa)',
+                            label: 'Diastólica',
                             data: vitals.pressure.map(v => v.dia),
-                            borderColor: infoColor,
+                            borderColor: '#0EA5E9',
                             backgroundColor: 'transparent',
-                            borderWidth: 3,
-                            pointBackgroundColor: infoColor,
+                            borderWidth: 2.5,
+                            pointBackgroundColor: '#0EA5E9',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
                             fill: false,
                             tension: 0.3
                         }
@@ -259,10 +509,10 @@
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11} } } },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 16, font: { size: 11, weight: '500' }, color: '#64748B' } } },
                     scales: {
-                        y: { beginAtZero: false, min: 60, max: 180 },
-                        x: { grid: { display: false } }
+                        y: { beginAtZero: false, suggestedMin: 60, suggestedMax: 180, ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { color: '#F1F5F9' } },
+                        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#94A3B8' } }
                     }
                 }
             });
@@ -271,9 +521,9 @@
 
         // Save Functionality from Modal
         const btnSave = document.getElementById('btn-save-record');
-        let currentTab = 'tab-pressao'; // Default
+        let currentTab = 'tab-pressao';
 
-        // Hook into modal tabs to know which one is active
+        // Hook into modal tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => { currentTab = e.target.getAttribute('data-target'); });
         });
@@ -293,6 +543,7 @@
                 }
                 appStore.addPressure(sys, dia);
                 renderPressureChart();
+                updateStatusCard();
                 document.getElementById('val-sys').value = '';
                 document.getElementById('val-dia').value = '';
                 showToast("Pressão salva com sucesso!", 'success');
@@ -304,6 +555,7 @@
                 }
                 appStore.addGlycemia(val);
                 renderGlycemiaChart();
+                updateStatusCard();
                 document.getElementById('val-glicose').value = '';
                 showToast("Glicemia salva com sucesso!", 'success');
             } else {
