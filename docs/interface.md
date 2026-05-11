@@ -26,7 +26,7 @@ Tela Paciente/Cuidador (https://github.com/user-attachments/files/27489591/Templ
 </ul>
 Tela Médico (https://github.com/user-attachments/files/27612277/Template.3.1.pdf)
 
-## <h3><b>Tela – Cuidador/Paciente</b></h3> 
+ ## <h3><b>Tela – Cuidador/Paciente</b></h3> 
 <h3><b>Tela – Cadastro</b></h3>
 <p>A tela de cadastro apresenta os seguintes campos para a inserção das informações pessoais do usuário paciente: Nome Completo, CPF, Senha, data de nascimento, sexo do paciente, qual a doença crônica, tipo sanguineo, alergias, opção para aceitar os termos de uso e botão de cadastro.</p> <p>Também tem a o cadastro para o Cuidador, que assim como o paciente apresenta CPF e senha.</p> <p>E para finalizar a area de cadastro, temos o cadastro do médico, que requer nome completo, CPF, CRM, e senha.</p>
   
