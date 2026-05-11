@@ -141,7 +141,6 @@ Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br
 <figure> 
   <figcaption> - Tela Perfil
 </figure> 
-  ##
     <h3><b>Tela – Médico</b></h3> 
   <hr>
 </p>
