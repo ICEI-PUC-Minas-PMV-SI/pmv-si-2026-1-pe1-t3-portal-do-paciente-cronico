@@ -27,7 +27,7 @@ Tela Paciente/Cuidador (https://github.com/user-attachments/files/27489591/Templ
 Tela Médico (https://github.com/user-attachments/files/27612277/Template.3.1.pdf)
 
  ## <h3><b>Tela – Cuidador/Paciente</b></h3> 
-<h3><b>Tela – Cadastro</b></h3>
+## <h3><b>Tela – Cadastro</b></h3>
 <p>A tela de cadastro apresenta os seguintes campos para a inserção das informações pessoais do usuário paciente: Nome Completo, CPF, Senha, data de nascimento, sexo do paciente, qual a doença crônica, tipo sanguineo, alergias, opção para aceitar os termos de uso e botão de cadastro.</p> <p>Também tem a o cadastro para o Cuidador, que assim como o paciente apresenta CPF e senha.</p> <p>E para finalizar a area de cadastro, temos o cadastro do médico, que requer nome completo, CPF, CRM, e senha.</p>
   
   ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085202.png)
@@ -139,9 +139,9 @@ Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br
 ![Perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
 
 <figure> 
-  <figcaption> - Tela Perfil
+  ## <figcaption> - Tela Perfil
 </figure> 
-## <h3><b>Tela – Médico</b></h3> 
+  <h3><b>Tela – Médico</b></h3> 
   <hr>
 </p>
 
