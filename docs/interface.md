@@ -139,9 +139,10 @@ Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br
 ![Perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
 
 <figure> 
-  ## <figcaption> - Tela Perfil
+  <figcaption> - Tela Perfil
 </figure> 
-  <h3><b>Tela – Médico</b></h3> 
+  ##
+    <h3><b>Tela – Médico</b></h3> 
   <hr>
 </p>
 
