@@ -140,6 +140,15 @@
             color: white;
         }
 
+        /* Garante folga suficiente entre o botão "Sair" e o bottom-nav fixo
+           (64px) — incluindo safe-area-inset em iOS/notebooks com barra. */
+        .container {
+            padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+        }
+        #btn-logout-profile {
+            margin-bottom: var(--sp-6);
+        }
+
         @media print {
             .bottom-nav, .btn, .accordion-icon, .accordion-header { display: none !important; }
             .accordion-content { max-height: none !important; padding: var(--sp-4); border: 1px solid #ccc; display: block !important; margin-bottom: 20px;}

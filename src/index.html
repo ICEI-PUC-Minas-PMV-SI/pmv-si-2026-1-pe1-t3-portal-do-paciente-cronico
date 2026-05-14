@@ -66,6 +66,49 @@
             margin-bottom: var(--sp-2);
         }
 
+        /* Profile Selector — mesmo padrão da tela de cadastro */
+        .profile-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: var(--sp-5);
+        }
+        .profile-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px var(--sp-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-size: 0.8125rem;
+            font-weight: var(--fw-medium);
+            color: var(--text-muted);
+        }
+        .profile-option:hover {
+            border-color: var(--text-subtle);
+        }
+        .profile-option.selected {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: var(--fw-semibold);
+        }
+        .profile-option i {
+            display: block;
+            margin: 0 auto 4px;
+            width: 22px;
+            height: 22px;
+        }
+        .profile-option input { display: none; }
+
+        .profile-selector-label {
+            font-weight: var(--fw-semibold);
+            font-size: 0.8125rem;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
         .password-wrapper {
             position: relative;
         }
@@ -114,13 +157,23 @@
         <p class="auth-subtitle">Acesse seu portal de saúde</p>
 
         <div class="login-card">
-            <div class="form-group">
-                <label>Entrar como:</label>
-                <select id="login-profile" class="form-control" style="font-weight: 500; color: var(--text-main);">
-                    <option value="paciente">Paciente</option>
-                    <option value="cuidador">Cuidador</option>
-                    <option value="medico">Profissional de Saúde</option>
-                </select>
+            <label class="profile-selector-label">Entrar como:</label>
+            <div class="profile-selector" id="login-profile-selector">
+                <label class="profile-option selected">
+                    <input type="radio" name="login-profile" value="paciente" checked>
+                    <i data-lucide="user"></i>
+                    Paciente
+                </label>
+                <label class="profile-option">
+                    <input type="radio" name="login-profile" value="cuidador">
+                    <i data-lucide="users"></i>
+                    Cuidador
+                </label>
+                <label class="profile-option">
+                    <input type="radio" name="login-profile" value="medico">
+                    <i data-lucide="stethoscope"></i>
+                    Médico
+                </label>
             </div>
 
             <div class="form-group">
@@ -157,6 +210,15 @@
 <script src="./js/auth.js?v=1778181033"></script>
 <script>
     lucide.createIcons();
+
+    // Seleção visual dos cards de perfil
+    document.querySelectorAll('input[name="login-profile"]').forEach(r => {
+        r.addEventListener('change', (e) => {
+            document.querySelectorAll('#login-profile-selector .profile-option').forEach(el => el.classList.remove('selected'));
+            e.target.closest('.profile-option').classList.add('selected');
+        });
+    });
+
     function togglePassword() {
         const input = document.getElementById('password');
         if (input.type === 'password') {

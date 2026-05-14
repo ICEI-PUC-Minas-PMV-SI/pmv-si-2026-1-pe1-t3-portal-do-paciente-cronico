@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnLogin = document.getElementById('btn-login');
     if (btnLogin) {
         btnLogin.addEventListener('click', () => {
-            const profileSelected = document.getElementById('login-profile').value;
+            const profileRadio = document.querySelector('input[name="login-profile"]:checked');
+            const profileSelected = profileRadio ? profileRadio.value : 'paciente';
             const cpf = document.getElementById('cpf').value.trim();
             const password = document.getElementById('password') ? document.getElementById('password').value.trim() : '';
 
