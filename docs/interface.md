@@ -143,7 +143,7 @@ Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br
 </figure> 
     <h3><b>Tela – Médico</b></h3> 
   <hr>
-## <h3><b>Tela - Gestão de Pacientes</b></h3>
+<h3><b>Tela - Gestão de Pacientes</b></h3>
 
 No lado esquerdo, sobre um fundo branco, há o logotipo "Portal Clínico" com um ícone de coração azul. Abaixo, o botão "Meus Pacientes" está destacado em azul claro. No rodapé, identificam-se o nome do médico, seu CRM e o botão "Sair".
 
