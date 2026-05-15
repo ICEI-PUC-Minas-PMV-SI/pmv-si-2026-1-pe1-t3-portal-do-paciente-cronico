@@ -181,7 +181,17 @@ Um campo de texto editável com o placeholder "Paciente apresenta picos de glice
 <img width="1918" height="908" alt="médico img3" src="https://github.com/user-attachments/assets/8cff4d6d-e435-414b-8192-9c0dc782f322" />
 Tela - Prontuário e Histórico de Sintomas 
 
-<hr>
+<hr> 
+<h3><b>Tela - Finalização da Conduta Médica</b></h3> 
+
+Abaixo das observações clínicas, existe um campo específico intitulado "Ajuste de Prescrição", onde o médico pode digitar alterações nas dosagens ou novos medicamentos.
+
+No canto inferior direito, destaca-se o botão azul "Salvar e Notificar o Paciente". Este botão finaliza o registro e envia automaticamente as atualizações para o aplicativo do paciente.
+
+Reitera a presença do menu lateral e as informações de login do médico, garantindo que o contexto do usuário não seja perdido durante o preenchimento. 
+
+<img width="1918" height="898" alt="médico img4" src="https://github.com/user-attachments/assets/fd0b5931-be09-481d-9a44-1822f31b4d9a" />
+Tela - Finalização da Conduta Médica
  
 > **Links Úteis**:
 > - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
