@@ -149,7 +149,7 @@ No lado esquerdo, sobre um fundo branco, há o logotipo "Portal Clínico" com um
 No centro, o título principal é "Gestão de Pacientes", acompanhado do subtítulo "Visão geral de monitoramento remoto". À direita, há uma barra de pesquisa com o texto "Buscar por Nome...".
 
 Apresenta a seção "Meus Pacientes Ativos" com três cartões brancos e bordas arredondadas. Cada cartão contém o nome do paciente, o número do CPF e uma etiqueta verde no canto superior direito indicando o status "Estável".
-Tela Gestão de Pacientes <img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" />
+<img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" />
 
  
 > **Links Úteis**:
