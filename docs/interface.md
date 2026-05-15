@@ -170,9 +170,18 @@ Na parte inferior, dois quadros mostram a "Prescrição Atual" (medicamentos em 
 Tela - Interface de Detalhes do Paciente 
 
 <hr>
-<h3><b>Tela - Interface de Detalhes do Paciente</b></h3>
+<h3><b>Tela - Prontuário e Histórico de Sintomas</b></h3> 
 
+Exibe detalhadamente o quadro de "Prescrição Atual" com as dosagens de Losartana, Metformina e Sinvastatina, ao lado do quadro de "Últimos Sintomas", que mostra registros datados (14 abr e 12 abr) sobre o bem-estar do paciente.
 
+Introduz a seção "Prontuário e Conduta", onde o médico começa a formalizar o atendimento.
+
+Um campo de texto editável com o placeholder "Paciente apresenta picos de glicemia...", permitindo que o profissional escreva suas anotações de anamnese remota. 
+
+<img width="1918" height="908" alt="médico img3" src="https://github.com/user-attachments/assets/8cff4d6d-e435-414b-8192-9c0dc782f322" />
+Tela - Prontuário e Histórico de Sintomas 
+
+<hr>
  
 > **Links Úteis**:
 > - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
