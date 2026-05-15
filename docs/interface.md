@@ -154,7 +154,9 @@ Apresenta a seção "Meus Pacientes Ativos" com três cartões brancos e bordas 
 <img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" /> 
 Tela - Gestão de Pacientes
 
-## <h3><b>Tela - Interface de Detalhes do Paciente</b></h3> 
+<hr>
+
+<h3><b>Tela - Interface de Detalhes do Paciente</b></h3> 
 
 O card do Paciente aparece com um fundo azulado, indicando que ele é o foco atual da visualização.
 
@@ -165,7 +167,10 @@ Uma grande área central reservada para visualização de dados, com abas para a
 Na parte inferior, dois quadros mostram a "Prescrição Atual" (medicamentos em uso) e os "Últimos Sintomas" relatados pelo paciente, como cansaço e tontura. 
 
 <img width="1918" height="905" alt="médico img2" src="https://github.com/user-attachments/assets/be425857-0ba0-4629-945b-9eb040165156" /> 
-Tela - Interface de Detalhes do Paciente
+Tela - Interface de Detalhes do Paciente 
+
+<hr>
+<h3><b>Tela - Interface de Detalhes do Paciente</b></h3>
 
 
  
