@@ -151,7 +151,10 @@ No centro, o título principal é "Gestão de Pacientes", acompanhado do subtít
 
 Apresenta a seção "Meus Pacientes Ativos" com três cartões brancos e bordas arredondadas. Cada cartão contém o nome do paciente, o número do CPF e uma etiqueta verde no canto superior direito indicando o status "Estável".
 
-<img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" />
+<img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" /> 
+Tela - Gestão de Pacientes
+
+<h3><b>Tela - Gestão de Pacientes</b></h3>
 
  
 > **Links Úteis**:
