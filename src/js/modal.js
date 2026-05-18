@@ -37,17 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove active classes
-            tabs.forEach(t => t.classList.remove('active', 'border-b-2', 'border-primary', 'text-primary'));
+            // Limpa estado ativo de TODAS as abas (e remove estilo inline antigo que
+            // sobrescrevia o visual de "pílula" da nova UI do bottom-sheet)
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.style.borderBottom = '';
+            });
             tabContents.forEach(c => c.style.display = 'none');
-            
-            // Add active class
-            tab.classList.add('active', 'text-primary');
-            tab.style.borderBottom = '2px solid var(--primary)';
-            
-            // Show content
+
+            // Marca a aba atual
+            tab.classList.add('active');
+
+            // Mostra o conteúdo correspondente
             const target = tab.getAttribute('data-target');
-            document.getElementById(target).style.display = 'block';
+            const targetEl = document.getElementById(target);
+            if (targetEl) targetEl.style.display = 'block';
         });
     });
 });

@@ -1,0 +1,314 @@
+/* css/onboarding.css
+   Estilos para:
+   1. Banner do cuidador (identifica paciente representado)
+   2. FAB estendido (botão "Novo Registro" com rótulo)
+   3. Tutorial de primeiro acesso (spotlight + tooltip com seta)
+*/
+
+/* ───────────────────────────────────────────────────────────
+   1. CAREGIVER BANNER
+   ─────────────────────────────────────────────────────────── */
+.caregiver-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    margin: var(--sp-4) 0 var(--sp-5) 0;
+    padding: var(--sp-4) var(--sp-5);
+    background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+    border: 1.5px solid #FDBA74;
+    border-left: 5px solid var(--accent);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.10);
+    position: relative;
+    overflow: hidden;
+}
+.caregiver-banner::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 140px;
+    height: 140px;
+    background: rgba(249, 115, 22, 0.06);
+    border-radius: 50%;
+}
+.cgb-avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--fw-bold);
+    font-size: 1.25rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    z-index: 1;
+}
+.cgb-body {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    z-index: 1;
+}
+.cgb-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: var(--fw-semibold);
+    color: var(--accent-hover);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.cgb-icon {
+    width: 14px;
+    height: 14px;
+}
+.cgb-patient {
+    font-size: 1.125rem;
+    font-weight: var(--fw-bold);
+    color: var(--text-main);
+    letter-spacing: var(--ls-tight);
+    margin-top: 2px;
+}
+.cgb-cg {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ───────────────────────────────────────────────────────────
+   2. EXTENDED FAB
+   ─────────────────────────────────────────────────────────── */
+.fab-extended {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 56px;
+    padding: 0 22px;
+    border-radius: 28px;
+    background: var(--accent);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: var(--fw-semibold);
+    font-size: 0.9375rem;
+    letter-spacing: var(--ls-normal);
+    box-shadow: 0 10px 28px rgba(249, 115, 22, 0.40),
+                0 4px 10px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    width: auto;
+    white-space: nowrap;
+}
+.fab-extended:hover {
+    background: var(--accent-hover);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 14px 32px rgba(249, 115, 22, 0.50),
+                0 6px 12px rgba(0, 0, 0, 0.10);
+}
+.fab-extended:active {
+    transform: translateX(-50%) translateY(0);
+}
+.fab-extended i {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+.fab-extended .fab-label {
+    line-height: 1;
+}
+/* Pulso sutil pra chamar atenção quando o usuário ainda não interagiu */
+.fab-extended.attention::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 32px;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    animation: fab-pulse 2.2s ease-out infinite;
+}
+@keyframes fab-pulse {
+    0%   { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(1.15); }
+}
+
+@media (min-width: 600px) {
+    .fab-extended {
+        left: auto;
+        right: calc(50% - min(50vw, 640px) + var(--sp-6));
+        transform: none;
+    }
+    .fab-extended:hover {
+        transform: translateY(-2px);
+    }
+    .fab-extended:active {
+        transform: translateY(0);
+    }
+}
+
+/* ───────────────────────────────────────────────────────────
+   3. ONBOARDING (tutorial guiado)
+   ─────────────────────────────────────────────────────────── */
+.onb-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 9000;
+    animation: onb-fade-in 0.25s ease;
+}
+@keyframes onb-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.onb-highlight {
+    position: fixed;
+    z-index: 9001;
+    border-radius: 14px;
+    pointer-events: none;
+    box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.55),
+        0 0 0 9999px rgba(15, 23, 42, 0.55);
+    transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.2s ease;
+    opacity: 0;
+}
+
+.onb-tooltip {
+    position: fixed;
+    z-index: 9002;
+    width: min(320px, calc(100vw - 32px));
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    padding: var(--sp-5);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.30);
+    border: 1px solid var(--border);
+    animation: onb-tooltip-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes onb-tooltip-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.onb-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--sp-3);
+}
+.onb-step-counter {
+    font-size: 0.6875rem;
+    font-weight: var(--fw-semibold);
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+}
+.onb-skip {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+.onb-skip:hover {
+    color: var(--text-main);
+    background: var(--surface-hover);
+}
+
+.onb-title {
+    font-size: 1.0625rem;
+    font-weight: var(--fw-bold);
+    color: var(--text-main);
+    margin: 0 0 8px 0;
+    letter-spacing: var(--ls-tight);
+}
+.onb-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 var(--sp-4) 0;
+}
+
+.onb-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: var(--sp-4);
+}
+.onb-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    transition: var(--transition-fast);
+}
+.onb-dot.active {
+    background: var(--primary);
+    width: 18px;
+    border-radius: 999px;
+}
+
+.onb-actions {
+    display: flex;
+    gap: var(--sp-3);
+}
+.onb-actions .btn { flex: 1; padding: 9px 12px; font-size: 0.875rem; }
+
+/* Seta apontando para o elemento alvo */
+.onb-arrow {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transform: rotate(45deg);
+}
+.onb-tooltip.arrow-top .onb-arrow {
+    top: -9px;
+    border-right: none;
+    border-bottom: none;
+}
+.onb-tooltip.arrow-bottom .onb-arrow {
+    bottom: -9px;
+    border-left: none;
+    border-top: none;
+}
+
+/* Indicador de "clique aqui" complementando a seta */
+.onb-highlight::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 18px;
+    border: 2px solid var(--primary);
+    opacity: 0.7;
+    animation: onb-pulse 1.8s ease-out infinite;
+}
+@keyframes onb-pulse {
+    0%   { transform: scale(1);    opacity: 0.7; }
+    100% { transform: scale(1.18); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+    .onb-tooltip { padding: var(--sp-4); }
+    .onb-title { font-size: 1rem; }
+    .onb-text { font-size: 0.8125rem; }
+}

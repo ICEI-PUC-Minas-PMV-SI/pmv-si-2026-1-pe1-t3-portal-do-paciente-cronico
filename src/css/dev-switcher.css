@@ -1,0 +1,287 @@
+/* css/dev-switcher.css
+   Painel flutuante "Modo Desenvolvedor" — visível apenas durante testes.
+   Visual neutro/discreto pra não competir com a UI real. */
+
+/* ── Botão flutuante de acesso ───────────────────────────────── */
+.devsw-fab {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #0F172A;
+    color: white;
+    border: 2px solid white;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 8500;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.devsw-fab i { width: 18px; height: 18px; }
+.devsw-fab:hover {
+    background: #1E293B;
+    transform: scale(1.08);
+}
+.devsw-fab::after {
+    content: 'DEV';
+    position: absolute;
+    bottom: -6px;
+    right: -8px;
+    background: #F97316;
+    color: white;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 6px;
+    border: 2px solid white;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+}
+
+/* ── Overlay + painel ────────────────────────────────────────── */
+.devsw-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.devsw-overlay.show { opacity: 1; }
+
+.devsw-panel {
+    width: min(420px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.30);
+    padding: 20px;
+    transform: translateY(8px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #0F172A;
+}
+.devsw-overlay.show .devsw-panel { transform: translateY(0); }
+
+/* ── Header ──────────────────────────────────────────────────── */
+.devsw-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.devsw-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+.devsw-header-title i {
+    width: 18px;
+    height: 18px;
+    color: #F97316;
+}
+.devsw-close {
+    background: transparent;
+    border: none;
+    color: #64748B;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.devsw-close:hover { background: #F1F5F9; color: #0F172A; }
+.devsw-close i { width: 18px; height: 18px; }
+
+.devsw-subtitle {
+    font-size: 0.8125rem;
+    color: #64748B;
+    margin: 0 0 18px 0;
+    line-height: 1.5;
+}
+
+/* ── Seções e listas ────────────────────────────────────────── */
+.devsw-section-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94A3B8;
+    margin: 16px 0 8px 0;
+}
+.devsw-section-label i { width: 13px; height: 13px; }
+
+.devsw-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.devsw-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    width: 100%;
+}
+.devsw-item:hover {
+    border-color: #2563EB;
+    background: #F8FAFC;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+.devsw-item.active {
+    border-color: #16A34A;
+    background: #F0FDF4;
+}
+.devsw-item.active:hover { background: #DCFCE7; }
+
+.devsw-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.devsw-item-icon i { width: 18px; height: 18px; }
+
+.devsw-item-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.devsw-item-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.devsw-item-head strong {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0F172A;
+}
+.devsw-tag {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 7px;
+    border-radius: 999px;
+    line-height: 1.4;
+}
+.devsw-item-cpf {
+    font-size: 0.75rem;
+    color: #64748B;
+    font-variant-numeric: tabular-nums;
+}
+.devsw-item-note {
+    font-size: 0.6875rem;
+    color: #94A3B8;
+    margin-top: 1px;
+}
+.devsw-item-action {
+    width: 18px;
+    height: 18px;
+    color: #94A3B8;
+    flex-shrink: 0;
+}
+.devsw-item.active .devsw-item-action { color: #16A34A; }
+
+/* ── Atalhos ─────────────────────────────────────────────────── */
+.devsw-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.devsw-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: white;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    width: 100%;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #334155;
+}
+.devsw-action:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+}
+.devsw-action i { width: 16px; height: 16px; color: #64748B; }
+.devsw-action--danger { color: #B91C1C; }
+.devsw-action--danger i { color: #DC2626; }
+.devsw-action--danger:hover {
+    background: #FEF2F2;
+    border-color: #FECACA;
+}
+.devsw-action--master {
+    color: #0F172A;
+    background: #F8FAFC;
+    border-style: dashed;
+}
+.devsw-action--master i { color: #0F172A; }
+.devsw-action--master:hover {
+    background: #E2E8F0;
+    border-color: #94A3B8;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.devsw-footer {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+}
+.devsw-footer small {
+    font-size: 0.6875rem;
+    color: #94A3B8;
+    line-height: 1.5;
+    display: block;
+}
+.devsw-footer code {
+    background: #F1F5F9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.625rem;
+    color: #475569;
+}
+
+@media (max-width: 480px) {
+    .devsw-fab { top: 10px; right: 10px; }
+    .devsw-panel { padding: 16px; border-radius: 14px; }
+}
