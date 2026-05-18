@@ -1,49 +1,39 @@
 # Especificações do Projeto
 
-## Perfis de Usuários
+Este documento detalha **as personas** atendidas pelo sistema, suas **histórias de usuário** e o conjunto de **requisitos funcionais e não funcionais** que orientaram o desenvolvimento do Portal do Paciente Crônico.
+
+> 🔗 Para o **mapeamento de cada requisito ao arquivo de código que o implementa**, consulte [`docs/development.md`](development.md). Para a **especificação técnica completa** (modelo de dados, fluxos, contas de teste), consulte o [`PRD.md`](../PRD.md).
+
+---
+
+## 1. Perfis de Usuários (Personas)
+
 ### Paciente Crônico
 
-<table>
-  <tr>
-    <td><strong>Descrição:</strong></td>
-    <td>Adulto ou idoso portador de condições como diabetes ou hipertensão, que possui familiaridade básica ou intermediária com smartphones e necessita de acompanhamento contínuo de saúde.</td>
-  </tr>
-  <tr>
-    <td><strong>Necessidades:</strong></td>
-    <td>Interface simples e com botões grandes; facilidade para registrar medições diárias (glicose, pressão); lembretes visuais e sonoros para horários fracionados de medicamentos.</td>
-  </tr>
-</table>
+| | |
+|---|---|
+| **Descrição** | Adulto ou idoso portador de condições como diabetes ou hipertensão, que possui familiaridade básica ou intermediária com smartphones e necessita de acompanhamento contínuo de saúde. |
+| **Necessidades** | Interface simples e com botões grandes; facilidade para registrar medições diárias (glicose, pressão); lembretes visuais para horários fracionados de medicamentos; acesso ao próprio histórico de evolução. |
 
 ### Familiar / Cuidador
 
-<table>
-  <tr>
-    <td><strong>Descrição:</strong></td>
-    <td>Pessoa responsável por auxiliar ou monitorar o tratamento do paciente (filho, neto ou profissional), com bom domínio tecnológico.</td>
-  </tr>
-  <tr>
-    <td><strong>Necessidades:</strong></td>
-    <td>Capacidade de registrar dados em nome do paciente; acesso rápido a relatórios de adesão ao tratamento; compartilhamento de informações de forma ágil.</td>
-  </tr>
-</table>
+| | |
+|---|---|
+| **Descrição** | Pessoa responsável por auxiliar ou monitorar o tratamento do paciente (filho, neto ou cuidador profissional), com bom domínio tecnológico. |
+| **Necessidades** | Capacidade de registrar dados **em nome do paciente** com identificação clara de quem está sendo acompanhado; acesso rápido a relatórios de adesão ao tratamento; compartilhamento de informações de forma ágil. |
 
 ### Profissional de Saúde (UBS)
 
-<table>
-  <tr>
-    <td><strong>Descrição:</strong></td>
-    <td>Médico ou enfermeiro da rede de Atenção Primária que realiza o acompanhamento periódico do paciente. Tem tempo de consulta limitado e lida com alto volume de atendimentos.</td>
-  </tr>
-  <tr>
-    <td><strong>Necessidades:</strong></td>
-    <td>Visualização de um painel (dashboard) resumido e gráfico do histórico do paciente; leitura rápida e clara das tendências de saúde (ex: picos de glicemia ou pressão) para embasar decisões clínicas rápidas.</td>
-  </tr>
-</table>
+| | |
+|---|---|
+| **Descrição** | Médico ou enfermeiro da rede de Atenção Primária que realiza o acompanhamento periódico do paciente. Tem tempo de consulta limitado e lida com alto volume de atendimentos. |
+| **Necessidades** | Visualização de um painel (dashboard) resumido e gráfico do histórico do paciente; leitura rápida e clara das tendências de saúde (ex.: picos de glicemia ou pressão) com **destaque visual para medições fora do alvo**, para embasar decisões clínicas rápidas; registro de conduta clínica. |
 
+---
 
-## Histórias de Usuários
+## 2. Histórias de Usuários
 
-Com base na análise das personas forma identificadas as seguintes histórias de usuários:
+Com base na análise das personas, foram identificadas as seguintes histórias de usuário:
 
 |     EU COMO... `PERSONA`     | QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
 |-----------------------------|------------------------------------------|---------------------------------|
@@ -61,45 +51,58 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 |Profissional de Saúde| visualizar a lista consolidada de quais medicamentos o paciente marcou como "em uso" no aplicativo| cruzar com o meu receituário para garantir que ele entendeu a prescrição e evitar interações medicamentosas perigosas.|
 
 
-## Requisitos
+---
 
-As tabelas que se seguem apresentam os requisitos funcionais e não funcionais que detalham o escopo do projeto.
+## 3. Requisitos
 
-### Requisitos Funcionais
+As tabelas a seguir apresentam os **requisitos funcionais (RF)** e **não funcionais (RNF)** que detalham o escopo do projeto. A coluna *Atendido em* indica os artefatos do código onde o requisito foi implementado — para o detalhamento completo de cada implementação, consulte [`docs/development.md`](development.md).
 
-|ID      | Descrição do Requisito  | Prioridade | 
-|--------|-----------------|----| 
-|RF-01| Autenticação e Cadastro: O sistema deve permitir o cadastro e o acesso seguro (login/logout) para pacientes, cuidadores e profissionais de saúde.  | ALTA |
-|RF-02| Perfil de Saúde: O sistema deve permitir que o paciente cadastre e edite informações básicas de saúde (doenças crônicas, alergias, tipo sanguíneo). | ALTA | 
-|RF-03| Registro de Medicamentos: O sistema deve permitir que o usuário registre seus medicamentos de uso contínuo, informando dosagem e horários fracionados. | ALTA |
-|RF-04| Sistema de Alertas: O sistema deve emitir notificações/alertas visuais na interface para lembrar o paciente sobre o horário exato da medicação. | ALTA |
-|RF-05| Registro de Medições Diárias: O sistema deve disponibilizar um formulário simplificado para o registro rápido de medições de rotina (ex: glicemia e pressão arterial). | ALTA |
-|RF-06| Registro de Sintomas: O sistema deve permitir que o paciente registre sintomas diários (descrição e data) para acompanhamento da evolução clínica. | MÉDIA |
-|RF-07| Histórico de Exames e Consultas: O sistema deve permitir o cadastro de exames realizados e de consultas médicas, incluindo datas e envio de anexos simples (PDF/Imagens). | MÉDIA |
-|RF-08| Dashboard do Paciente (Gráficos): O sistema deve gerar um painel visual (dashboard) com gráficos mostrando a evolução das medições e a adesão ao tratamento nos últimos 30 dias. |ALTA|
-|RF-09|Exportação e Compartilhamento: O sistema deve permitir que o paciente exporte seus dados de saúde e histórico (ex: formato PDF) para compartilhar com profissionais fora da plataforma.| MÉDIA|
-|RF-10| Busca e Filtro: O sistema deve disponibilizar uma ferramenta de busca para que o usuário localize rapidamente exames, consultas ou medicamentos antigos.| BAIXA|
-|RF-11| Perfil Cuidador: O sistema deve permitir o cadastro de um "Perfil Cuidador", que poderá visualizar e ajudar a gerenciar a rotina de saúde do paciente principal|MÉDIA|
-|RF-12| Acesso Autorizado do Médico: O sistema deve permitir que o médico acesse o perfil de saúde do paciente (mediante autorização) garantindo a privacidade dos dados.|ALTA|
-|RF-13| Visualização Clínica (Dashboard do Médico): O sistema deve permitir que o médico consulte a linha do tempo de sintomas, exames e medições do paciente de forma clara e consolidada.|ALTA|
-|RF-14|Observações e Prescrições Médicas: O sistema deve permitir que o médico registre observações clínicas rápidas e atualize a lista de prescrições ativas diretamente no perfil do paciente.|MÉDIA|
+### 3.1 Requisitos Funcionais
 
+| ID | Descrição do Requisito | Prioridade | Atendido em |
+|---|---|---|---|
+| **RF-01** | **Autenticação e Cadastro**: o sistema deve permitir o cadastro e o acesso seguro (login/logout) para pacientes, cuidadores e profissionais de saúde. | ALTA | ✅ [`index.html`](../src/index.html), [`register.html`](../src/register.html), [`auth.js`](../src/js/auth.js), [`store.js`](../src/js/store.js) |
+| **RF-02** | **Perfil de Saúde**: o sistema deve permitir que o paciente cadastre e edite informações básicas de saúde (doenças crônicas, alergias, tipo sanguíneo). | ALTA | ✅ [`profile.html`](../src/pages/profile.html) (accordion Dados Clínicos) |
+| **RF-03** | **Registro de Medicamentos**: o sistema deve permitir que o usuário registre seus medicamentos de uso contínuo, informando dosagem e horários. | ALTA | ✅ [`medications.html`](../src/pages/medications.html) (CRUD completo) |
+| **RF-04** | **Sistema de Alertas**: o sistema deve emitir alertas visuais na interface para destacar medições fora do alvo clínico e horários de medicação. | ALTA | ✅ Status card adaptativo na [`dashboard.html`](../src/pages/dashboard.html); badge "Alerta!" na [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+| **RF-05** | **Registro de Medições Diárias**: o sistema deve disponibilizar um formulário simplificado para o registro rápido de medições de rotina (glicemia e pressão arterial). | ALTA | ✅ Bottom-sheet "Novo Registro" na [`dashboard.html`](../src/pages/dashboard.html) (abas Pressão e Glicose) |
+| **RF-06** | **Registro de Sintomas**: o sistema deve permitir que o paciente registre sintomas diários (descrição e data) para acompanhamento da evolução clínica. | MÉDIA | ✅ Aba Sintomas no bottom-sheet, com chips + descrição livre |
+| **RF-07** | **Histórico de Exames e Consultas**: o sistema deve permitir o cadastro de exames e consultas com data e referência a anexos. | MÉDIA | ✅ [`history.html`](../src/pages/history.html) (botão "Anexar Exame/Laudo") |
+| **RF-08** | **Dashboard do Paciente (Gráficos)**: o sistema deve gerar um painel visual com gráficos da evolução das medições. | ALTA | ✅ Canvases `#glycemiaChart` e `#pressureChart` em [`dashboard.html`](../src/pages/dashboard.html) (Chart.js) |
+| **RF-09** | **Exportação e Compartilhamento**: o sistema deve permitir que o paciente exporte seus dados (PDF) para compartilhar com profissionais. | MÉDIA | ✅ [`report.html`](../src/pages/report.html) via `window.print()` |
+| **RF-10** | **Busca e Filtro**: o sistema deve disponibilizar busca para localizar rapidamente exames, consultas ou medicamentos. | BAIXA | ✅ `#hist-search` em [`history.html`](../src/pages/history.html); `#patient-search` em [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+| **RF-11** | **Perfil Cuidador**: o sistema deve permitir o cadastro de um "Perfil Cuidador" vinculado a um paciente para ajudar na gestão da rotina. | MÉDIA | ✅ [`profile.html`](../src/pages/profile.html) (accordion Meus Cuidadores) + [`caregiver-banner.js`](../src/js/caregiver-banner.js) |
+| **RF-12** | **Acesso Autorizado do Médico**: o sistema deve permitir que o médico acesse os dados do paciente garantindo a privacidade. | ALTA | ✅ Login por perfil em [`auth.js`](../src/js/auth.js) + controle de acesso em [`security.js`](../src/js/security.js) |
+| **RF-13** | **Visualização Clínica (Dashboard do Médico)**: linha do tempo consolidada de sintomas, exames e medições. | ALTA | ✅ [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+| **RF-14** | **Observações e Prescrições Médicas**: o sistema deve permitir que o médico registre observações e atualize prescrições. | MÉDIA | ✅ Seção "Prontuário e Conduta" em [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) + função `saveObservation` em [`store.js`](../src/js/store.js) |
 
+### 3.2 Requisitos Não Funcionais
 
-### Requisitos não Funcionais
+| ID | Descrição do Requisito | Prioridade | Atendido em |
+|---|---|---|---|
+| **RNF-01** | **Acessibilidade Visual**: botões grandes, tipografia legível e alto contraste para idosos. | ALTA | ✅ [`variables.css`](../src/css/variables.css) (tipografia Inter, paleta WCAG); botões ≥ 44 px |
+| **RNF-02** | **Responsividade**: layout mobile-first adaptável a smartphones, tablets e desktops. | ALTA | ✅ `@media` em [`components.css`](../src/css/components.css) e [`onboarding.css`](../src/css/onboarding.css) |
+| **RNF-03** | **Segurança e Privacidade (LGPD)**: aceite explícito do termo de consentimento. | ALTA | ✅ Checkbox `#reg-lgpd` em [`register.html`](../src/register.html); bloqueio sem aceite |
+| **RNF-04** | **Eficiência de Uso**: registro diário em até 3 cliques. | ALTA | ✅ FAB → aba → Salvar = 3 cliques |
+| **RNF-05** | **Desempenho**: carregamento < 3 s em redes móveis. | ALTA | ✅ Vanilla JS sem bundler; CSS único por contexto; assets via CDN |
+| **RNF-06** | **HTTPS**: comunicação criptografada. | ALTA | ✅ GitHub Pages serve em HTTPS automaticamente |
+| **RNF-07** | **Timeout de Sessão**: logout automático após 15 minutos de inatividade. | MÉDIA | ✅ Listeners globais em [`security.js`](../src/js/security.js) |
+| **RNF-08** | **Tratamento de Erros Amigável**: mensagens claras, sem jargão técnico. | ALTA | ✅ Toasts coloridos em [`toast.js`](../src/js/toast.js); `showConfirm` para confirmações |
+| **RNF-09** | **Prevenção de Perda de Dados**: dados preservados em queda de conexão. | MÉDIA | ✅ Persistência em `localStorage`; funciona totalmente offline |
+| **RNF-10** | **Compatibilidade de Navegadores**: Chrome, Safari, Firefox e Edge recentes. | ALTA | ✅ Uso exclusivo de Web Standards (HTML5, CSS3, ES6+) |
+| **RNF-11** | **Curva de Aprendizado (Onboarding)**: tutorial visual e interativo no primeiro acesso. | BAIXA | ✅ Tour guiado com spotlight em [`onboarding.js`](../src/js/onboarding.js) + estilos em [`onboarding.css`](../src/css/onboarding.css); botão "Rever Tutorial" no Perfil |
+| **RNF-12** | **Clareza Legal**: Termos de Uso em linguagem simples. | MÉDIA | ✅ Texto LGPD em [`register.html`](../src/register.html) escrito em linguagem direta |
 
-|ID     | Descrição do Requisito  |Prioridade |
-|-------|-------------------------|----|
-|RNF-01| Acessibilidade Visual: A interface deve possuir botões grandes, tipografia legível (opção de ajuste de tamanho) e alto contraste, visando a facilidade de uso por pacientes idosos ou com visão reduzida. | ALTA | 
-|RNF-02| Responsividade: A aplicação Web (Front-end) deve ser totalmente responsiva, com layout que se adapte perfeitamente às telas de smartphones (mobile-first), tablets e desktops. | ALTA | 
-|RNF-03| Segurança e Privacidade (LGPD): O sistema deve exigir o aceite de um termo de consentimento explícito para o tratamento de dados sensíveis de saúde, em total conformidade com a LGPD. | ALTA | 
-|RNF-04| Eficiência de Uso (Usabilidade): O fluxo principal do sistema (registro diário de medições e confirmação de medicamentos) não deve ultrapassar 3 cliques a partir da tela inicial. | ALTA | 
-|RNF-05| Desempenho (Tempo de Carregamento): A interface deve ser otimizada para carregar as telas principais em menos de 3 segundos em redes móveis (3G/4G), considerando que muitos usuários podem acessar da rua ou de UBSs. | ALTA | 
-|RNF-06| Segurança da Comunicação: Toda a troca de informações entre o navegador do usuário e o sistema deve ser criptografada, utilizando o protocolo de segurança HTTPS. | ALTA | 
-|RNF-07| Segurança de Acesso (Timeout): O sistema deve encerrar a sessão do usuário (logout automático) após 15 minutos de inatividade, evitando a exposição de dados médicos caso o paciente esqueça o celular desbloqueado. | MÉDIA | 
-|RNF-08| Tratamento de Erros Amigável: O sistema deve exibir mensagens de erro claras e em linguagem não técnica (ex: "A pressão informada parece incorreta, verifique os números"), evitando jargões de programação que assustem o usuário idoso. | ALTA | 
-|RNF-09| Prevenção de Perda de Dados: Em caso de perda momentânea de conexão com a internet, o sistema deve manter os dados digitados no formulário (via cache/local storage do navegador) para que o paciente não precise redigitar tudo. | MÉDIA | 
-|RNF-10| Compatibilidade de Navegadores: O Front-end deve ser homologado para funcionar perfeitamente nas versões mais recentes dos principais navegadores do mercado (Google Chrome, Safari, Firefox e Edge). | ALTA | 
-|RNF-11| Curva de Aprendizado (Onboarding): No primeiro acesso do paciente, o sistema deve apresentar um rápido tutorial visual e interativo (tooltips) ensinando como registrar o primeiro medicamento e a primeira medição. | BAIXA | 
-|RNF-12| Clareza Legal: Os Termos de Uso e Políticas de Privacidade devem ser escritos em linguagem simples e acessível, evitando "juridiquês" excessivo, garantindo que o paciente leigo entenda com o que está concordando. | MÉDIA | 
+---
+
+## 4. Documentação Complementar
+
+| Tema | Documento |
+|---|---|
+| Contexto, problema e justificativa | [`docs/context.md`](context.md) |
+| Telas, wireframes e design system | [`docs/interface.md`](interface.md) |
+| Mapeamento RF → arquivo de código | [`docs/development.md`](development.md) |
+| Plano e cenários de testes | [`docs/tests.md`](tests.md) |
+| Bibliografia | [`docs/references.md`](references.md) |
+| Especificação técnica detalhada (PRD) | [`../PRD.md`](../PRD.md) |
 
