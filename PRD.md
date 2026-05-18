@@ -2,16 +2,18 @@
 
 ## 0. CREDENCIAIS DE TESTE (PRÉ-CARREGADAS NO LOCALSTORAGE)
 
-> **IMPORTANTE PARA TESTES AUTOMATIZADOS**: O sistema injeta automaticamente os 4 usuários abaixo no `localStorage` na primeira carga de qualquer página. **Não há cadastro prévio necessário**. **NÃO** pedir credenciais ao usuário durante os testes.
+> **IMPORTANTE PARA TESTES AUTOMATIZADOS**: O sistema injeta automaticamente os 6 usuários abaixo no `localStorage` na primeira carga de qualquer página. **Não há cadastro prévio necessário**. **NÃO** pedir credenciais ao usuário durante os testes.
 >
 > **Senha universal de teste: `123`**
 
-| # | Perfil | Nome | CPF (formato exibido) | CPF (puro) | Senha | Vínculo |
+| # | Perfil | Nome | CPF (formato exibido) | CPF (puro) | Senha | Vínculo / Quadro Clínico |
 |---|---|---|---|---|---|---|
-| 1 | **Paciente** | João Silva | `123.456.789-00` | `12345678900` | `123` | — |
-| 2 | **Paciente** | Maria Souza | `987.654.321-00` | `98765432100` | `123` | — |
-| 3 | **Cuidador** | Alan Cuidador | `477.447.980-23` | `47744798023` | `123` | Linkado a João Silva |
-| 4 | **Médico** | Dra. Ana | `111.111.111-11` | `11111111111` | `123` | CRM 12345-MG |
+| 1 | **Paciente** | João Silva | `123.456.789-00` | `12345678900` | `123` | Diabetes + Hipertensão (dados ricos pré-populados) |
+| 2 | **Paciente** | Maria Souza | `987.654.321-00` | `98765432100` | `123` | Conta limpa (teste de fluxo do zero) |
+| 3 | **Paciente** | Carlos Eduardo Pereira | `321.654.987-00` | `32165498700` | `123` | ⚠️ Hipertensão crítica (última PA 172/105 mmHg) |
+| 4 | **Paciente** | Ana Beatriz Lima | `789.123.456-00` | `78912345600` | `123` | ⚠️ Diabetes descompensada (últimas glicemias > 180 mg/dL) |
+| 5 | **Cuidador** | Alan Cuidador | `477.447.980-23` | `47744798023` | `123` | Linkado a João Silva |
+| 6 | **Médico** | Dra. Ana | `111.111.111-11` | `11111111111` | `123` | CRM 12345-MG (vê todos os pacientes, exceto contas de desenvolvimento) |
 
 ### Login padrão para teste do fluxo principal de paciente:
 
@@ -53,6 +55,8 @@ Senha:     123
 | G | Senha errada | `123.456.789-00` | `senhaerrada` | Paciente | ❌ Alert "senha incorreta" |
 | H | Acesso direto sem login | abre `/pages/dashboard.html` direto | — | — | ❌ Redireciona para `/index.html` |
 | I | Acesso direto sem login (médico) | abre `/pages/clinical-dashboard.html` direto | — | — | ❌ Redireciona para `/index.html` |
+| J | Paciente tenta acessar área clínica | logado como paciente, abre `/pages/clinical-dashboard.html` | — | — | ❌ Redireciona para `/pages/dashboard.html` |
+| K | Médico tenta acessar área do paciente | logado como médico, abre `/pages/dashboard.html` | — | — | ❌ Redireciona para `/pages/clinical-dashboard.html` |
 
 ### Seletores HTML chave para automação:
 
@@ -85,10 +89,12 @@ Senha:     123
 Aplicação web front-end (HTML/CSS/JavaScript puro, sem framework, sem backend real) para acompanhamento de pacientes com doenças crônicas (Diabetes, Hipertensão, Asma). A persistência é simulada via `localStorage` do navegador, agindo como banco de dados local.
 
 - **Stack**: HTML5, CSS3, Vanilla JavaScript (ES6+)
-- **Bibliotecas externas (CDN)**: Lucide Icons, Chart.js
-- **Servidor**: Nginx (Docker), porta `8080`
-- **URL base de teste**: `http://localhost:8080/index.html`
+- **Bibliotecas externas (CDN)**: Lucide Icons, Chart.js, Google Fonts (Inter)
+- **Servidor**: Nginx (Docker), porta `8080` (ou Python `http.server` para desenvolvimento)
+- **URL base de teste local**: `http://localhost:8080/index.html`
+- **URL pública (GitHub Pages)**: <https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/src/>
 - **Idioma**: Português (Brasil)
+- **Recursos diferenciados**: tutorial guiado de primeiro acesso (RNF-11), banner de identificação para cuidadores, alertas visuais para pacientes em quadro crítico, controle de acesso por perfil
 
 ## 2. Perfis de Usuário
 
@@ -102,14 +108,18 @@ A aplicação suporta três perfis distintos, selecionáveis no login:
 
 ## 3. Contas de Teste (já populadas em `localStorage` na inicialização)
 
-| Perfil | CPF (com máscara) | CPF (sem máscara) | Senha | Nome |
-|---|---|---|---|---|
-| Paciente | `123.456.789-00` | `12345678900` | `123` | João Silva |
-| Paciente | `987.654.321-00` | `98765432100` | `123` | Maria Souza |
-| Cuidador | `477.447.980-23` | `47744798023` | `123` | Alan Cuidador (vinculado a João Silva) |
-| Médico | `111.111.111-11` | `11111111111` | `123` | Dra. Ana (CRM 12345-MG) |
+| Perfil | CPF (com máscara) | CPF (sem máscara) | Senha | Nome | Observação |
+|---|---|---|---|---|---|
+| Paciente | `123.456.789-00` | `12345678900` | `123` | João Silva | Diabetes + Hipertensão, dados ricos pré-populados |
+| Paciente | `987.654.321-00` | `98765432100` | `123` | Maria Souza | Conta limpa (sem dados) |
+| Paciente | `321.654.987-00` | `32165498700` | `123` | Carlos Eduardo Pereira | ⚠️ Hipertensão crítica (PA 172/105 mmHg) |
+| Paciente | `789.123.456-00` | `78912345600` | `123` | Ana Beatriz Lima | ⚠️ Diabetes descompensada (240 mg/dL) |
+| Cuidador | `477.447.980-23` | `47744798023` | `123` | Alan Cuidador | Vinculado a João Silva |
+| Médico | `111.111.111-11` | `11111111111` | `123` | Dra. Ana | CRM 12345-MG |
 
 **Conta primária para testes automatizados**: CPF `123.456.789-00`, senha `123`, perfil **Paciente**.
+
+**Pacientes recomendados para demonstração de alertas**: Carlos Eduardo Pereira (alerta de pressão) e Ana Beatriz Lima (alerta de glicemia) aparecem com badge vermelho **"Alerta!"** no painel da Dra. Ana e com cartão de status vermelho na própria dashboard deles.
 
 ## 4. Fluxos Funcionais
 
@@ -145,24 +155,32 @@ Regras:
 
 ### 4.3 Dashboard do Paciente (`/pages/dashboard.html`)
 
-Cabeçalho com saudação personalizada ("Olá, João"), data de hoje, avatar (clicável → vai para perfil).
+**Cabeçalho** com saudação personalizada ("Olá, João"), data de hoje e avatar clicável (vai para o Perfil). Para **cuidadores logados**, a saudação adiciona a linha *"Acompanhando \<Nome do Paciente\>"* em laranja.
 
-**Próximos Remédios (Hoje)**: lista os 3 primeiros medicamentos com botão de "check" que persiste o estado de "tomado" por dia (via chave `ppc_meds_taken_YYYY-MM-DD` no localStorage).
+**Cartão de Status (`#status-card`)** — adaptativo conforme as últimas medições:
+- Quando há medições fora do alvo (PA ≥ 140/90 mmHg **ou** glicemia > 180 / < 70 mg/dL), o cartão muda para fundo vermelho com título *"Atenção!"* e descrição do motivo (ex.: *"Pressão 172/105 mmHg fora do alvo"*).
+- Quando há medições recentes em dia, exibe *"Muito bem! · Medições em dia."* em azul.
+- Quando ainda não há nenhuma medição, exibe *"Comece agora · Registre sua primeira medição."*.
 
-**Gráfico de Glicemia** (Chart.js): linha temporal das medições.
-**Gráfico de Pressão Arterial** (Chart.js): duas linhas (sistólica/diastólica).
+**Próximos Remédios (Hoje)**: lista os medicamentos cadastrados com botão de "check" que persiste o estado de "tomado" por dia (via chave `ppc_meds_taken_YYYY-MM-DD` no localStorage). Para cuidadores, o título da seção muda para *"Remédios de \<Nome do Paciente\>"*.
 
-**Botão FAB "+"**: abre bottom-sheet com 3 abas:
-- **Pressão**: campos sistólica e diastólica
-- **Glicemia**: campo valor mg/dL
-- **Sintomas**: chips selecionáveis (Tontura, Dor de cabeça, Cansaço, Falta de ar) + textarea livre
+**Gráfico de Glicemia** (Chart.js): linha temporal das medições. Usa `suggestedMin/Max` para expandir o eixo Y automaticamente em picos críticos.
+**Gráfico de Pressão Arterial** (Chart.js): duas linhas (sistólica em vermelho, diastólica em azul-claro).
 
-Botão "Salvar":
-- Pressão: exige sys e dia preenchidos. Após salvar, **gráfico de pressão atualiza automaticamente**.
-- Glicemia: exige valor. Após salvar, **gráfico de glicemia atualiza automaticamente**.
-- Sintomas: exige ao menos um chip ou descrição. Após salvar, registro aparece no histórico.
+**Botão FAB Novo Registro** (`#fab-add`): em formato de **pílula** com ícone `+` e texto *"Novo Registro"* (substituiu o antigo "+" redondo). Abre bottom-sheet com 3 abas:
 
-**Bottom-nav**: Início / Histórico / Remédios / Perfil
+- **Pressão**: dois *value cards* lado a lado (Sistólica e Diastólica) com separador `/` visual, números grandes e indicadores coloridos (vermelho/azul). Faixa informativa azul com referência clínica: *"Ideal: até 120/80 mmHg · Atenção: a partir de 140/90 mmHg."*
+- **Glicose**: *value card* único com número grande em azul. Faixa de referência: *"Jejum: 70-99 · Pós-refeição: até 140 · Alerta: acima de 180 mg/dL."*
+- **Sintomas**: 4 chips selecionáveis em grade 2×2 (Tontura, Dor de cabeça, Cansaço, Falta de ar) + textarea livre.
+
+Em desktop, o bottom-sheet vira modal centralizada com largura máxima de 520 px.
+
+Botão "Salvar Registro":
+- Pressão: exige sys e dia preenchidos. Após salvar, **gráfico de pressão atualiza automaticamente** sem reload.
+- Glicose: exige valor. Após salvar, **gráfico de glicemia atualiza automaticamente** sem reload.
+- Sintomas: exige ao menos um chip ou descrição. Após salvar, registro aparece no Histórico.
+
+**Bottom-nav**: Início · Histórico · Remédios · Perfil (fixa na parte inferior).
 
 ### 4.4 Medicamentos (`/pages/medications.html`)
 
@@ -187,18 +205,25 @@ Linha do tempo agregando: pressões, glicemias, sintomas, exames.
   - Lista cuidadores vinculados
   - Botão "Adicionar Cuidador" abre form com Nome, CPF (com máscara), senha
   - Validação: CPF de 11 dígitos
-  - Editar / Excluir cuidador
+  - **Proteção anti-sequestro**: o sistema **bloqueia** o cadastro quando o CPF informado já pertence a outro tipo de usuário (médico ou paciente) ou já é cuidador vinculado a outro paciente. Mensagens estruturadas: `CPF_OWNED`, `CG_LINKED_ELSEWHERE`.
+  - Editar / Excluir cuidador (com confirmação modal)
 - Botão **"Gerar Relatório Clínico PDF"** abre `report.html` em nova aba (versão imprimível)
+- Botão **"Rever Tutorial de Boas-vindas"**: limpa as flags `ppc_onboarding_done_*` do usuário atual e redireciona para a dashboard, disparando o tour guiado novamente (ver Seção 4.11)
 - Botão **"Sair da Conta"**: confirma e limpa `ppc_currentUser` antes de redirecionar para login
 
 ### 4.7 Painel Médico (`/pages/clinical-dashboard.html`)
 
 - Sidebar mostra **médico real logado** (nome + CRM)
-- Busca de pacientes por nome (`#patient-search`)
-- Lista de pacientes ativos (cards): clicar seleciona o paciente
+- Busca de pacientes por nome (`#patient-search`) — filtra a lista em tempo real
+- **Lista de pacientes ativos** (cards) com:
+  - Nome e CPF do paciente
+  - **Badge de status** verde *"Estável"* ou vermelho *"Alerta!"* — calculado a partir das **últimas medições** de pressão e glicemia (PA ≥ 140/90 ou glicemia > 180 / < 70 = alerta)
+  - Quando há alerta, uma linha vermelha abaixo do CPF descreve **o motivo** (ex.: *"⚠️ PA 172/105 mmHg"* ou *"⚠️ Glicemia 240 mg/dL"*)
+  - Borda lateral esquerda colorida reforça o status (verde/vermelho)
+  - Clicar no card seleciona o paciente
 - Ao selecionar paciente, abre painel de detalhe:
   - **Ficha Clínica** (idade, sexo, tipo sanguíneo, alergias, condições)
-  - **Gráficos** com botões "Glicemia" / "Pressão" para alternar
+  - **Gráficos** com botões "Glicemia" / "Pressão" para alternar (eixo Y expande com `suggestedMin/Max` para acomodar picos críticos)
   - **Prescrição Atual** (medicamentos do paciente)
   - **Últimos Sintomas** (top 3 mais recentes)
   - **Prontuário e Conduta**: textareas para Observação e Ajuste de Prescrição
@@ -218,13 +243,53 @@ CPF deve ser comparado normalizado (sem pontuação).
 
 - Em qualquer página interna, após **15 minutos** sem interação (mouse, teclado, click, scroll, touch), a sessão é encerrada e o usuário é redirecionado para login
 
+### 4.10 Banner do Cuidador
+
+Quando o usuário logado tem perfil `cuidador`, o sistema injeta automaticamente um **banner laranja** no topo de **todas as páginas internas** (Dashboard, Histórico, Remédios, Perfil) identificando o paciente representado:
+
+- **Avatar circular** azul com a inicial do paciente
+- Tag *"Você está acompanhando"* em laranja
+- **Nome do paciente em destaque** (negrito, fonte grande)
+- Linha *"Cuidador logado: \<nome do cuidador\>"* abaixo
+
+Adicionalmente, na dashboard:
+- A saudação muda de *"Olá, Alan"* para *"Olá, Alan · Acompanhando \<Paciente\>"*
+- O título da seção de remédios passa de *"Meus Remédios"* para *"Remédios de \<Paciente\>"*
+
+Implementação em `src/js/caregiver-banner.js`. O banner não aparece para perfis `paciente` ou `medico`.
+
+### 4.11 Tutorial Guiado de Primeiro Acesso (RNF-11)
+
+No primeiro acesso a cada tela interna, o sistema dispara automaticamente um **tour guiado** com:
+
+- **Overlay escuro** com *spotlight pulsante azul* destacando o elemento explicado
+- **Tooltip com seta** apontando para o alvo, com título + descrição contextual
+- **Contador** "passo X de Y", bolinhas de progresso e botões **Voltar / Próximo / Pular**
+- Suporte a teclado: `←` `→` para navegar, `Esc` para sair
+- **Tours específicos por perfil e por tela** (dashboard, histórico, remédios, perfil, painel clínico)
+- Cada tela é marcada como vista uma única vez por usuário (`ppc_onboarding_done_<userId>_<screenKey>` no localStorage)
+
+O usuário pode **rever o tutorial a qualquer momento** pelo botão *"Rever Tutorial de Boas-vindas"* no Perfil (Seção 4.6).
+
+Implementação em `src/js/onboarding.js` e estilos em `src/css/onboarding.css`.
+
+### 4.12 Controle de Acesso por Perfil
+
+Além da proteção contra acesso sem login (Seção 4.9), o sistema impõe **roteamento por perfil**:
+
+- Se um usuário com perfil `paciente` ou `cuidador` tentar acessar `/pages/clinical-dashboard.html`, é redirecionado para `/pages/dashboard.html`.
+- Se um usuário com perfil `medico` tentar acessar `/pages/dashboard.html` (ou qualquer página da área do paciente), é redirecionado para `/pages/clinical-dashboard.html`.
+
+Implementação em `src/js/security.js`, executada sincronamente antes do DOMContentLoaded de cada página.
+
 ## 5. Modelo de Dados (localStorage)
 
 ```
-ppc_users        : Array<User>
-ppc_currentUser  : User (sessão ativa)
-ppc_data         : { [patientId]: { medications: [], vitals: { pressure, glycemia, history, symptoms }, observations: [] } }
-ppc_meds_taken_YYYY-MM-DD : Array<medId>  (estado de "tomei o remédio hoje")
+ppc_users                       : Array<User>
+ppc_currentUser                 : User (sessão ativa)
+ppc_data                        : { [patientId]: { medications, vitals, observations } }
+ppc_meds_taken_YYYY-MM-DD       : Array<medId>     (estado diário de "tomei o remédio")
+ppc_onboarding_done_<id>_<tela> : '1'              (flag de tutorial visto por tela e por usuário)
 ```
 
 `User`:
@@ -234,18 +299,40 @@ ppc_meds_taken_YYYY-MM-DD : Array<medId>  (estado de "tomei o remédio hoje")
   crm?, linkedPatientId? }
 ```
 
+`vitals` em `ppc_data[patientId]`:
+```js
+{
+  pressure:  [{ date, time, sys, dia, timestamp }],
+  glycemia:  [{ date, time, value, timestamp }],
+  symptoms:  [{ date, time, description, timestamp }],
+  history:   [{ date, time, title, fileLabel, timestamp }]
+}
+```
+
+`observations` em `ppc_data[patientId]` (registradas pelo médico):
+```js
+[{ timestamp, date, time, text, prescription }]
+```
+
+> O `store.js` faz *housekeeping* automático das chaves `ppc_meds_taken_*` com mais de 7 dias.
+
 ## 6. Critérios de Aceitação Globais
 
 1. **Segurança de autenticação**: nenhum perfil pode logar sem CPF + senha válidos. Não pode haver bypass de médico.
 2. **Acesso a páginas internas**: tentar abrir `/pages/*.html` sem estar logado deve redirecionar imediatamente para `/index.html`.
-3. **Sair da Conta**: ao clicar em logout (em qualquer perfil), a sessão deve ser limpa de tal forma que voltar (browser back) leve de volta ao login.
-4. **CPF**: máscara automática, validação de 11 dígitos, prevenção de duplicatas no cadastro.
-5. **Reatividade dos gráficos**: ao adicionar uma medição (pressão ou glicemia), o gráfico correspondente deve atualizar **sem reload manual da página**.
-6. **Botão check de remédio**: estado de "tomado" deve persistir após reload da página (no mesmo dia).
-7. **Cadastro de cuidador via perfil**: o cuidador pode então fazer login e visualiza dashboard do paciente vinculado (não o seu próprio).
-8. **Médico só vê pacientes**: ao selecionar um paciente, mostra dados clínicos, gráficos, medicações e sintomas reais daquele paciente.
-9. **Prontuário do médico**: salvar conduta deve persistir e aparecer no "Histórico de Condutas" sem reload.
-10. **Busca/filtro do histórico**: filtros e busca textual devem afetar a lista em tempo real.
+3. **Controle de acesso por perfil**: paciente/cuidador não pode acessar a área clínica; médico não pode acessar a área do paciente (redirecionamento automático).
+4. **Sair da Conta**: ao clicar em logout (em qualquer perfil), a sessão deve ser limpa de tal forma que voltar (browser back) leve de volta ao login.
+5. **CPF**: máscara automática, validação de 11 dígitos, prevenção de duplicatas no cadastro.
+6. **Reatividade dos gráficos**: ao adicionar uma medição (pressão ou glicemia), o gráfico correspondente deve atualizar **sem reload manual da página**.
+7. **Botão check de remédio**: estado de "tomado" deve persistir após reload da página (no mesmo dia).
+8. **Cadastro de cuidador via perfil**: o cuidador pode então fazer login e visualiza dashboard do paciente vinculado (não o seu próprio).
+9. **Proteção anti-sequestro de cadastro de cuidador**: não deve ser possível "transformar" uma conta de paciente ou médico em cuidador informando o CPF dela no formulário de Adicionar Cuidador — o sistema deve rejeitar com mensagem clara.
+10. **Banner do cuidador**: ao logar como cuidador, o banner laranja com o nome do paciente acompanhado deve aparecer em todas as páginas internas.
+11. **Médico só vê pacientes**: ao selecionar um paciente, mostra dados clínicos, gráficos, medicações e sintomas reais daquele paciente.
+12. **Alerta no painel do médico**: pacientes com última medição de pressão ≥ 140/90 mmHg ou glicemia > 180 / < 70 mg/dL devem aparecer com badge vermelho *"Alerta!"* e descrição do motivo abaixo do CPF.
+13. **Prontuário do médico**: salvar conduta deve persistir e aparecer no "Histórico de Condutas" sem reload.
+14. **Busca/filtro do histórico**: filtros e busca textual devem afetar a lista em tempo real.
+15. **Tutorial guiado**: no primeiro acesso a cada tela, o tour com spotlight e tooltip deve disparar automaticamente. O botão *"Rever Tutorial de Boas-vindas"* no Perfil deve permitir refazê-lo.
 
 ## 7. Fora de Escopo (não testar)
 
