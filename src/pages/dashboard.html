@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Portal do Paciente</title>
-    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
-    <link rel="stylesheet" href="../css/global.css?v=1778181033">
-    <link rel="stylesheet" href="../css/components.css?v=1778181033">
+    <link rel="stylesheet" href="../css/variables.css?v=20260518a">
+    <link rel="stylesheet" href="../css/global.css?v=20260518a">
+    <link rel="stylesheet" href="../css/components.css?v=20260518a">
+    <link rel="stylesheet" href="../css/onboarding.css?v=20260518a">
+    <link rel="stylesheet" href="../css/dev-switcher.css?v=20260518a">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=1778181033"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=20260518a"></script>
     <style>
         .header-dash {
             display: flex;
@@ -157,45 +159,223 @@
             .charts-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        /* Tabs */
+        /* ── Tabs (Pill-bar) ───────────────────────────── */
+        .sheet-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--surface-hover);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+            margin: var(--sp-5) 0 var(--sp-4) 0;
+        }
         .tab-btn {
             flex: 1;
-            padding: var(--sp-3);
+            padding: 9px 8px;
             text-align: center;
             font-weight: var(--fw-semibold);
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             color: var(--text-muted);
-            border-bottom: 2px solid transparent;
+            background: transparent;
+            border: none;
+            border-radius: calc(var(--radius-lg) - 4px);
             cursor: pointer;
             transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
+        .tab-btn i { width: 16px; height: 16px; }
         .tab-btn:hover { color: var(--text-secondary); }
         .tab-btn.active {
             color: var(--primary);
-            border-bottom-color: var(--primary);
+            background: var(--surface);
+            box-shadow: var(--shadow-xs);
         }
-        .tab-content { display: none; padding-top: var(--sp-4); }
+        .tab-content { display: none; padding-top: var(--sp-3); }
         .tab-content.active { display: block; }
 
-        /* Chips */
-        .chip {
-            padding: 8px 16px;
-            background: var(--surface-hover);
-            border-radius: 999px;
+        /* ── Sheet Header com ícone ────────────────────── */
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: var(--sp-4);
+            border-bottom: 1px solid var(--border);
+        }
+        .sheet-header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .sheet-header-icon i { width: 22px; height: 22px; }
+        .sheet-header-text h3 {
+            margin: 0;
+            font-size: 1.0625rem;
+            font-weight: var(--fw-bold);
+            color: var(--text-main);
+            letter-spacing: var(--ls-tight);
+        }
+        .sheet-header-text p {
+            margin: 2px 0 0 0;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Value Cards (Pressão / Glicemia) ──────────── */
+        .pressure-row {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+            margin-bottom: var(--sp-3);
+        }
+        .value-card {
+            flex: 1;
+            padding: 14px 12px;
+            background: var(--surface-alt);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+        .value-card:focus-within {
+            border-color: var(--primary);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+        }
+        .value-card--single { margin-bottom: var(--sp-3); padding: var(--sp-5) var(--sp-4); }
+        .value-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.6875rem;
+            font-weight: var(--fw-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        .value-dot {
             display: inline-block;
-            margin: 4px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+        .value-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            text-align: center;
+            font-size: 1.875rem;
+            font-weight: var(--fw-bold);
+            color: var(--text-main);
+            letter-spacing: var(--ls-tight);
+            line-height: 1.1;
+            padding: 2px 0;
+            -moz-appearance: textfield;
+        }
+        .value-input::-webkit-outer-spin-button,
+        .value-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .value-input:focus { outline: none; }
+        .value-input::placeholder { color: var(--text-subtle); font-weight: var(--fw-medium); }
+        .value-input--lg { font-size: 2.75rem; color: var(--primary); }
+        .value-hint {
+            margin: 4px 0 0 0;
+            font-size: 0.6875rem;
+            color: var(--text-subtle);
+        }
+        .value-separator {
+            font-size: 1.75rem;
+            font-weight: var(--fw-bold);
+            color: var(--text-subtle);
+            align-self: center;
+            user-select: none;
+        }
+
+        /* ── Faixa informativa com referência clínica ─── */
+        .reference-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px 14px;
+            background: var(--primary-light);
+            border-radius: var(--radius-md);
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+        .reference-info i { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        /* ── Sintomas ───────────────────────────────────── */
+        .sintomas-prompt {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-weight: var(--fw-medium);
+            margin-bottom: var(--sp-3);
+        }
+        .sintomas-prompt i { width: 16px; height: 16px; color: var(--primary); }
+        .sintomas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            background: var(--surface);
+            border-radius: var(--radius-md);
             color: var(--text-secondary);
             font-size: 0.8125rem;
             font-weight: var(--fw-medium);
             border: 1.5px solid var(--border);
             cursor: pointer;
             transition: var(--transition-fast);
+            margin: 0;
+            text-align: center;
         }
-        .chip:hover { border-color: var(--text-subtle); }
+        .chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
         .chip.selected {
             background: var(--primary-light);
             color: var(--primary-dark);
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+
+        /* ── Sheet Actions ──────────────────────────────── */
+        .sheet-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: var(--sp-5);
+            padding-top: var(--sp-4);
+            border-top: 1px solid var(--border);
+        }
+        .sheet-actions .btn { flex: 1; }
+
+        /* ── Centralizar bottom-sheet em desktop ────────── */
+        @media (min-width: 768px) {
+            #quick-action-sheet {
+                left: 50%;
+                right: auto;
+                max-width: 520px;
+                width: 100%;
+                transform: translateX(-50%);
+                border-radius: var(--radius-2xl);
+            }
         }
     </style>
 </head>
@@ -225,7 +405,7 @@
     <div class="chart-section">
         <h3>
             <i data-lucide="pill" style="width: 18px; height: 18px; color: var(--primary);"></i>
-            Meus Remédios
+            <span id="meds-section-title">Meus Remédios</span>
         </h3>
         <div class="card medication-list" id="home-med-list" style="padding: 0; overflow: hidden;">
             <!-- Render via JS abaixo -->
@@ -258,7 +438,10 @@
     </div>
 </div>
 
-<button class="fab" id="fab-add"><i data-lucide="plus"></i></button>
+<button class="fab-extended attention" id="fab-add" aria-label="Novo registro de medição">
+    <i data-lucide="plus-circle"></i>
+    <span class="fab-label">Novo Registro</span>
+</button>
 
 <nav class="bottom-nav">
     <a href="dashboard.html" class="bottom-nav-item active"><i data-lucide="home"></i><span>Início</span></a>
@@ -271,39 +454,88 @@
 <div class="modal-overlay" id="modal-overlay"></div>
 <div class="bottom-sheet" id="quick-action-sheet">
     <div class="sheet-drag-handle"></div>
-    <h3 class="mb-4 text-center">Novo Registro</h3>
 
-    <div style="display: flex; border-bottom: 1px solid var(--border); margin-bottom: 16px;">
-        <div class="tab-btn active" data-target="tab-pressao" id="t-pressao">Pressão</div>
-        <div class="tab-btn" data-target="tab-glicemia" id="t-glicose">Glicose</div>
-        <div class="tab-btn" data-target="tab-sintomas" id="t-sintomas">Sintomas</div>
+    <!-- Header -->
+    <div class="sheet-header">
+        <div class="sheet-header-icon">
+            <i data-lucide="clipboard-plus"></i>
+        </div>
+        <div class="sheet-header-text">
+            <h3>Novo Registro</h3>
+            <p>Anote sua medição ou sintoma agora</p>
+        </div>
     </div>
 
+    <!-- Tabs em pílula -->
+    <div class="sheet-tabs">
+        <div class="tab-btn active" data-target="tab-pressao" id="t-pressao">
+            <i data-lucide="heart-pulse"></i>
+            <span>Pressão</span>
+        </div>
+        <div class="tab-btn" data-target="tab-glicemia" id="t-glicose">
+            <i data-lucide="droplet"></i>
+            <span>Glicose</span>
+        </div>
+        <div class="tab-btn" data-target="tab-sintomas" id="t-sintomas">
+            <i data-lucide="alert-triangle"></i>
+            <span>Sintomas</span>
+        </div>
+    </div>
+
+    <!-- Pressão -->
     <div id="tab-pressao" class="tab-content active" style="display: block;">
-        <div class="form-group row" style="display: flex; gap: 16px;">
-            <div style="flex: 1;">
-                <label>Sistólica (Maior)</label>
-                <input type="number" id="val-sys" class="form-control" placeholder="120" style="font-size: 1.25rem; text-align: center;">
+        <div class="pressure-row">
+            <div class="value-card">
+                <div class="value-label">
+                    <span class="value-dot" style="background: var(--danger);"></span>
+                    Sistólica
+                </div>
+                <input type="number" id="val-sys" class="value-input" placeholder="120" inputmode="numeric">
+                <p class="value-hint">Máxima · mmHg</p>
             </div>
-            <div style="flex: 1;">
-                <label>Diastólica (Menor)</label>
-                <input type="number" id="val-dia" class="form-control" placeholder="80" style="font-size: 1.25rem; text-align: center;">
+            <span class="value-separator">/</span>
+            <div class="value-card">
+                <div class="value-label">
+                    <span class="value-dot" style="background: var(--info);"></span>
+                    Diastólica
+                </div>
+                <input type="number" id="val-dia" class="value-input" placeholder="80" inputmode="numeric">
+                <p class="value-hint">Mínima · mmHg</p>
             </div>
+        </div>
+        <div class="reference-info">
+            <i data-lucide="info"></i>
+            <span>Ideal: até 120/80 mmHg · Atenção: a partir de 140/90 mmHg.</span>
         </div>
     </div>
 
+    <!-- Glicose -->
     <div id="tab-glicemia" class="tab-content">
-        <div class="form-group">
-            <label>Nível (mg/dL)</label>
-            <input type="number" id="val-glicose" class="form-control" placeholder="95" style="font-size: 1.5rem; text-align: center; font-weight: 600; color: var(--primary);">
+        <div class="value-card value-card--single">
+            <div class="value-label">
+                <span class="value-dot" style="background: var(--warning);"></span>
+                Nível de Glicemia
+            </div>
+            <input type="number" id="val-glicose" class="value-input value-input--lg" placeholder="95" inputmode="numeric">
+            <p class="value-hint">Medido em mg/dL</p>
+        </div>
+        <div class="reference-info">
+            <i data-lucide="info"></i>
+            <span>Jejum: 70-99 · Pós-refeição: até 140 · Alerta: acima de 180 mg/dL.</span>
         </div>
     </div>
 
+    <!-- Sintomas -->
     <div id="tab-sintomas" class="tab-content">
-        <p style="margin-bottom: 8px; font-size: 0.875rem; color: var(--text-muted);">Como você está se sentindo?</p>
-        <div id="sintomas-chips">
-            <div class="chip">Tontura</div><div class="chip">Dor de cabeça</div>
-            <div class="chip">Cansaço</div><div class="chip">Falta de ar</div>
+        <p class="sintomas-prompt">
+            <i data-lucide="message-circle"></i>
+            Como você está se sentindo?
+        </p>
+        <div id="sintomas-chips" class="sintomas-grid">
+            <div class="chip">Tontura</div>
+            <div class="chip">Dor de cabeça</div>
+            <div class="chip">Cansaço</div>
+            <div class="chip">Falta de ar</div>
         </div>
         <div class="form-group mt-4">
             <label>Outro sintoma / Descrição detalhada</label>
@@ -311,17 +543,24 @@
         </div>
     </div>
 
-    <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <button class="btn btn-outline" id="btn-cancel-action" style="flex: 1;">Cancelar</button>
-        <button class="btn btn-primary" id="btn-save-record" style="flex: 1;">Salvar</button>
+    <div class="sheet-actions">
+        <button class="btn btn-outline" id="btn-cancel-action">
+            <i data-lucide="x" style="width:16px;height:16px;"></i> Cancelar
+        </button>
+        <button class="btn btn-primary" id="btn-save-record">
+            <i data-lucide="check" style="width:16px;height:16px;"></i> Salvar Registro
+        </button>
     </div>
 </div>
 
-<script src="../js/security.js?v=1778181033"></script>
-<script src="../js/store.js?v=1778181033"></script>
-<script src="../js/main.js?v=1778181033"></script>
-<script src="../js/modal.js?v=1778181033"></script>
-<script src="../js/toast.js?v=1778181033"></script>
+<script src="../js/security.js?v=20260518a"></script>
+<script src="../js/store.js?v=20260518a"></script>
+<script src="../js/main.js?v=20260518a"></script>
+<script src="../js/modal.js?v=20260518a"></script>
+<script src="../js/toast.js?v=20260518a"></script>
+<script src="../js/dev-switcher.js?v=20260518a"></script>
+<script src="../js/caregiver-banner.js?v=20260518a"></script>
+<script src="../js/onboarding.js?v=20260518a"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
@@ -331,6 +570,22 @@
         if (!currentUser) return; // security.js já redirecionou
         document.getElementById('user-greeting').innerText = `Olá, ${currentUser.name.split(' ')[0]}`;
         document.getElementById('user-avatar-icon').innerText = currentUser.name.charAt(0).toUpperCase();
+
+        // Se for cuidador, ajusta textos para deixar claro de quem são os dados
+        const patientUser = appStore.getPatientUser();
+        if (currentUser.profile === 'cuidador' && patientUser && patientUser.id !== currentUser.id) {
+            const patientName = patientUser.name || 'Paciente';
+            // Saudação ganha contexto: "Olá, Alan · Acompanhando João Silva"
+            document.getElementById('user-greeting').innerHTML =
+                `Olá, ${escapeHtml(currentUser.name.split(' ')[0])} ` +
+                `<small style="font-weight:500; font-size:0.875rem; color:var(--accent-hover); display:block; margin-top:2px;">` +
+                `Acompanhando <strong>${escapeHtml(patientName)}</strong></small>`;
+            // Título da seção de remédios passa a ser "Remédios de João"
+            const medsTitle = document.getElementById('meds-section-title');
+            if (medsTitle) {
+                medsTitle.textContent = `Remédios de ${patientName.split(' ')[0]}`;
+            }
+        }
 
         // Status card dinâmico baseado nos vitals mais recentes
         function updateStatusCard() {
@@ -459,6 +714,8 @@
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
+                        // suggestedMin/Max são pisos; Chart.js expande automaticamente se houver
+                        // valores fora desse intervalo (ex: glicemia 240 em diabetes descompensada).
                         y: { beginAtZero: false, suggestedMin: 60, suggestedMax: 200, ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { color: '#F1F5F9' } },
                         x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#94A3B8' } }
                     }
@@ -523,9 +780,10 @@
         const btnSave = document.getElementById('btn-save-record');
         let currentTab = 'tab-pressao';
 
-        // Hook into modal tabs
+        // Hook into modal tabs (currentTarget garante que o data-target venha sempre da .tab-btn,
+        // mesmo quando o clique cair sobre um ícone <i> filho)
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => { currentTab = e.target.getAttribute('data-target'); });
+            btn.addEventListener('click', (e) => { currentTab = e.currentTarget.getAttribute('data-target'); });
         });
 
         // Chips toggle

@@ -55,16 +55,24 @@
         <tbody></tbody>
     </table>
 
-    <script src="../js/store.js"></script>
-    <script src="../js/security.js"></script>
+    <script src="../js/store.js?v=20260518a"></script>
+    <script src="../js/toast.js?v=20260518a"></script>
+    <script src="../js/security.js?v=20260518a"></script>
     <script>
+        // Fallback caso toast.js falhe — garante que escapeHtml exista para evitar XSS.
+        const esc = (typeof window.escapeHtml === 'function')
+            ? window.escapeHtml
+            : (s) => String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
         document.addEventListener('DOMContentLoaded', () => {
             const tempUser = appStore.getCurrentUser();
             if (!tempUser) return; // security.js já redirecionou
 
             // Puxa do id ativo se o requerente for cuidador
             const targetId = appStore.getActivePatientId ? appStore.getActivePatientId() : tempUser.id;
-            
+
             // Busca os dados consolidados do paciente real no banco
             const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
             const patientObj = users.find(u => u.id === targetId) || tempUser;
@@ -73,7 +81,7 @@
             document.getElementById('rep-date').innerText = `Emitido em: ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById('rep-name').innerText = patientObj.name || 'N/D';
             document.getElementById('rep-cpf').innerText = patientObj.cpf || 'N/D';
-            
+
             // Age
             if (patientObj.birthDate) {
                 const birth = new Date(patientObj.birthDate);
@@ -89,10 +97,12 @@
             document.getElementById('rep-allergies').innerText = patientObj.allergies || 'Nenhuma declarada';
             document.getElementById('rep-conds').innerText = patientObj.conditions && patientObj.conditions.length > 0 ? patientObj.conditions.join(', ') : 'Nenhuma declarada';
 
-            // Meds
+            // Meds (todos os campos vêm de input do usuário — sempre escapar)
             const medsBody = document.querySelector('#table-meds tbody');
             if (pData.medications && pData.medications.length) {
-                medsBody.innerHTML = pData.medications.map(m => `<tr><td>${m.name || '—'}</td><td>${m.dose || m.dosage || '—'}</td><td>${m.frequency || '—'}</td></tr>`).join('');
+                medsBody.innerHTML = pData.medications.map(m =>
+                    `<tr><td>${esc(m.name || '—')}</td><td>${esc(m.dose || m.dosage || '—')}</td><td>${esc(m.frequency || '—')}</td></tr>`
+                ).join('');
             } else {
                 medsBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Nenhum medicamento registrado.</td></tr>`;
             }
@@ -109,16 +119,28 @@
                 }
             };
 
-            mapTable(pressure, 'table-pressure', r => `<tr><td>${r.date}</td><td>${r.time}</td><td>${r.sys} / ${r.dia} mmHg</td></tr>`);
-            mapTable(glycemia, 'table-glycemia', r => `<tr><td>${r.date}</td><td>${r.time}</td><td>${r.value} mg/dL</td></tr>`);
-            
-            let occurrences = [];
-            if(symptoms.length) occurrences = occurrences.concat(symptoms.map(s => ({...s, type: 'Sintoma', desc: s.description})));
-            if(history.length) occurrences = occurrences.concat(history.map(h => ({...h, type: 'Evento', desc: `Inclusão de Histórico Médico: ${h.title} ${h.fileLabel ? `(${h.fileLabel})` : ''}`})));
-            
-            mapTable(occurrences, 'table-symptoms', r => `<tr><td>${r.date}</td><td>${r.time}</td><td><strong>[${r.type}]</strong> ${r.desc}</td></tr>`);
+            // Pressão e glicemia: valores numéricos (number()) garantem segurança, mas escapamos data/hora.
+            mapTable(pressure, 'table-pressure', r =>
+                `<tr><td>${esc(r.date)}</td><td>${esc(r.time)}</td><td>${Number(r.sys) || '—'} / ${Number(r.dia) || '—'} mmHg</td></tr>`);
+            mapTable(glycemia, 'table-glycemia', r =>
+                `<tr><td>${esc(r.date)}</td><td>${esc(r.time)}</td><td>${Number(r.value) || '—'} mg/dL</td></tr>`);
 
-            // Dispara para PDF nativo depois que os gráficos e tabelas textuais montarem.
+            // Sintomas e histórico: TEXTO LIVRE — obrigatório escapar para evitar XSS.
+            let occurrences = [];
+            if (symptoms.length) {
+                occurrences = occurrences.concat(symptoms.map(s => ({...s, type: 'Sintoma', desc: s.description})));
+            }
+            if (history.length) {
+                occurrences = occurrences.concat(history.map(h => ({
+                    ...h, type: 'Evento',
+                    desc: `Inclusão de Histórico Médico: ${h.title}${h.fileLabel ? ` (${h.fileLabel})` : ''}`
+                })));
+            }
+
+            mapTable(occurrences, 'table-symptoms', r =>
+                `<tr><td>${esc(r.date)}</td><td>${esc(r.time)}</td><td><strong>[${esc(r.type)}]</strong> ${esc(r.desc)}</td></tr>`);
+
+            // Dispara para PDF nativo depois que as tabelas textuais montarem.
             setTimeout(() => {
                 window.print();
             }, 800);

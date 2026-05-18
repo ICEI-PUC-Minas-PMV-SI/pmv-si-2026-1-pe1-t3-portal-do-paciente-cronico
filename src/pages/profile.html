@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - Portal do Paciente</title>
-    <link rel="stylesheet" href="../css/variables.css?v=1778181033">
-    <link rel="stylesheet" href="../css/global.css?v=1778181033">
-    <link rel="stylesheet" href="../css/components.css?v=1778181033">
+    <link rel="stylesheet" href="../css/variables.css?v=20260518a">
+    <link rel="stylesheet" href="../css/global.css?v=20260518a">
+    <link rel="stylesheet" href="../css/components.css?v=20260518a">
+    <link rel="stylesheet" href="../css/onboarding.css?v=20260518a">
+    <link rel="stylesheet" href="../css/dev-switcher.css?v=20260518a">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .profile-header {
@@ -288,6 +290,10 @@
         <i data-lucide="file-output" style="width:18px; height:18px;"></i> Gerar Relatório Clínico PDF
     </button>
 
+    <button class="btn btn-outline mb-4" id="btn-replay-tutorial">
+        <i data-lucide="help-circle" style="width:18px; height:18px;"></i> Rever Tutorial de Boas-vindas
+    </button>
+
     <button class="btn btn-logout mt-4" id="btn-logout-profile">
         <i data-lucide="log-out" style="width:18px; height:18px;"></i> Sair da Conta
     </button>
@@ -308,10 +314,13 @@
     </a>
 </nav>
 
-<script src="../js/security.js?v=1778181033"></script>
-<script src="../js/store.js?v=1778181033"></script>
-<script src="../js/main.js?v=1778181033"></script>
-<script src="../js/toast.js?v=1778181033"></script>
+<script src="../js/security.js?v=20260518a"></script>
+<script src="../js/store.js?v=20260518a"></script>
+<script src="../js/main.js?v=20260518a"></script>
+<script src="../js/toast.js?v=20260518a"></script>
+<script src="../js/dev-switcher.js?v=20260518a"></script>
+<script src="../js/caregiver-banner.js?v=20260518a"></script>
+<script src="../js/onboarding.js?v=20260518a"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
@@ -319,6 +328,15 @@
         if (!user) return; // security.js já redirecionou
 
         // Botão "Sair da Conta" agora limpa a sessão antes de redirecionar
+        const btnReplay = document.getElementById('btn-replay-tutorial');
+        if (btnReplay) {
+            btnReplay.addEventListener('click', () => {
+                if (typeof window.resetOnboarding === 'function') window.resetOnboarding();
+                showToast('Abrindo tutorial de boas-vindas...', 'info');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+            });
+        }
+
         const btnLogout = document.getElementById('btn-logout-profile');
         if (btnLogout) {
             btnLogout.addEventListener('click', () => {
@@ -503,6 +521,11 @@
 
             if(name && cpf && pass) {
                 const res = appStore.registerCaregiver(name, cpf, pass);
+                // Erro estruturado retornado pelo store
+                if (res && typeof res === 'object' && res.error) {
+                    showToast(res.message || 'Não foi possível salvar o cuidador.', 'error');
+                    return;
+                }
                 if (res) {
                     document.getElementById('form-invite-caregiver').style.display = 'none';
                     document.getElementById('btn-show-invite').style.display = 'flex';

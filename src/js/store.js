@@ -12,21 +12,29 @@ class Store {
             { id: 101, name: 'João Silva', cpf: '123.456.789-00', password: '123', profile: 'paciente', birthDate: '1960-05-15', sex: 'M', bloodType: 'A+', allergies: 'Nenhuma', conditions: ['Diabetes', 'Hipertensão'] },
             { id: 102, name: 'Alan Cuidador', cpf: '477.447.980-23', password: '123', profile: 'cuidador', linkedPatientId: 101 },
             { id: 103, name: 'Dra. Ana', cpf: '111.111.111-11', password: '123', profile: 'medico', crm: '12345-MG' },
-            { id: 104, name: 'Maria Souza', cpf: '987.654.321-00', password: '123', profile: 'paciente', birthDate: '1980-10-20', sex: 'F', bloodType: 'O-', allergies: 'Dipirona', conditions: ['Asma'] }
+            { id: 104, name: 'Maria Souza', cpf: '987.654.321-00', password: '123', profile: 'paciente', birthDate: '1980-10-20', sex: 'F', bloodType: 'O-', allergies: 'Dipirona', conditions: ['Asma'] },
+            // Patient demo Carlos — quadro de hipertensão crítica
+            { id: 105, name: 'Carlos Eduardo Pereira', cpf: '321.654.987-00', password: '123', profile: 'paciente', birthDate: '1958-03-22', sex: 'M', bloodType: 'B+', allergies: 'Nenhuma', conditions: ['Hipertensão Arterial Sistêmica'] },
+            // Patient demo Ana Beatriz — diabetes descompensada
+            { id: 106, name: 'Ana Beatriz Lima',       cpf: '789.123.456-00', password: '123', profile: 'paciente', birthDate: '1965-11-08', sex: 'F', bloodType: 'AB+', allergies: 'AAS',     conditions: ['Diabetes Tipo 2', 'Obesidade Grau I'] },
+            // Usuário Master (construtor) — perfil neutro, sem dados clínicos. Ao logar ativa o painel dev-switcher.
+            { id: 999, name: 'Alan Alencar (Master)', cpf: '000.000.000-01', password: 'master2026', profile: 'paciente', birthDate: '', sex: '', bloodType: '', allergies: '', conditions: [] }
         ];
 
         let users = JSON.parse(localStorage.getItem('ppc_users')) || [];
         
-        // Se o CPF teste já existir (de um teste antigo), garantimos que a senha seja '123' para a demonstração não falhar
+        // Se o CPF teste já existir (de um teste antigo), garantimos que a senha definida no
+        // defaultUser seja restaurada — assim a demonstração não falha. Antes a senha era fixada
+        // em '123', o que quebrava qualquer usuário default com senha customizada (ex.: master).
         defaultUsers.forEach(defUser => {
             const cleanDefCpf = String(defUser.cpf).replace(/\D/g, '');
             const existingIndex = users.findIndex(u => String(u.cpf).replace(/\D/g, '') === cleanDefCpf);
-            
+
             if (existingIndex === -1) {
                 users.push(defUser);
             } else {
-                // Força a atualização da senha, perfil, e principalmente ID para ligar com a base rica abaixo
-                users[existingIndex].password = '123';
+                // Restaura a senha conforme definida no defaultUser (preserva senhas custom como 'master2026')
+                users[existingIndex].password = defUser.password;
                 users[existingIndex].profile = defUser.profile;
                 users[existingIndex].id = defUser.id;
                 if (defUser.linkedPatientId) {
@@ -87,6 +95,102 @@ class Store {
         
         if (!data[104]) {
             data[104] = { medications: [], vitals: { pressure: [], glycemia: [], history: [], symptoms: [] } };
+        }
+
+        // ── PACIENTE DEMO: Carlos Eduardo Pereira (id 105) ───────────
+        // Quadro: HIPERTENSÃO CRÍTICA. Pressão consistentemente elevada com pico recente.
+        if (!data[105]) {
+            data[105] = {
+                medications: [
+                    {id: 1051, name: 'Losartana Potássica', frequency: 'A cada 12h', firstDose: '07:00', dosage: '50mg',   warning: false},
+                    {id: 1052, name: 'Hidroclorotiazida',   frequency: 'A cada 24h', firstDose: '08:00', dosage: '25mg',   warning: false},
+                    {id: 1053, name: 'Anlodipino',          frequency: 'A cada 24h', firstDose: '20:00', dosage: '5mg',    warning: false},
+                    {id: 1054, name: 'AAS',                 frequency: 'A cada 24h', firstDose: '08:00', dosage: '100mg',  warning: false}
+                ],
+                vitals: {
+                    pressure: [
+                        {date: '05 mai.', time: '07:30', sys: 148, dia: 92,  timestamp: now - 13*DayMs},
+                        {date: '07 mai.', time: '07:45', sys: 152, dia: 95,  timestamp: now - 11*DayMs},
+                        {date: '09 mai.', time: '07:30', sys: 145, dia: 88,  timestamp: now - 9*DayMs},
+                        {date: '11 mai.', time: '20:15', sys: 160, dia: 98,  timestamp: now - 7*DayMs + 13*3600000},
+                        {date: '13 mai.', time: '07:00', sys: 155, dia: 93,  timestamp: now - 5*DayMs},
+                        {date: '15 mai.', time: '08:00', sys: 168, dia: 100, timestamp: now - 3*DayMs},
+                        {date: '17 mai.', time: '07:45', sys: 172, dia: 105, timestamp: now - 1*DayMs}  // pico crítico
+                    ],
+                    glycemia: [
+                        {date: '08/05', time: '07:00', value: 102, timestamp: now - 10*DayMs + 1000},
+                        {date: '12/05', time: '07:00', value: 108, timestamp: now - 6*DayMs + 1000},
+                        {date: '16/05', time: '07:00', value:  98, timestamp: now - 2*DayMs + 1000}
+                    ],
+                    history: [
+                        {date: '06 mai.', time: '09:30', title: 'Consulta Cardiologista — Dr. Mendes', fileLabel: '',                     timestamp: now - 12*DayMs},
+                        {date: '14 mai.', time: '14:00', title: 'Holter 24h',                          fileLabel: 'holter_14mai.pdf',     timestamp: now - 4*DayMs}
+                    ],
+                    symptoms: [
+                        {date: '11 mai.', time: '20:30', description: 'Dor de cabeça forte, Visão turva - Após estresse no trabalho', timestamp: now - 7*DayMs + 50400000},
+                        {date: '15 mai.', time: '09:00', description: 'Tontura, Falta de ar leve',                                    timestamp: now - 3*DayMs + 3600000},
+                        {date: '17 mai.', time: '08:00', description: 'Dor no peito leve, Dor de cabeça',                             timestamp: now - 1*DayMs + 1800000}
+                    ]
+                },
+                observations: [
+                    {
+                        timestamp: now - 4*DayMs + 5000,
+                        date: new Date(now - 4*DayMs).toLocaleDateString('pt-BR'),
+                        time: '14:30',
+                        text: 'Paciente em descontrole pressórico há 10 dias. Picos hipertensivos recorrentes. Necessário revisão urgente de medicação. Orientado repouso e retorno em 7 dias.',
+                        prescription: 'Aumentar Anlodipino para 10mg/dia. Adicionar Captopril 25mg SOS para picos > 160/100.'
+                    }
+                ]
+            };
+        }
+
+        // ── PACIENTE DEMO: Ana Beatriz Lima (id 106) ─────────────────
+        // Quadro: DIABETES DESCOMPENSADA. Glicemias persistentemente elevadas.
+        if (!data[106]) {
+            data[106] = {
+                medications: [
+                    {id: 1061, name: 'Metformina',     frequency: 'A cada 8h',  firstDose: '07:00', dosage: '850mg',  warning: false},
+                    {id: 1062, name: 'Glibenclamida',  frequency: 'A cada 12h', firstDose: '07:00', dosage: '5mg',    warning: false},
+                    {id: 1063, name: 'Insulina NPH',   frequency: 'A cada 12h', firstDose: '06:30', dosage: '20 UI',  warning: true},
+                    {id: 1064, name: 'Sinvastatina',   frequency: 'A cada 24h', firstDose: '21:00', dosage: '20mg',   warning: false}
+                ],
+                vitals: {
+                    pressure: [
+                        {date: '06 mai.', time: '07:30', sys: 128, dia: 82, timestamp: now - 12*DayMs},
+                        {date: '10 mai.', time: '07:45', sys: 132, dia: 85, timestamp: now - 8*DayMs},
+                        {date: '14 mai.', time: '07:30', sys: 125, dia: 80, timestamp: now - 4*DayMs}
+                    ],
+                    glycemia: [
+                        {date: '04/05', time: '07:00', value: 195, timestamp: now - 14*DayMs + 1000},
+                        {date: '05/05', time: '14:00', value: 220, timestamp: now - 13*DayMs + 7*3600000},  // pós-prandial
+                        {date: '07/05', time: '07:00', value: 188, timestamp: now - 11*DayMs + 1000},
+                        {date: '09/05', time: '14:00', value: 240, timestamp: now - 9*DayMs + 7*3600000},  // crítico
+                        {date: '11/05', time: '07:00', value: 205, timestamp: now - 7*DayMs + 1000},
+                        {date: '13/05', time: '07:00', value: 195, timestamp: now - 5*DayMs + 1000},
+                        {date: '15/05', time: '14:00', value: 215, timestamp: now - 3*DayMs + 7*3600000},
+                        {date: '17/05', time: '07:00', value: 198, timestamp: now - 1*DayMs + 1000}
+                    ],
+                    history: [
+                        {date: '04 mai.', time: '08:00', title: 'Hemoglobina Glicada (HbA1c)', fileLabel: 'hba1c_mai.pdf',     timestamp: now - 14*DayMs - 7200000},
+                        {date: '09 mai.', time: '10:00', title: 'Consulta Endocrinologista',   fileLabel: '',                  timestamp: now - 9*DayMs - 14*3600000},
+                        {date: '16 mai.', time: '08:30', title: 'Exames de rotina + Lipidograma', fileLabel: 'rotina_mai.pdf', timestamp: now - 2*DayMs}
+                    ],
+                    symptoms: [
+                        {date: '08 mai.', time: '11:00', description: 'Sede excessiva, Cansaço - Várias idas ao banheiro durante o dia', timestamp: now - 10*DayMs + 14400000},
+                        {date: '12 mai.', time: '15:30', description: 'Visão embaçada, Cansaço',                                          timestamp: now - 6*DayMs + 18*3600000},
+                        {date: '16 mai.', time: '09:00', description: 'Formigamento nos pés',                                             timestamp: now - 2*DayMs + 3600000}
+                    ]
+                },
+                observations: [
+                    {
+                        timestamp: now - 9*DayMs + 5000,
+                        date: new Date(now - 9*DayMs).toLocaleDateString('pt-BR'),
+                        time: '10:30',
+                        text: 'HbA1c em 8.9% — diabetes descompensada. Glicemia pós-prandial recorrente acima de 200 mg/dL. Risco de complicações neuropáticas. Iniciar insulinização noturna e reforçar adesão à dieta.',
+                        prescription: 'Iniciar Insulina NPH 20 UI 12/12h. Manter Metformina e Glibenclamida. Reavaliar em 15 dias.'
+                    }
+                ]
+            };
         }
         localStorage.setItem('ppc_data', JSON.stringify(data));
 
@@ -238,14 +342,30 @@ class Store {
 
     registerCaregiver(name, cpf, password) {
         const user = this.getCurrentUser();
+        if (!user) return { error: 'NO_SESSION', message: 'Sessão expirada. Faça login novamente.' };
         const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
-        
+
         // Verifica se já existe limpando a formatação
         const cleanCpf = String(cpf || '').replace(/\D/g, '');
         const existingIndex = users.findIndex(u => String(u.cpf || '').replace(/\D/g, '') === cleanCpf);
-        
+
         if (existingIndex > -1) {
-            // Se o cuidador já existir no sistema, atualizamos a senha dele (recuperação forçada/edição pelo paciente)
+            const existing = users[existingIndex];
+
+            // Defesa: NÃO sobrescreve contas existentes que não sejam cuidador.
+            // Isso impede que alguém digite o CPF de um paciente ou médico e
+            // converta a conta dele em cuidador (sequestro de identidade).
+            if (existing.profile && existing.profile !== 'cuidador') {
+                return { error: 'CPF_OWNED', message: 'Este CPF já pertence a outro tipo de usuário no sistema.' };
+            }
+
+            // Se já é cuidador, só permite atualizar se for o cuidador já vinculado
+            // a este paciente (ou ainda sem vínculo). Bloqueia sequestrar cuidador alheio.
+            if (existing.linkedPatientId && existing.linkedPatientId !== user.id) {
+                return { error: 'CG_LINKED_ELSEWHERE', message: 'Este CPF já está vinculado como cuidador de outro paciente.' };
+            }
+
+            // Atualiza dados do cuidador existente (mantém id)
             users[existingIndex].password = password;
             users[existingIndex].name = name;
             users[existingIndex].profile = 'cuidador';
@@ -273,8 +393,10 @@ class Store {
     // --- Visão do Médico (Busca multi paciente) ---
 
     getAllPatients() {
-        const users = JSON.parse(localStorage.getItem('ppc_users'));
-        return users.filter(u => u.profile === 'paciente');
+        const users = JSON.parse(localStorage.getItem('ppc_users')) || [];
+        // Filtra o usuário master (id 999) — ele é a porta de entrada do modo dev,
+        // não deve aparecer na lista clínica do médico.
+        return users.filter(u => u.profile === 'paciente' && u.id !== 999);
     }
 
     getPatientData(userId) {

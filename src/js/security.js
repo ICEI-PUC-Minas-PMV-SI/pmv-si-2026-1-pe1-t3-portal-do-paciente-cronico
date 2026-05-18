@@ -1,5 +1,5 @@
 // js/security.js
-// RNF-07: Segurança de Acesso - Timeout de Inatividade
+// RNF-07: Segurança de Acesso - Timeout de Inatividade + Roteamento por Perfil
 
 // Checagem síncrona (executa no parse, antes do DOMContentLoaded) para impedir que
 // scripts da página tentem renderizar dados protegidos sem sessão.
@@ -7,12 +7,37 @@
     const path = window.location.pathname;
     const isAuthPage = path.endsWith('/') || path.endsWith('/index.html') || path.endsWith('/register.html');
     if (isAuthPage) return;
+
     let session = null;
     try { session = JSON.parse(localStorage.getItem('ppc_currentUser')); } catch (e) { session = null; }
     if (!session || typeof session.id === 'undefined' || !session.profile) {
         // Limpa qualquer resíduo inválido antes de redirecionar
         localStorage.removeItem('ppc_currentUser');
         window.location.replace('../index.html');
+        return;
+    }
+
+    // ── Controle de acesso por perfil ──────────────────────────────────
+    // Páginas de paciente/cuidador: dashboard, history, medications, profile, report
+    // Página exclusiva do médico: clinical-dashboard
+    const isClinical = path.endsWith('/clinical-dashboard.html');
+    const isPatientArea = (
+        path.endsWith('/dashboard.html')   ||
+        path.endsWith('/history.html')     ||
+        path.endsWith('/medications.html') ||
+        path.endsWith('/profile.html')     ||
+        path.endsWith('/report.html')
+    );
+
+    if (isClinical && session.profile !== 'medico') {
+        // Paciente/cuidador tentando acessar área clínica → manda pro dashboard correto
+        window.location.replace('dashboard.html');
+        return;
+    }
+    if (isPatientArea && session.profile === 'medico') {
+        // Médico tentando acessar área do paciente → manda pra área clínica
+        window.location.replace('clinical-dashboard.html');
+        return;
     }
 })();
 
