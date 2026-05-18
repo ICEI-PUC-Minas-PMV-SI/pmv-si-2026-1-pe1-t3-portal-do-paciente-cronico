@@ -1,33 +1,65 @@
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
+# Arquivo CITATION.cff — metadados de citação para o projeto.
+# Formato: Citation File Format v1.2.0 (https://citation-file-format.github.io)
 cff-version: 1.2.0
-title: Web Application Template
+title: Portal do Paciente Crônico
 message: >-
-  Repositório padrão para o Eixo 1 - Projeto 1: Aplicações
-  Web da PUC Minas.
+  Se você citar ou reutilizar este software em trabalhos acadêmicos,
+  por favor utilize as informações de metadados abaixo.
 type: software
 authors:
-  - given-names: Aluno 1
-    family-names: Nome Completo
-    email: aluno@pucminas.br
+  - given-names: Alan
+    family-names: Alencar da Silva
+    email: alanalencar.office@gmail.com
     affiliation: PUC Minas
-  - given-names: Hugo
-    name-particle: 'B '
-    family-names: de Paula
+  - given-names: Alex Gabriel
+    family-names: Rocha Santos
+    email: rochaalexgabriel@gmail.com
+    affiliation: PUC Minas
+  - given-names: Marcela
+    family-names: Fernandes de Castro Melo
+    email: marcelafernandes0099@gmail.com
+    affiliation: PUC Minas
+  - given-names: Sara
+    family-names: Zschaber de Souza
+    email: zschaberlu@gmail.com
+    affiliation: PUC Minas
+  - given-names: Clóvis
+    family-names: Lemos Tavares
     name-suffix: Prof.
-    email: hugo@pucminas.br
     affiliation: PUC Minas
-    orcid: 'https://orcid.org/0000-0002-6193-3205'
 repository-code: >-
-  https://github.com/ICEI-PUC-Minas-PMV-SI/WebApplicationProject-Template
+  https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico
+url: >-
+  https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/src/
 abstract: >-
-  Descrever resumidamente, em um ou dois parágrafos, o
-  projeto que foi desenvolvido.
+  O Portal do Paciente Crônico é uma aplicação web desenvolvida como Registro
+  Pessoal de Saúde, otimizada para o acompanhamento diário de cidadãos com
+  doenças crônicas, como diabetes e hipertensão. A plataforma combate a baixa
+  adesão ao tratamento por meio de uma interface intuitiva que reduz o atrito
+  no registro de medições de rotina (pressão arterial, glicemia, sintomas) e
+  no controle de horários fracionados de medicamentos. Além de empoderar o
+  paciente sobre sua própria evolução clínica, o sistema consolida o histórico
+  em um painel visual (dashboard) que apoia a tomada de decisão por
+  profissionais de saúde durante atendimentos na Atenção Primária (UBS),
+  promovendo um cuidado mais eficiente e preventivo. O projeto foi
+  desenvolvido na disciplina Projeto - Aplicações Web do curso de Sistemas de
+  Informação da PUC Minas, e contempla três perfis de usuário (paciente,
+  cuidador e profissional de saúde), com persistência local via localStorage
+  e total aderência às diretrizes da LGPD.
 keywords:
-  - Desenvolvimento Web
+  - Saúde Digital
+  - Registro Pessoal de Saúde
+  - Doenças Crônicas
+  - Diabetes
+  - Hipertensão
+  - Atenção Primária à Saúde
+  - UBS
+  - LGPD
+  - Aplicações Web
   - HTML
   - CSS
   - JavaScript
-  - Template
-date-released: '2024-06-23'
+  - Vanilla JS
+  - PUC Minas
+version: 0.1.0
+date-released: '2026-05-18'
