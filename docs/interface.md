@@ -4,7 +4,7 @@ Este documento apresenta a visão geral da interação do usuário com o **Porta
 
 > 🔗 Para ver as telas em ação, acesse a [aplicação rodando no GitHub Pages](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/src/).
 >
-> 📌 **Sobre os screenshots:** Algumas imagens deste documento foram capturadas em fases anteriores do desenvolvimento e não refletem 100% das melhorias mais recentes (FAB estendido "Novo Registro", banner laranja do cuidador, tutorial guiado de primeiro acesso, status card de alertas no painel do médico). A equipe substituirá esses prints por capturas atualizadas na próxima iteração. As **descrições textuais** nesta página, no entanto, já estão atualizadas com a interface vigente.
+> 📌 **Sobre os screenshots:** A maioria das imagens foi atualizada para refletir a versão mais recente da interface (FAB estendido "Novo Registro", banner do cuidador, painel do médico com badges de alerta, etc.). Algumas telas auxiliares (cadastro de cuidador/médico, Remédios e Perfil) ainda usam capturas de uma versão anterior — a equipe atualizará esses prints em uma próxima iteração. As **descrições textuais** já estão alinhadas com a interface vigente.
 
 ---
 
@@ -68,11 +68,11 @@ Permite a inserção dos dados pessoais conforme o perfil escolhido:
 
 Validações em tempo real: máscara de CPF, mínimo de 11 dígitos, senha de pelo menos 4 caracteres, prevenção de CPFs duplicados. Implementação em [`src/register.html`](../src/register.html) + [`src/js/auth.js`](../src/js/auth.js).
 
-![cadastro - perfil paciente](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085202.png)
-![cadastro - perfil cuidador](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085359.png)
-![cadastro - perfil médico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085410.png)
+![cadastro - perfil paciente](./img/cadastro-paciente.png)
+![cadastro - perfil cuidador](./img/Captura%20de%20tela%202026-04-16%20085359.png)
+![cadastro - perfil médico](./img/Captura%20de%20tela%202026-04-16%20085410.png)
 
-*Telas de cadastro para cada um dos três perfis.*
+*Telas de cadastro para cada um dos três perfis. O print do perfil Paciente já reflete a versão atual; os de Cuidador e Médico serão atualizados na próxima iteração.*
 
 ---
 
@@ -87,7 +87,7 @@ Recursos adicionais:
 
 Implementação em [`src/index.html`](../src/index.html) + [`src/js/auth.js`](../src/js/auth.js).
 
-![login](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20094527.png)
+![login](./img/login.png)
 
 *Tela de acesso à conta do usuário, com seletor visual de perfil.*
 
@@ -108,9 +108,17 @@ A página inicial concentra o que o paciente precisa **ver e fazer no dia**. Est
 
 Implementação em [`src/pages/dashboard.html`](../src/pages/dashboard.html).
 
-![dashboard home](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083449.png)
+![dashboard home](./img/dashboard-paciente.png)
 
-*Tela home (versão anterior — o "+" laranja no canto inferior direito hoje aparece como um botão pílula com o texto "Novo Registro").*
+*Dashboard do paciente João Silva, com cartão de status, lista de remédios, gráficos de glicemia e pressão e o FAB estendido "Novo Registro" no rodapé.*
+
+#### Bottom-sheet "Novo Registro"
+
+Ao clicar no FAB, abre-se um bottom-sheet (em mobile) ou modal centralizada (em desktop) com 3 abas e value cards. Detalhes na Seção 4.2.
+
+![bottom-sheet novo registro](./img/novo-registro.png)
+
+*Bottom-sheet "Novo Registro" aberto na aba Pressão, com value cards para sistólica e diastólica e faixa informativa com referências clínicas.*
 
 ---
 
@@ -126,9 +134,9 @@ Linha do tempo consolidada com **todas as medições, sintomas e exames** já re
 
 Implementação em [`src/pages/history.html`](../src/pages/history.html).
 
-![histórico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083536.png)
+![histórico](./img/historico.png)
 
-*Tela de Histórico com timeline e busca em tempo real.*
+*Tela de Histórico com timeline consolidada e busca em tempo real.*
 
 ---
 
@@ -143,9 +151,9 @@ Gerencia a lista de medicamentos contínuos do paciente:
 
 Implementação em [`src/pages/medications.html`](../src/pages/medications.html).
 
-![remédios](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083600.png)
+![remédios](./img/Screenshot%202026-05-06%20083600.png)
 
-*Tela de gestão de medicamentos com CRUD completo.*
+*Tela de gestão de medicamentos com CRUD completo (captura de versão anterior — será atualizada).*
 
 ---
 
@@ -162,9 +170,9 @@ Centraliza identidade, dados clínicos básicos e controle de cuidadores vincula
 
 Implementação em [`src/pages/profile.html`](../src/pages/profile.html).
 
-![perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
+![perfil](./img/Screenshot%202026-05-06%20083637.png)
 
-*Tela de Perfil com dados clínicos editáveis e gestão de cuidadores.*
+*Tela de Perfil com dados clínicos editáveis e gestão de cuidadores (captura de versão anterior — será atualizada).*
 
 ---
 
@@ -179,9 +187,9 @@ A entrada do fluxo do médico, com **sidebar** identificando o profissional e á
 
 Implementação em [`src/pages/clinical-dashboard.html`](../src/pages/clinical-dashboard.html).
 
-![médico - gestão de pacientes](https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72)
+![médico - gestão de pacientes](./img/painel-medico.png)
 
-*Lista de pacientes ativos vista pela Dra. Ana, com badges de status e indicação do motivo do alerta.*
+*Lista de pacientes ativos vista pela Dra. Ana, com badges de status (verde "Estável" / vermelho "Alerta!") e indicação do motivo do alerta abaixo do CPF.*
 
 ---
 
@@ -193,39 +201,35 @@ Ao selecionar um paciente da lista, abre-se o painel detalhado à direita:
 - **Card "Alertas"** (acentos vermelhos) com alergias e condições crônicas
 - **Área central de gráficos** com botões para alternar entre **Glicemia** e **Pressão**, expandindo automaticamente o eixo Y para picos críticos (Ana Beatriz com glicemia de 240 mg/dL, Carlos com PA 172/105 mmHg)
 
-![médico - detalhes do paciente](https://github.com/user-attachments/assets/be425857-0ba0-4629-945b-9eb040165156)
+![médico - detalhes do paciente](./img/prontuario-carlos.png)
 
-*Painel detalhado do paciente selecionado com ficha clínica, alertas e gráfico.*
+*Prontuário completo do paciente Carlos Eduardo Pereira (hipertensão crítica) aberto pela Dra. Ana, com ficha clínica, alertas, gráficos, prescrição, sintomas e formulário de conduta clínica.*
 
 ---
 
-### 3.9 Tela Prontuário e Histórico de Sintomas (Médico)
+### 3.9 Tela Prontuário, Sintomas e Conduta Médica
 
-Logo abaixo da área de gráficos:
+Logo abaixo da área de gráficos (visível no mesmo print da seção anterior):
 
 - **Card "Prescrição Atual"** lista os medicamentos do paciente com dosagem e frequência
 - **Card "Últimos Sintomas"** mostra os 3 sintomas mais recentes em ordem reversa, destacando data/hora em vermelho
-- **Seção "Prontuário e Conduta"** com textarea **"Observação Clínica / Anamnese Remota"** para o profissional registrar o raciocínio
-
-![médico - prontuário](https://github.com/user-attachments/assets/8cff4d6d-e435-414b-8192-9c0dc782f322)
-
-*Quadros de prescrição e sintomas + área de observação clínica.*
-
----
-
-### 3.10 Tela Finalização da Conduta Médica
-
-Conclui o atendimento do médico:
-
-- Campo **"Ajuste de Prescrição"** para mudanças nas dosagens ou novos medicamentos
-- Botão **"Salvar e Notificar o Paciente"** persiste a conduta em `ppc_data[id].observations[]` e exibe imediatamente no **"Histórico de Condutas"** abaixo do formulário
-- Confirmação visual via toast de sucesso
+- **Seção "Prontuário e Conduta"** com:
+  - Textarea **"Observação Clínica / Anamnese Remota"** para o profissional registrar o raciocínio
+  - Campo **"Ajuste de Prescrição"** para mudanças nas dosagens ou novos medicamentos
+  - Botão **"Salvar e Notificar o Paciente"** que persiste a conduta em `ppc_data[id].observations[]` e exibe imediatamente no **"Histórico de Condutas"** abaixo do formulário
+  - Confirmação visual via toast de sucesso
 
 A função no JS é [`saveObservation()` em `store.js`](../src/js/store.js).
 
-![médico - finalização](https://github.com/user-attachments/assets/fd0b5931-be09-481d-9a44-1822f31b4d9a)
+---
 
-*Finalização da conduta com ajuste de prescrição e histórico do que já foi registrado.*
+### 3.10 Banner do Cuidador
+
+Quando o usuário logado é um cuidador, todas as páginas internas (Início, Histórico, Remédios, Perfil) ganham um **banner laranja no topo** identificando o paciente representado. Essa identificação é crítica para evitar que o cuidador confunda em nome de quem está agindo.
+
+![banner do cuidador na dashboard](./img/dashboard-cuidador.png)
+
+*Dashboard do paciente João Silva sendo acompanhado pelo cuidador Alan. O banner laranja no topo, a saudação personalizada ("Olá, Alan · Acompanhando João Silva") e o título de seção ("Remédios de João") deixam o contexto explícito.*
 
 ---
 
