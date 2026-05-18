@@ -1,203 +1,367 @@
-
 # Projeto de Interface
 
-Visão geral da interação do usuário pelas telas do sistema e protótipo interativo das telas com as funcionalidades que fazem parte do sistema (wireframes)
-## User Flow
-[Flow.pdf](https://github.com/user-attachments/files/26802084/Flow.pdf)
+Este documento apresenta a visão geral da interação do usuário com o **Portal do Paciente Crônico**, descrevendo o fluxo de navegação (*user flow*), os protótipos de baixa fidelidade e o detalhamento de cada tela do sistema. Também documenta os **componentes reutilizáveis** e o **design system** que sustenta a consistência visual em todo o produto.
 
-Nesse documento, apresentamos a interface principal do nosso aplicativo, explicando as suas seguintes funcionalidades e como elas pode ser utilizadas pelo usuário para que ele cumpra o próposito de auxiliar tanto o paciente, quanto os cuidadores, que possuem o espelho do perfil do indivíduo no qual ele zela, além dos profissionais da saúde, que assim, conseguem ter acesso ao registro de todos os seus pacientes, podendo organizar melhor seus prontuários, mas também ter um controle muito maior sobre o bem-estar deles no dia-a-dia. 
+> 🔗 Para ver as telas em ação, acesse a [aplicação rodando no GitHub Pages](https://icei-puc-minas-pmv-si.github.io/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/src/).
+>
+> 📌 **Sobre os screenshots:** Algumas imagens deste documento foram capturadas em fases anteriores do desenvolvimento e não refletem 100% das melhorias mais recentes (FAB estendido "Novo Registro", banner laranja do cuidador, tutorial guiado de primeiro acesso, status card de alertas no painel do médico). A equipe substituirá esses prints por capturas atualizadas na próxima iteração. As **descrições textuais** nesta página, no entanto, já estão atualizadas com a interface vigente.
 
+---
 
-## Protótipo de baixa fidelidade
+## 1. User Flow
 
-As telas do sistema apresentam uma estrutura comum que é apresentada na figura. Nesta estrutura existem 3 grandes blocos, descritos a seguir. São eles:
-<h3><b>Tela – Paciente/Cuidador</b></h3> 
-<ul>
-  <li>Cabeçalho - apresenta o nome presente no cadastro do usuário, além da data;</li>
-  <li>Conteúdo - apresenta o progresso do paciente em relação as atividades propostas, nesse caso a meditação, proposta pelos profissionais da saúde designados para o monitoramento do paciente, exibir um relatório geral do paciente, mudar suas informações de cadastro, além disso possui a lista do uso de medicamentos, indicando o nome, o horário e a dose, além de uma checklist, e no final se pode observar uma análise da evolução glicêmica e pressão arterial;</li>
-  <li>Rodapé - redirecionamento para outras divisões presentes no aplicativo, essas nas quais informam ou possuem funções específicas.</li>
-</ul>
-Tela Paciente/Cuidador (https://github.com/user-attachments/files/27489591/Template.2.pdf) 
-<h3><b>Tela – Médico</b></h3> 
-<ul>
-  <li>Cabeçalho - traz um resumo do conteúdo, além de poder buscar pelos pacientes por meio do <i>search</i>;</li>
-  <li>Conteúdo - apresenta os últimos sintomas sentidos pelo paciente através de tava e hora, possui a lista do uso de medicamentos, indicando o nome, o horário e a dose uma análise da evolução glicêmica e pressão arterial, além de poder criar um prontuário apresentando a conduta atual dele;</li>
-  <li>Rodapé - CRM, nome do doutor e a opção de sair do menu principal do aplicativo e voltar para a tela de <i>login</i>.</li> 
-</ul>
-Tela Médico (https://github.com/user-attachments/files/27612277/Template.3.1.pdf)
+O fluxo do usuário descreve como cada perfil navega entre as telas a partir do login até as ações principais do sistema.
 
- ## <h3><b>Tela – Cuidador/Paciente</b></h3> 
-## <h3><b>Tela – Cadastro</b></h3>
-<p>A tela de cadastro apresenta os seguintes campos para a inserção das informações pessoais do usuário paciente: Nome Completo, CPF, Senha, data de nascimento, sexo do paciente, qual a doença crônica, tipo sanguineo, alergias, opção para aceitar os termos de uso e botão de cadastro.</p> <p>Também tem a o cadastro para o Cuidador, que assim como o paciente apresenta CPF e senha.</p> <p>E para finalizar a area de cadastro, temos o cadastro do médico, que requer nome completo, CPF, CRM, e senha.</p>
-  
-  ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085202.png)
-  ![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085359.png)
-![cadastro](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085410.png)
+📄 [Diagrama completo (Flow.pdf)](https://github.com/user-attachments/files/26802084/Flow.pdf)
 
-<figure> 
-    <figcaption> - Tela de cadastro de usuários
-</figure>
-<hr> 
+### Resumo dos fluxos por perfil
 
-<h3><b>Tela – Login</b></h3>
-<p>A tela de Login apresenta campos para a inserção da ocupação do usuario ( paciente, cuidador e médico), do CPF/e-mail, da senha, e a funcionalidade de recuperar a senha caso tenha esquecido.</p>
+- **Paciente:** Login → Dashboard (gráficos + remédios + alertas) → Novo Registro (pressão/glicose/sintomas) → Histórico → Remédios → Perfil → Sair
+- **Cuidador:** Login → Dashboard **do paciente vinculado** (com banner de identificação em todas as telas) → demais telas no mesmo contexto do paciente representado
+- **Profissional de Saúde:** Login → Painel Clínico → Selecionar Paciente → Ficha + Gráficos + Prescrição → Registrar Conduta
+
+Para o detalhamento dos perfis e histórias de usuário, consulte [`docs/especification.md`](especification.md). Para a relação RF → tela → arquivo de código, consulte [`docs/development.md`](development.md).
+
+---
+
+## 2. Protótipo de Baixa Fidelidade
+
+As telas seguem uma estrutura comum dividida em **três grandes blocos**:
+
+- **Cabeçalho:** identificação do usuário (nome, avatar) e contexto (data, banner do paciente representado, no caso do cuidador).
+- **Conteúdo:** área principal da tela, varia conforme a função (cartão de status, gráficos, lista de medicamentos, timeline, etc.).
+- **Rodapé:** barra de navegação inferior (paciente/cuidador) ou sidebar lateral (médico).
+
+### Tela – Paciente / Cuidador
+
+O paciente vê seu próprio painel; o cuidador vê o painel **do paciente vinculado**, com o nome dele em destaque no banner laranja superior. Em ambos os casos:
+
+- **Cabeçalho:** saudação personalizada, data, avatar clicável
+- **Conteúdo:** cartão de status (verde quando estável, vermelho quando há alerta), lista de remédios do dia com checkbox, gráficos de evolução glicêmica e pressão arterial
+- **Rodapé:** barra de navegação fixa com Início · Histórico · Remédios · Perfil, e botão flutuante **"Novo Registro"** sempre acessível
+
+📄 [Wireframe — Paciente/Cuidador (Template.2.pdf)](https://github.com/user-attachments/files/27489591/Template.2.pdf)
+
+### Tela – Médico
+
+O profissional de saúde acessa um layout específico, com mais espaço lateral para listas e detalhes clínicos:
+
+- **Sidebar:** identificação do médico (nome, CRM), atalhos para gestão de pacientes, botão de sair
+- **Cabeçalho:** título da seção, barra de busca por nome de paciente
+- **Conteúdo:** lista de pacientes ativos à esquerda; ao selecionar, abre o painel detalhado à direita com ficha clínica, gráficos, prescrição atual, sintomas e formulário de conduta
+
+📄 [Wireframe — Médico (Template.3.1.pdf)](https://github.com/user-attachments/files/27612277/Template.3.1.pdf)
+
+---
+
+## 3. Telas em Alta Fidelidade
+
+A seguir, o detalhamento visual e funcional de cada tela do sistema.
+
+### 3.1 Tela de Cadastro
+
+Permite a inserção dos dados pessoais conforme o perfil escolhido:
+
+- **Paciente:** Nome completo, CPF, senha, data de nascimento, sexo, tipo sanguíneo, alergias, doenças crônicas (checkboxes) e aceite obrigatório dos termos da **LGPD**.
+- **Cuidador:** o fluxo de cuidador **não passa pela tela de cadastro pública** — ele é vinculado a um paciente por meio do formulário "Adicionar Cuidador" na tela de Perfil do paciente principal.
+- **Médico:** Nome, CPF, senha e **CRM**.
+
+Validações em tempo real: máscara de CPF, mínimo de 11 dígitos, senha de pelo menos 4 caracteres, prevenção de CPFs duplicados. Implementação em [`src/register.html`](../src/register.html) + [`src/js/auth.js`](../src/js/auth.js).
+
+![cadastro - perfil paciente](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085202.png)
+![cadastro - perfil cuidador](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085359.png)
+![cadastro - perfil médico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20085410.png)
+
+*Telas de cadastro para cada um dos três perfis.*
+
+---
+
+### 3.2 Tela de Login
+
+Concentra os campos de autenticação e a **seleção do perfil** em formato de cards visuais clicáveis (Paciente · Cuidador · Médico). A escolha do perfil é obrigatória e validada contra o cadastro do CPF: tentar entrar com um perfil divergente bloqueia o acesso com mensagem amigável.
+
+Recursos adicionais:
+- Link **"Esqueci minha senha"** com fluxo de recuperação por CPF + data de nascimento
+- Link **"Cadastre-se"** que leva à tela de cadastro
+- Toggle de exibição de senha (ícone de olho)
+
+Implementação em [`src/index.html`](../src/index.html) + [`src/js/auth.js`](../src/js/auth.js).
 
 ![login](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Captura%20de%20tela%202026-04-16%20094527.png)
 
+*Tela de acesso à conta do usuário, com seletor visual de perfil.*
 
-<figure> 
-    <figcaption> - Tela de acesso à conta do usuário
-</figure>
-<hr>
+---
 
-<h3><b>Tela - Home page</b></h3>
-<p>A tela de home page tem funções focadas no controle de medicamentos com visual limpo e moderno, focado em acompanhamento diário. Apresenta algumas funcionalidades disponiveis, como a seção “Próximos Remédios (Hoje)”, contendo medicamentos em cartões separados.<br> Cada item possui um botão circular à direita, para marcar o remédio como tomado.<p> Mais abaixo existe a seção “Evolução Glicêmica”, com um gráfico de linha azul mostrando a variação da glicemia do paciente ao decorrer de alguns dias.</p> <p>No canto inferior direito há um botão flutuante laranja com símbolo de “+”, sugerindo adicionar nova medição ou medicamento.</p><p> Na parte inferior da tela existe uma barra de navegação com 4 abas:</p> <br>
+### 3.3 Tela Home (Dashboard do Paciente)
 
-Início (selecionada em azul)
-Histórico
-Remédios
-Perfil   </p>
+A página inicial concentra o que o paciente precisa **ver e fazer no dia**. Estrutura de cima para baixo:
 
-![homepage](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083449.png)
+1. **Saudação personalizada** com nome, data e avatar clicável (vai para o Perfil)
+2. **Cartão de Status (`#status-card`)** — gradiente azul quando tudo está em dia, **gradiente vermelho** quando há medições fora do alvo (PA ≥ 140/90 mmHg ou glicemia > 180 mg/dL), com mensagem explícita do motivo
+3. **Meus Remédios do dia** — cards com nome, horário e dose, e um botão de check que persiste o estado de "tomado" por dia
+4. **Gráficos lado a lado em desktop** (empilhados em mobile) — Evolução Glicêmica e Pressão Arterial, renderizados via Chart.js e **reativos**: atualizam imediatamente após um novo registro
+5. **Botão flutuante "Novo Registro"** sempre acessível no rodapé — formato pílula com ícone `+` e texto explícito (não é mais um botão genérico com apenas `+`)
+6. **Bottom-nav** com 4 abas: Início · Histórico · Remédios · Perfil
 
-<figure> 
-  <figcaption> - Tela home page
-</figure> 
-<hr>
+> 🟧 **Para cuidadores logados,** um **banner laranja** aparece no topo identificando o paciente representado (ver Seção 4.3).
 
-<h3><b>Tela- Histórico</b></h3>
-<p>A tela mostra a seção “Meu Histórico” focada no acompanhamento cronológico de registros médicos e medições.</p>
-<p>No topo há:<br>
-o título “Meu Histórico”;
- uma barra de pesquisa com o texto: 
- “Buscar por exames, consultas…”;
-e um botão de filtro com ícone de funil ao lado.</p>
+Implementação em [`src/pages/dashboard.html`](../src/pages/dashboard.html).
 
-<P>Logo abaixo existe um botão grande com borda azul escrito:
-“Anexar Exame/Laudo”
-com um ícone de upload, indicando envio de documentos médicos.</p>
-<p>Na parte inferior há uma barra de navegação com:
+![dashboard home](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083449.png)
 
-Início, 
-Histórico (selecionado em azul), 
-Remédios e 
-Perfil assim como na tela anterior</p>
+*Tela home (versão anterior — o "+" laranja no canto inferior direito hoje aparece como um botão pílula com o texto "Novo Registro").*
 
-![Histórico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083536.png)
+---
 
-<figure> 
-  <figcaption> - Tela Histórico
-</figure> 
-<hr>
+### 3.4 Tela Histórico
 
-<h3><b>Tela - Remédios</b></h3>
-<p>A tela mostra a seção “Meus Medicamentos” voltada para gerenciamento de remédios e horários.<br>
-No topo há:<br>
+Linha do tempo consolidada com **todas as medições, sintomas e exames** já registrados, com:
 
-O título “Meus Medicamentos”;<br>
-Um botão grande com borda azul escrito:<br>
-“+ Novo Medicamento” usado para adicionar novos remédios.</p>
-<p>Abaixo aparecem cards individuais para cada medicamento cadastrado. Todos seguem um layout semelhante:<br>
+- **KPIs no topo** mostrando a contagem de cada tipo (Pressão, Glicemia, Sintomas, Exames)
+- **Busca textual em tempo real** filtra a tabela conforme o usuário digita (sem precisar clicar em buscar)
+- **Botão "Anexar Exame/Laudo"** abre formulário inline para adicionar um exame ao histórico (título + nome do arquivo simulado)
+- **Tabela com badges coloridos por tipo de registro** (pressão, glicemia, sintoma, exame)
+- Registros ordenados pelo timestamp mais recente
 
-Nome do remédio em destaque;<br>
-Horário inicial;<br>
-Frequência de uso em uma etiqueta verde;<br>
-Botões de editar e excluir no canto direito.</p>
+Implementação em [`src/pages/history.html`](../src/pages/history.html).
 
-![Remédios](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083600.png)
+![histórico](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083536.png)
 
-<figure> 
-  <figcaption> - Tela Remédios
-</figure> 
-<hr>
+*Tela de Histórico com timeline e busca em tempo real.*
 
-<h3><b>Tela - Perfil</b></h3>
-<p>Essa tela representa a aba de Perfil do aplicativo, com foco nas informações pessoais e gestão de cuidadores.<br>
-No topo aparece o nome de usuário e abaixo o CPF<br>
-Dados Clínicos Básicos; Um card com informações de saúde:<br>
-Idade, 
- Sexo biológico, 
- Tipo sanguíneo, 
- Alergias, 
- Condições crônicas. <br>
- A segunda seção é “Meus Cuidadores”, também em um card expansível. Ela mostra o nome do cuidador, o CPF e um selo para indicar se ele esta ativo ou inativo.<br>
-Abaixo existem dois botões se referindo ao cuidador:<br>
+---
 
-Editar (azul)<br>
-Excluir (vermelho)<br>
+### 3.5 Tela Remédios
 
-E logo abaixo:<br>
+Gerencia a lista de medicamentos contínuos do paciente:
 
-botão “+ Adicionar Cuidador”.<br>
+- **KPIs:** Total · Em dia · Atenção
+- **Botão "Novo Medicamento"** abre formulário inline com Nome, Dosagem, Primeira dose (time picker), Frequência
+- **Tabela** com nome, dosagem, primeira dose, frequência (badge) e ações de Editar / Excluir
+- **Exclusão** com confirmação modal
 
-Mais abaixo aparece um botão azul sólido grande:<br>
-“Gerar Relatório Clínico PDF” com ícone de documento, sugerindo exportação do histórico médico.<br>
+Implementação em [`src/pages/medications.html`](../src/pages/medications.html).
 
-Na parte inferior da tela há parcialmente visível um botão vermelho claro:<br>
-“Sair da Conta”
+![remédios](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083600.png)
 
-![Perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
+*Tela de gestão de medicamentos com CRUD completo.*
 
-<figure> 
-  <figcaption> - Tela Perfil
-</figure> 
-    <h3><b>Tela – Médico</b></h3> 
-  <hr>
-<h3><b>Tela - Gestão de Pacientes</b></h3>
+---
 
-No lado esquerdo, sobre um fundo branco, há o logotipo "Portal Clínico" com um ícone de coração azul. Abaixo, o botão "Meus Pacientes" está destacado em azul claro. No rodapé, identificam-se o nome do médico, seu CRM e o botão "Sair".
+### 3.6 Tela Perfil
 
-No centro, o título principal é "Gestão de Pacientes", acompanhado do subtítulo "Visão geral de monitoramento remoto". À direita, há uma barra de pesquisa com o texto "Buscar por Nome...".
+Centraliza identidade, dados clínicos básicos e controle de cuidadores vinculados:
 
-Apresenta a seção "Meus Pacientes Ativos" com três cartões brancos e bordas arredondadas. Cada cartão contém o nome do paciente, o número do CPF e uma etiqueta verde no canto superior direito indicando o status "Estável".
+- **Avatar grande** com inicial do nome
+- **Accordion "Dados Clínicos Básicos"** — idade (calculada da data de nascimento), sexo, tipo sanguíneo, alergias, condições crônicas. Botão **Editar Dados** abre formulário e salva no banco
+- **Accordion "Meus Cuidadores"** (oculto para o próprio cuidador) — lista cuidadores vinculados; botão **Adicionar Cuidador** abre formulário (Nome, CPF com máscara, senha provisória) com **validação anti-sequestro de conta**
+- **Botão "Gerar Relatório Clínico PDF"** abre [`src/pages/report.html`](../src/pages/report.html) em nova aba e dispara a janela de impressão
+- **Botão "Rever Tutorial de Boas-vindas"** reseta as flags do tutorial e leva à dashboard, fazendo o tour guiado disparar novamente
+- **Botão "Sair da Conta"** com confirmação modal
 
-<img width="1918" height="899" alt="médico img1" src="https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72" /> 
-Tela - Gestão de Pacientes
+Implementação em [`src/pages/profile.html`](../src/pages/profile.html).
 
-<hr>
+![perfil](https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/Screenshot%202026-05-06%20083637.png)
 
-<h3><b>Tela - Interface de Detalhes do Paciente</b></h3> 
+*Tela de Perfil com dados clínicos editáveis e gestão de cuidadores.*
 
-O card do Paciente aparece com um fundo azulado, indicando que ele é o foco atual da visualização.
+---
 
-No topo direito, dois quadros organizam os dados vitais. O de "Ficha Clínica" (azul) detalha idade, sexo e tipo sanguíneo. O de "Alertas" (vermelho) destaca que o paciente possui Diabetes e Hipertensão.
+### 3.7 Tela Gestão de Pacientes (Médico)
 
-Uma grande área central reservada para visualização de dados, com abas para alternar entre os gráficos de "Glicemia" e "Pressão".
+A entrada do fluxo do médico, com **sidebar** identificando o profissional e área central listando os pacientes:
 
-Na parte inferior, dois quadros mostram a "Prescrição Atual" (medicamentos em uso) e os "Últimos Sintomas" relatados pelo paciente, como cansaço e tontura. 
+- **Sidebar:** logo "Portal Clínico", nome do médico, CRM, atalho "Meus Pacientes" e botão "Sair"
+- **Cabeçalho central:** título "Gestão de Pacientes", subtítulo "Visão geral de monitoramento remoto" e **barra de busca** que filtra a lista em tempo real
+- **Lista "Meus Pacientes Ativos":** cards com nome, CPF e **badge de status** verde ("Estável") ou **vermelho ("Alerta!")** quando há sinais vitais fora do alvo (PA ≥ 140/90 ou glicemia > 180 / < 70). Cards com alerta também exibem o **motivo abaixo do CPF** (ex.: *"PA 172/105 mmHg"*)
+- Borda lateral colorida do card reforça o status (verde/vermelho)
 
-<img width="1918" height="905" alt="médico img2" src="https://github.com/user-attachments/assets/be425857-0ba0-4629-945b-9eb040165156" /> 
-Tela - Interface de Detalhes do Paciente 
+Implementação em [`src/pages/clinical-dashboard.html`](../src/pages/clinical-dashboard.html).
 
-<hr>
-<h3><b>Tela - Prontuário e Histórico de Sintomas</b></h3> 
+![médico - gestão de pacientes](https://github.com/user-attachments/assets/fd51930d-5f4e-4b43-930c-ea1f61f27c72)
 
-Exibe detalhadamente o quadro de "Prescrição Atual" com as dosagens de Losartana, Metformina e Sinvastatina, ao lado do quadro de "Últimos Sintomas", que mostra registros datados (14 abr e 12 abr) sobre o bem-estar do paciente.
+*Lista de pacientes ativos vista pela Dra. Ana, com badges de status e indicação do motivo do alerta.*
 
-Introduz a seção "Prontuário e Conduta", onde o médico começa a formalizar o atendimento.
+---
 
-Um campo de texto editável com o placeholder "Paciente apresenta picos de glicemia...", permitindo que o profissional escreva suas anotações de anamnese remota. 
+### 3.8 Tela Detalhes do Paciente (Médico)
 
-<img width="1918" height="908" alt="médico img3" src="https://github.com/user-attachments/assets/8cff4d6d-e435-414b-8192-9c0dc782f322" />
-Tela - Prontuário e Histórico de Sintomas 
+Ao selecionar um paciente da lista, abre-se o painel detalhado à direita:
 
-<hr> 
-<h3><b>Tela - Finalização da Conduta Médica</b></h3> 
+- **Card "Ficha Clínica"** (fundo azulado quando selecionado) com idade, sexo e tipo sanguíneo
+- **Card "Alertas"** (acentos vermelhos) com alergias e condições crônicas
+- **Área central de gráficos** com botões para alternar entre **Glicemia** e **Pressão**, expandindo automaticamente o eixo Y para picos críticos (Ana Beatriz com glicemia de 240 mg/dL, Carlos com PA 172/105 mmHg)
 
-Abaixo das observações clínicas, existe um campo específico intitulado "Ajuste de Prescrição", onde o médico pode digitar alterações nas dosagens ou novos medicamentos.
+![médico - detalhes do paciente](https://github.com/user-attachments/assets/be425857-0ba0-4629-945b-9eb040165156)
 
-No canto inferior direito, destaca-se o botão azul "Salvar e Notificar o Paciente". Este botão finaliza o registro e envia automaticamente as atualizações para o aplicativo do paciente.
+*Painel detalhado do paciente selecionado com ficha clínica, alertas e gráfico.*
 
-Reitera a presença do menu lateral e as informações de login do médico, garantindo que o contexto do usuário não seja perdido durante o preenchimento. 
+---
 
-<img width="1918" height="898" alt="médico img4" src="https://github.com/user-attachments/assets/fd0b5931-be09-481d-9a44-1822f31b4d9a" />
-Tela - Finalização da Conduta Médica
- 
-> **Links Úteis**:
-> - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
-> - [Ferramentas de Wireframes](https://rockcontent.com/blog/wireframes/)
-> - [MarvelApp](https://marvelapp.com/developers/documentation/tutorials/)
+### 3.9 Tela Prontuário e Histórico de Sintomas (Médico)
+
+Logo abaixo da área de gráficos:
+
+- **Card "Prescrição Atual"** lista os medicamentos do paciente com dosagem e frequência
+- **Card "Últimos Sintomas"** mostra os 3 sintomas mais recentes em ordem reversa, destacando data/hora em vermelho
+- **Seção "Prontuário e Conduta"** com textarea **"Observação Clínica / Anamnese Remota"** para o profissional registrar o raciocínio
+
+![médico - prontuário](https://github.com/user-attachments/assets/8cff4d6d-e435-414b-8192-9c0dc782f322)
+
+*Quadros de prescrição e sintomas + área de observação clínica.*
+
+---
+
+### 3.10 Tela Finalização da Conduta Médica
+
+Conclui o atendimento do médico:
+
+- Campo **"Ajuste de Prescrição"** para mudanças nas dosagens ou novos medicamentos
+- Botão **"Salvar e Notificar o Paciente"** persiste a conduta em `ppc_data[id].observations[]` e exibe imediatamente no **"Histórico de Condutas"** abaixo do formulário
+- Confirmação visual via toast de sucesso
+
+A função no JS é [`saveObservation()` em `store.js`](../src/js/store.js).
+
+![médico - finalização](https://github.com/user-attachments/assets/fd0b5931-be09-481d-9a44-1822f31b4d9a)
+
+*Finalização da conduta com ajuste de prescrição e histórico do que já foi registrado.*
+
+---
+
+## 4. Componentes e Padrões UI
+
+Esta seção documenta os componentes reutilizáveis que aparecem em múltiplas telas e que foram desenhados para sustentar a consistência visual e funcional do app.
+
+### 4.1 FAB Estendido "Novo Registro"
+
+O botão de ação principal do paciente — laranja, em formato de **pílula**, centralizado no rodapé (mobile) e à direita (desktop). Substituiu a versão antiga que era apenas um círculo com `+` (que confundia usuários novos sobre o propósito).
+
+**Características:**
+- Ícone `plus-circle` + texto **"Novo Registro"** sempre visíveis
+- Animação sutil de pulso para chamar atenção em primeira visita
+- Sempre acessível na dashboard (não rola junto com o conteúdo)
+
+Implementação visual em [`src/css/onboarding.css`](../src/css/onboarding.css) (regras `.fab-extended`).
+
+### 4.2 Bottom-sheet "Novo Registro"
+
+Aberto pelo FAB. Repaginado para parecer um app médico premium:
+
+- **Header com ícone** azul à esquerda + título "Novo Registro" + subtítulo
+- **Abas em pílula** (Pressão · Glicose · Sintomas) com fundo cinza claro e aba ativa em "card branco elevado", padrão consistente com iOS/Material Design
+- **Value Cards** para Pressão (sistólica e diastólica lado a lado, com separador `/` visual) e Glicose (card único com número grande em azul)
+- **Faixa informativa azul** com referências clínicas (ex.: *"Ideal: até 120/80 mmHg · Atenção: a partir de 140/90 mmHg"*)
+- **Chips de sintomas** em grade 2×2 com hover azul e estado selecionado com sombra suave
+- **Botões com ícones**: `✗ Cancelar` e `✓ Salvar Registro`
+- Em desktop, o bottom-sheet vira modal centralizada com largura máxima de 520 px
+
+### 4.3 Banner do Cuidador
+
+Quando o usuário logado é um **cuidador**, um banner laranja aparece **no topo de todas as páginas** identificando o paciente que ele está acompanhando. Isso elimina a confusão de "em nome de quem estou agindo agora?"
+
+**Conteúdo do banner:**
+- Avatar circular azul com a inicial do paciente
+- Tag *"Você está acompanhando"* em laranja
+- **Nome do paciente em destaque (negrito grande)**
+- Linha discreta abaixo: *"Cuidador logado: {nome do cuidador}"*
+
+Adicionalmente, na dashboard:
+- A saudação muda de "Olá, Alan" para "Olá, Alan · Acompanhando João Silva"
+- O título "Meus Remédios" vira "Remédios de João"
+
+Implementação em [`src/js/caregiver-banner.js`](../src/js/caregiver-banner.js).
+
+### 4.4 Tutorial Guiado de Primeiro Acesso
+
+Atende ao **RNF-11** (curva de aprendizado). Na primeira visita de cada tela, dispara automaticamente um **tour interativo**:
+
+- **Overlay escuro** com *spotlight pulsante azul* destacando o elemento que está sendo explicado
+- **Tooltip com seta** apontando para o elemento, com título + descrição
+- **Contador** "1/4", **bolinhas de progresso** e botões **Voltar / Próximo / Pular**
+- **Tours diferentes por perfil** (paciente, cuidador e médico) — cada um vê passos contextuais à sua realidade
+- Suporte a teclado (← → para navegar, Esc para sair)
+- Cada tela é marcada como "visto" uma única vez (`ppc_onboarding_done_<userId>_<screenKey>`); o usuário pode reabrir pelo botão **"Rever Tutorial de Boas-vindas"** no Perfil
+
+Implementação em [`src/js/onboarding.js`](../src/js/onboarding.js) e estilos em [`src/css/onboarding.css`](../src/css/onboarding.css).
+
+### 4.5 Status Card (Cartão de Alertas)
+
+O cartão de saudação no topo da dashboard adapta-se ao estado clínico do paciente:
+
+- **Estado "Comece agora"** (sem medições) — gradiente neutro com ícone de estrelas
+- **Estado "Muito bem!"** (medições em dia) — gradiente azul com ícone de medalha
+- **Estado "Atenção!"** (PA ou glicemia fora do alvo) — gradiente vermelho com ícone de triângulo de alerta e mensagem descritiva do motivo
+
+A lógica vive em `updateStatusCard()` dentro de [`src/pages/dashboard.html`](../src/pages/dashboard.html).
+
+### 4.6 Toasts e Confirmações
+
+Substituem os `alert()`/`confirm()` nativos do navegador:
+
+- **Toasts** não-bloqueantes no topo da tela, em três cores: sucesso (verde), erro (vermelho), info (azul). Auto-fechamento em 2,5 s.
+- **Confirmações modais** com Promise (`showConfirm`) para ações destrutivas como excluir medicamento ou sair da conta
+
+Implementação em [`src/js/toast.js`](../src/js/toast.js).
+
+---
+
+## 5. Design System
+
+A consistência visual é sustentada por **variáveis CSS centralizadas** em [`src/css/variables.css`](../src/css/variables.css), reaproveitadas em [`src/css/components.css`](../src/css/components.css) e nas páginas.
+
+### Paleta
+
+| Função | Cor | Uso |
+|---|---|---|
+| Primária (azul) | `#2563EB` | Identidade do produto, botões principais, gráficos |
+| Acento (laranja) | `#F97316` | FAB, banner do cuidador, destaques de ação |
+| Sucesso | `#16A34A` | Status estável, confirmações |
+| Atenção | `#D97706` | Avisos amarelos |
+| Perigo | `#DC2626` | Alertas, exclusões, status crítico |
+| Texto principal | `#0F172A` | Tipografia primária |
+| Fundo da página | `#F8FAFC` | Off-white para reduzir cansaço visual |
+
+### Tipografia
+
+- Família: **Inter** (via Google Fonts) — moderna, neutra, ótima legibilidade em mobile
+- Pesos: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+- Tamanhos: variáveis controladas via CSS para fácil ajuste de acessibilidade
+
+### Espaçamento e Raios
+
+- Escala de espaçamento em `rem` (`--sp-1` a `--sp-12`) para consistência entre componentes
+- Raios padronizados (`--radius-sm` a `--radius-2xl`) — botões usam radius médio, cards usam radius grande, FAB e overlays usam raio máximo
+
+### Acessibilidade
+
+- **Contraste WCAG AA** garantido nas combinações principais
+- **Áreas de toque** mínimas de 44×44 px (botões, FAB, chips, bottom-nav)
+- **Modo responsivo mobile-first** com breakpoints em 600 px e 768 px
+- **Suporte a teclado** em tutoriais e modais (Esc fecha, setas navegam)
+
+---
+
+## 6. Documentação Complementar
+
+| Tema | Documento |
+|---|---|
+| Contexto, problema, público-alvo | [`docs/context.md`](context.md) |
+| Personas, histórias de usuário, requisitos | [`docs/especification.md`](especification.md) |
+| Mapeamento RF → tela → código | [`docs/development.md`](development.md) |
+| Plano e cenários de testes | [`docs/tests.md`](tests.md) |
+| Bibliografia | [`docs/references.md`](references.md) |
+| Especificação detalhada (PRD) | [`PRD.md`](../PRD.md) |
+| Roteiro da apresentação | [`presentation/README.md`](../presentation/README.md) |
+
+---
+
+## 7. Links Úteis sobre Wireframing e Prototipagem
+
+> - [Protótipos vs Wireframes (Nielsen Norman Group)](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
+> - [Ferramentas de Wireframes (Rock Content)](https://rockcontent.com/blog/wireframes/)
 > - [Figma](https://www.figma.com/)
-> - [Adobe XD](https://www.adobe.com/br/products/xd.html#scroll)
-> - [Axure](https://www.axure.com/edu) (Licença Educacional)
-> - [InvisionApp](https://www.invisionapp.com/) (Licença Educacional)
+> - [MarvelApp](https://marvelapp.com/developers/documentation/tutorials/)
+> - [Adobe XD](https://www.adobe.com/br/products/xd.html)
+> - [Axure (Licença Educacional)](https://www.axure.com/edu)
+> - [InvisionApp (Licença Educacional)](https://www.invisionapp.com/)
