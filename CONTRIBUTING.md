@@ -139,15 +139,40 @@ refactor: extrai escapeHtml para módulo compartilhado em toast.js
 
 ### Co-autoria obrigatória
 
-Como o trabalho é coletivo, todos os commits substantivos devem incluir os demais integrantes da equipe como **coautores**, mesmo quando apenas um membro digitou o código. Adicione ao final da mensagem do commit:
+Como o trabalho é coletivo, todos os commits substantivos devem incluir os demais integrantes da equipe como **coautores**, mesmo quando apenas um membro digitou o código.
 
+**Regra simples:** quem está commitando entra como **autor** principal automaticamente (porque o Git usa o `user.email` configurado). Os outros integrantes — **menos quem está commitando** — entram como `Co-Authored-By` no final da mensagem.
+
+Identidades de cada integrante para uso nos trailers:
+
+| Integrante | `Co-Authored-By` |
+|---|---|
+| Alan Alencar da Silva | `Co-Authored-By: Alan Alencar <alanalencar.office@gmail.com>` |
+| Alex Gabriel Rocha Santos | `Co-Authored-By: Alex Gabriel Rocha Santos <rochaalexgabriel@gmail.com>` |
+| Marcela Fernandes de Castro Melo | `Co-Authored-By: Marcela Fernandes <marcelafernandes0099@gmail.com>` |
+| Sara Zschaber de Souza | `Co-Authored-By: Sara Zschaber <zschaberlu@gmail.com>` |
+
+**Exemplos por integrante:**
+
+Se quem está commitando é **Alan**, adicione ao final da mensagem:
 ```
 Co-Authored-By: Alex Gabriel Rocha Santos <rochaalexgabriel@gmail.com>
 Co-Authored-By: Marcela Fernandes <marcelafernandes0099@gmail.com>
 Co-Authored-By: Sara Zschaber <zschaberlu@gmail.com>
 ```
 
-O GitHub reconhece automaticamente esses trailers e mostra os avatares de todos os contribuidores no commit.
+Se quem está commitando é **Alex**, adicione:
+```
+Co-Authored-By: Alan Alencar <alanalencar.office@gmail.com>
+Co-Authored-By: Marcela Fernandes <marcelafernandes0099@gmail.com>
+Co-Authored-By: Sara Zschaber <zschaberlu@gmail.com>
+```
+
+E assim por diante para **Marcela** e **Sara** — sempre adicionando os 3 que **não são quem está commitando**.
+
+> **Sobre Bernardo Santos Torres:** Ele participa do grupo mas não possui conta no GitHub, por isso não pode ser incluído como `Co-Authored-By` no git (que exige um e-mail vinculado a um usuário). Mesmo assim, ele está formalmente reconhecido como **autor do projeto** no [`CITATION.cff`](CITATION.cff) e nos demais documentos acadêmicos, refletindo sua participação no trabalho coletivo.
+
+O GitHub reconhece automaticamente esses trailers e mostra os avatares de todos os contribuidores no commit. No gráfico de "Contributors" do repositório, todos aparecem creditados.
 
 ---
 
