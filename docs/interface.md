@@ -1,4 +1,4 @@
-[painel médico template.pdf](https://github.com/user-attachments/files/28124550/painel.medico.template.pdf)[painel cuidador template.pdf](https://github.com/user-attachments/files/28124538/painel.cuidador.template.pdf)[painel paciente template.pdf](https://github.com/user-attachments/files/28124490/painel.paciente.template.pdf)# Projeto de Interface
+# Projeto de Interface
 
 Este documento apresenta a visão geral da interação do usuário com o **Portal do Paciente Crônico**, descrevendo o fluxo de navegação (*user flow*), os protótipos de baixa fidelidade e o detalhamento de cada tela do sistema. Também documenta os **componentes reutilizáveis** e o **design system** que sustenta a consistência visual em todo o produto.
 
