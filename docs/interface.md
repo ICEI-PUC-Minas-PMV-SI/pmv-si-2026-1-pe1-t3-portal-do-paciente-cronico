@@ -1,4 +1,4 @@
-# Projeto de Interface
+[painel médico template.pdf](https://github.com/user-attachments/files/28124550/painel.medico.template.pdf)[painel cuidador template.pdf](https://github.com/user-attachments/files/28124538/painel.cuidador.template.pdf)[painel paciente template.pdf](https://github.com/user-attachments/files/28124490/painel.paciente.template.pdf)# Projeto de Interface
 
 Este documento apresenta a visão geral da interação do usuário com o **Portal do Paciente Crônico**, descrevendo o fluxo de navegação (*user flow*), os protótipos de baixa fidelidade e o detalhamento de cada tela do sistema. Também documenta os **componentes reutilizáveis** e o **design system** que sustenta a consistência visual em todo o produto.
 
@@ -40,7 +40,11 @@ O paciente vê seu próprio painel; o cuidador vê o painel **do paciente vincul
 - **Conteúdo:** cartão de status (verde quando estável, vermelho quando há alerta), lista de remédios do dia com checkbox, gráficos de evolução glicêmica e pressão arterial
 - **Rodapé:** barra de navegação fixa com Início · Histórico · Remédios · Perfil, e botão flutuante **"Novo Registro"** sempre acessível
 
-📄 [Wireframe — Paciente/Cuidador (Template.2.pdf)](https://github.com/user-attachments/files/27489591/Template.2.pdf)
+📄 [Wireframe — Paciente (painel paciente template.pdf)](https://github.com/user-attachments/files/28124933/painel.paciente.template.pdf) 
+📄 [Wireframe — Cuidador (painel cuidador template.pdf)](https://github.com/user-attachments/files/28124940/painel.cuidador.template.pdf)
+
+
+
 
 ### Tela – Médico
 
@@ -50,7 +54,8 @@ O profissional de saúde acessa um layout específico, com mais espaço lateral 
 - **Cabeçalho:** título da seção, barra de busca por nome de paciente
 - **Conteúdo:** lista de pacientes ativos à esquerda; ao selecionar, abre o painel detalhado à direita com ficha clínica, gráficos, prescrição atual, sintomas e formulário de conduta
 
-📄 [Wireframe — Médico (Template.3.1.pdf)](https://github.com/user-attachments/files/27612277/Template.3.1.pdf)
+📄 [Wireframe — Médico (painel médico template.pdf)](https://github.com/user-attachments/files/28125014/painel.medico.template.pdf) 
+
 
 ---
 
