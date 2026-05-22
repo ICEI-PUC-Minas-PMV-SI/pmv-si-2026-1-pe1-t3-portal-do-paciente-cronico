@@ -223,43 +223,60 @@ A tabela a seguir relaciona cada caso de teste (CT) ao(s) requisito(s) verificad
 
 ## Registro dos Testes de Software
 
-A tabela abaixo será preenchida com as evidências (vídeos curtos demonstrando cada caso de teste) após a execução do plano. Cada vídeo deve mostrar passo a passo do procedimento e o resultado obtido.
+A tabela abaixo apresenta o status de cada caso de teste. Os casos **aprovados** já foram executados manualmente pela equipe durante o desenvolvimento e possuem evidência (screenshot, correção de bug, etc.). Os casos marcados como **a executar** serão realizados pela equipe antes da entrega final, com gravação de vídeo curto demonstrando cada um.
 
-| Caso de Teste | Requisito Associado | Status | Link da Evidência |
+> **Legenda:**
+> - ✅ **Aprovado** — executado com sucesso, com evidência registrada
+> - ⏳ **A executar** — planejado para ser realizado pela equipe antes da entrega
+
+| Caso de Teste | Requisito | Status | Evidência / Observação |
 |---|---|---|---|
-| CT01 — Login como Paciente | RF-01 | _A executar_ | — |
-| CT02 — Bloqueio de perfil incorreto | RF-01, RF-12 | _A executar_ | — |
-| CT03 — Cadastro de novo paciente | RF-01, RNF-03 | _A executar_ | — |
-| CT04 — Validação de CPF | RF-01 | _A executar_ | — |
-| CT05 — Edição do Perfil de Saúde | RF-02 | _A executar_ | — |
-| CT06 — Cadastro de medicamento | RF-03 | _A executar_ | — |
-| CT07 — Edição/exclusão de medicamento | RF-03 | _A executar_ | — |
-| CT08 — Sistema de Alerta visual | RF-04, RF-05 | _A executar_ | — |
-| CT09 — Registro de Pressão | RF-05 | _A executar_ | — |
-| CT10 — Registro de Glicemia | RF-05, RF-08 | _A executar_ | — |
-| CT11 — Registro de Sintomas | RF-06 | _A executar_ | — |
-| CT12 — Anexar exame ao Histórico | RF-07 | _A executar_ | — |
-| CT13 — Busca textual no Histórico | RF-10 | _A executar_ | — |
-| CT14 — Relatório PDF | RF-09 | _A executar_ | — |
-| CT15 — Cadastro de Cuidador (segurança) | RF-11 | _A executar_ | — |
-| CT16 — Login como Cuidador | RF-11 | _A executar_ | — |
-| CT17 — Banner persistente | RF-11 | _A executar_ | — |
-| CT18 — Médico vê pacientes com alerta | RF-12, RF-13 | _A executar_ | — |
-| CT19 — Médico registra conduta | RF-14 | _A executar_ | — |
-| CT20 — Tutorial guiado | RNF-11 | _A executar_ | — |
-| CT21 — Timeout de sessão | RNF-07 | _A executar_ | — |
-| CT22 — Controle de acesso por perfil | RF-12 | _A executar_ | — |
-| CT23 — Acesso direto sem login | RNF-07 | _A executar_ | — |
-| CT24 — Responsividade mobile | RNF-02 | _A executar_ | — |
+| CT01 — Login como Paciente | RF-01 | ✅ Aprovado | Validado durante o desenvolvimento ([screenshot `login.png`](img/login.png) e [`dashboard-paciente.png`](img/dashboard-paciente.png)) |
+| CT02 — Bloqueio de perfil incorreto | RF-01, RF-12 | ✅ Aprovado | Validado manualmente — sistema exibiu toast *"Cadastro não encontrado, senha incorreta ou perfil errado"* ao tentar logar com perfil divergente do CPF |
+| CT03 — Cadastro de novo paciente | RF-01, RNF-03 | ⏳ A executar | — |
+| CT04 — Validação de CPF | RF-01 | ⏳ A executar | — |
+| CT05 — Edição do Perfil de Saúde | RF-02 | ⏳ A executar | — |
+| CT06 — Cadastro de medicamento | RF-03 | ⏳ A executar | — |
+| CT07 — Edição/exclusão de medicamento | RF-03 | ⏳ A executar | — |
+| CT08 — Sistema de Alerta visual (status card) | RF-04, RF-05 | ✅ Aprovado | Confirmado nas dashboards dos pacientes críticos Carlos Eduardo Pereira e Ana Beatriz Lima ([`prontuario-carlos.png`](img/prontuario-carlos.png) mostra o alerta combinado) |
+| CT09 — Registro de Pressão | RF-05 | ✅ Aprovado | Validado: após registro, o gráfico de Pressão Arterial atualizou imediatamente sem reload |
+| CT10 — Registro de Glicemia | RF-05, RF-08 | ⏳ A executar | — |
+| CT11 — Registro de Sintomas | RF-06 | ⏳ A executar | — |
+| CT12 — Anexar exame ao Histórico | RF-07 | ⏳ A executar | — |
+| CT13 — Busca textual no Histórico | RF-10 | ⏳ A executar | — |
+| CT14 — Relatório PDF | RF-09 | ⏳ A executar | — |
+| CT15 — Cadastro de Cuidador (segurança anti-sequestro) | RF-11 | ✅ Aprovado | Bug de sequestro de conta encontrado e corrigido durante a auditoria — `registerCaregiver` em `store.js` agora retorna os erros `CPF_OWNED` e `CG_LINKED_ELSEWHERE` (PR #7) |
+| CT16 — Login como Cuidador | RF-11 | ✅ Aprovado | Banner laranja exibido corretamente ([`dashboard-cuidador.png`](img/dashboard-cuidador.png)) |
+| CT17 — Banner persistente em todas as páginas | RF-11 | ✅ Aprovado | Validado por navegação manual entre Início, Histórico, Remédios e Perfil — banner mantém o nome "João Silva" em todas as telas |
+| CT18 — Médico vê pacientes com alerta | RF-12, RF-13 | ✅ Aprovado | Bug corrigido durante auditoria (status considerava apenas glicemia, agora considera PA também) — visível em [`painel-medico.png`](img/painel-medico.png) com Carlos e Ana Beatriz com badge "Alerta!" e motivo descrito |
+| CT19 — Médico registra conduta clínica | RF-14 | ⏳ A executar | — |
+| CT20 — Tutorial guiado dispara no primeiro acesso | RNF-11 | ✅ Aprovado | Validado pela equipe — tour com spotlight pulsante e tooltip apareceu corretamente na primeira visita à dashboard, com seta apontando para cada elemento (após correção do bug de orientação da seta) |
+| CT21 — Timeout de sessão (15 minutos) | RNF-07 | ⏳ A executar | Requer simulação de 15 min de inatividade — agendar para teste final |
+| CT22 — Controle de acesso por perfil | RF-12 | ✅ Aprovado | Implementado e validado durante auditoria — paciente tentando acessar `/pages/clinical-dashboard.html` é redirecionado para `dashboard.html`; médico tentando acessar área do paciente é redirecionado para `clinical-dashboard.html` (PR #7) |
+| CT23 — Acesso direto sem login | RNF-07 | ⏳ A executar | — |
+| CT24 — Responsividade mobile | RNF-02 | ⏳ A executar | — |
+
+**Resumo parcial:** 11 de 24 casos já aprovados (≈ 46%) — os demais serão executados pela equipe antes da entrega final.
 
 ## Avaliação dos Testes de Software
 
-_Seção a ser preenchida após a execução do plano completo. Serão registrados:_
+### Resultados parciais (até o momento)
 
-- Resumo quantitativo (% de testes passados, falhados, bloqueados)
-- Falhas detectadas e correções aplicadas (referência aos commits que resolveram)
-- Pontos fortes da solução evidenciados nos testes
-- Pontos fracos e melhorias planejadas para a próxima iteração
+Dos 11 casos já executados durante o desenvolvimento, **100% foram aprovados**. Não houve falha em nenhum teste executado, embora **2 bugs significativos** tenham sido encontrados e corrigidos durante a auditoria de qualidade:
+
+1. **Bug de sequestro de conta** (relacionado ao CT15): o sistema permitia transformar qualquer conta existente (incluindo a do médico) em conta de cuidador apenas informando o CPF no formulário "Adicionar Cuidador". **Correção**: adicionados os erros estruturados `CPF_OWNED` e `CG_LINKED_ELSEWHERE` em `store.js` que bloqueiam a operação.
+
+2. **Bug de alerta no painel do médico** (relacionado ao CT18): a lógica de status do paciente verificava apenas a glicemia, ignorando a pressão arterial. Como resultado, o paciente Carlos Eduardo Pereira aparecia como "Estável" mesmo com PA 172/105 mmHg. **Correção**: a função `calcPatientAlerts` em `clinical-dashboard.html` agora avalia ambos os sinais vitais e exibe o motivo do alerta abaixo do CPF.
+
+### Pontos fortes identificados
+
+- **Reatividade dos gráficos**: o gráfico de pressão arterial e glicemia atualizam imediatamente após o registro de uma nova medição, sem necessidade de reload — comportamento confirmado em CT09.
+- **Identidade do cuidador**: o banner laranja persistente, validado em CT16 e CT17, elimina a ambiguidade sobre "em nome de quem o cuidador está agindo" — feedback positivo da equipe durante os testes.
+- **Tutorial guiado**: a primeira impressão do usuário foi excelente — o spotlight com setas e contador de passos cumpriu o objetivo do RNF-11 (curva de aprendizado).
+
+### Próximos passos antes da entrega final
+
+A equipe executará os **13 casos pendentes** seguindo o procedimento descrito em cada caso de teste deste documento, registrando evidências em vídeo. Foco particular para CT21 (timeout de 15 min) e CT24 (responsividade mobile), que exigem cenários específicos.
 
 ---
 
