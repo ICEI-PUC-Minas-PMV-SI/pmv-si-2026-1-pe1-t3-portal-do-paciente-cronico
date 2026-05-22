@@ -12,7 +12,8 @@ Este documento apresenta a visão geral da interação do usuário com o **Porta
 
 O fluxo do usuário descreve como cada perfil navega entre as telas a partir do login até as ações principais do sistema.
 
-📄 [Diagrama completo (Flow.pdf)](https://github.com/user-attachments/files/26802084/Flow.pdf)
+📄 [Diagrama completo (flow 1.0.pdf)][flow 1.0.pdf](https://github.com/user-attachments/files/28159782/flow.1.0.pdf)
+
 
 ### Resumo dos fluxos por perfil
 
