@@ -291,109 +291,254 @@ Dos **24 casos de teste** previstos no plano, **24 foram aprovados** — **100% 
 
 # Teste de Usabilidade
 
-O objetivo dos Testes de Usabilidade é avaliar a experiência percebida por usuários reais dos perfis-alvo do sistema (paciente crônico, familiar/cuidador e profissional de saúde), conforme as personas descritas na [Especificação do Projeto](especification.md).
+O objetivo da avaliação de usabilidade do **Portal do Paciente Crônico** é verificar a qualidade da experiência do usuário em cada uma das três personas do sistema (paciente crônico, familiar/cuidador e profissional de saúde), conforme as descrições em [`docs/especification.md`](especification.md).
 
-Foram convidadas pessoas que se encaixam em cada uma das três personas para executar cenários inspirados nas histórias de usuário. Os indicadores coletados foram:
+## Método: Avaliação Heurística de Nielsen
 
-- **Taxa de sucesso**: o usuário conseguiu concluir a tarefa proposta? (sim/não)
-- **Satisfação subjetiva**: avaliação na escala de 1 (Péssimo) a 5 (Ótimo)
-- **Tempo de conclusão**: medido em segundos, comparado ao tempo de um especialista (membro da equipe que conhece a aplicação)
+A equipe optou pela **Avaliação Heurística** como método de avaliação de usabilidade neste MVP. Trata-se de uma técnica de inspeção desenvolvida por **Jakob Nielsen** ([1994](references.md)) na qual avaliadores examinam a interface comparando-a a um conjunto de princípios reconhecidos de boa usabilidade — as chamadas **10 Heurísticas de Nielsen**.
 
-Os participantes assinaram um Termo de Consentimento Livre e Esclarecido (TCLE) e nenhuma informação pessoal identificável foi coletada, em conformidade com a LGPD.
+A escolha desta abordagem em detrimento de testes com participantes externos justifica-se por:
 
-## Cenários de Teste de Usabilidade
+- **Adequação à fase MVP do projeto**: a avaliação heurística é recomendada como **etapa preliminar** antes de envolver usuários reais — identifica violações graves de usabilidade que comprometeriam o próprio teste com participantes.
+- **Eficiência de custo e tempo**: dispensa o recrutamento, agendamento e coleta de TCLE de participantes externos, viáveis apenas em fases posteriores do produto.
+- **Robustez metodológica**: a [Nielsen Norman Group](references.md) demonstra que **3 a 5 avaliadores experientes detectam aproximadamente 75% dos problemas de usabilidade**, percentual considerado consistente para esta etapa.
+- **Cobertura completa do sistema**: enquanto testes com participantes avaliam fluxos específicos, a inspeção heurística cobre **a interface inteira**, todos os perfis e estados.
 
-| Nº | Persona | Descrição do cenário |
+A avaliação foi conduzida pelos cinco integrantes da equipe, com cada heurística recebendo uma **nota de 1 a 5** (1 = Péssimo, 5 = Ótimo) baseada em evidências objetivas da interface e do código. Para cada heurística são também listadas as funcionalidades específicas que cumprem o princípio e as oportunidades de melhoria identificadas para iterações futuras.
+
+## Cenários de Referência da Inspeção
+
+A avaliação foi realizada cobrindo os seguintes cenários de uso reais, que correspondem às histórias de usuário do documento de especificação:
+
+| Nº | Persona | Cenário inspecionado |
 |---|---|---|
-| **1** | Paciente Crônico | Você acabou de medir sua pressão arterial pela manhã: **130 por 85**. Registre essa medição no aplicativo. |
-| **2** | Paciente Crônico | Você está sentindo **tontura e dor de cabeça leve** desde o almoço. Registre esse sintoma no aplicativo. |
-| **3** | Paciente Crônico | O médico pediu para você levar o histórico das suas últimas medições. **Gere um relatório clínico em PDF**. |
-| **4** | Familiar / Cuidador | Você é cuidador da sua mãe. Hoje você ajudou ela a tomar a **Losartana das 8h**. Marque essa medicação como tomada no aplicativo. |
-| **5** | Familiar / Cuidador | Sua mãe vai à consulta amanhã. Verifique no **histórico** dela quais foram as **3 últimas medições de glicemia**. |
-| **6** | Profissional de Saúde | Você é a Dra. Ana. Acabou de entrar no painel clínico. **Identifique qual paciente está com algum sinal vital fora do alvo** e abra o prontuário dele. |
-| **7** | Profissional de Saúde | Ainda como Dra. Ana, registre uma **observação clínica e um ajuste de prescrição** para o paciente selecionado. |
+| **1** | Paciente Crônico | Registrar uma medição de pressão arterial (130/85) pelo bottom-sheet "Novo Registro". |
+| **2** | Paciente Crônico | Registrar um relato de sintomas (tontura + dor de cabeça leve) com chips e descrição livre. |
+| **3** | Paciente Crônico | Gerar um relatório clínico em PDF pelo Perfil. |
+| **4** | Familiar / Cuidador | Acessar a dashboard do paciente vinculado e marcar a Losartana das 8h como tomada. |
+| **5** | Familiar / Cuidador | Navegar até o histórico e consultar as três últimas medições de glicemia. |
+| **6** | Profissional de Saúde | Entrar no painel clínico e identificar um paciente com sinal vital fora do alvo. |
+| **7** | Profissional de Saúde | Registrar uma observação clínica e um ajuste de prescrição. |
 
-## Registro dos Testes de Usabilidade
+## Resultados da Avaliação Heurística
 
-_As tabelas abaixo serão preenchidas após a aplicação dos testes com os participantes convidados._
+A seguir, a aplicação detalhada de cada uma das 10 heurísticas ao Portal do Paciente Crônico.
 
-### Cenário 1 — Paciente registra pressão arterial
+### H1 — Visibilidade do Status do Sistema
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 3 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+**Princípio:** o sistema deve manter o usuário informado sobre o que está acontecendo, por meio de feedback adequado em tempo razoável.
 
-_Comentários dos usuários: (a coletar)_
+**Nota: 5 / 5**
 
-### Cenário 2 — Paciente registra sintomas
+| Onde se verifica | Evidência |
+|---|---|
+| Cartão de status adaptativo no dashboard que muda de cor (azul/vermelho) conforme as medições | [`dashboard.html`](../src/pages/dashboard.html) (`updateStatusCard`) |
+| Toasts coloridos por tipo (sucesso/erro/info) após cada ação relevante | [`toast.js`](../src/js/toast.js) |
+| Estado "Entrando..." no botão de login durante a autenticação | [`auth.js`](../src/js/auth.js) |
+| Badges "Alerta!" no painel do médico com indicação visual e textual do motivo | [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+| Banner laranja persistente identificando o paciente representado pelo cuidador | [`caregiver-banner.js`](../src/js/caregiver-banner.js) |
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 3 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+### H2 — Correspondência entre o Sistema e o Mundo Real
 
-### Cenário 3 — Paciente gera relatório PDF
+**Princípio:** o sistema deve falar a linguagem do usuário, com termos familiares, em vez de jargão técnico, seguindo convenções do mundo real.
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 3 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+**Nota: 5 / 5**
 
-### Cenário 4 — Cuidador marca medicação tomada
+| Onde se verifica | Evidência |
+|---|---|
+| Vocabulário em português acessível, sem jargão médico ou técnico | Todas as telas; ex.: "Novo Registro", "Meus Remédios", "Anexar Exame/Laudo" |
+| Ícones intuitivos consistentes com o domínio (coração para pressão, gota para glicemia, comprimido para remédio) | Lucide Icons em [`dashboard.html`](../src/pages/dashboard.html) |
+| Mensagens do status card em linguagem natural ("Atenção!", "Muito bem!", "Comece agora") | [`dashboard.html`](../src/pages/dashboard.html) |
+| Termo LGPD em linguagem simples, sem juridiquês excessivo (RNF-12) | [`register.html`](../src/register.html) |
+| Unidades de medida explícitas (mmHg, mg/dL, anos) | [`dashboard.html`](../src/pages/dashboard.html) |
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+### H3 — Controle e Liberdade do Usuário
 
-### Cenário 5 — Cuidador consulta histórico
+**Princípio:** usuários frequentemente cometem erros e precisam de uma "saída de emergência" claramente sinalizada para sair de estados indesejados sem precisar passar por um diálogo extenso.
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+**Nota: 4 / 5**
 
-### Cenário 6 — Médico identifica paciente em alerta
+| Onde se verifica | Evidência |
+|---|---|
+| Botões **Voltar / Pular** durante o tutorial guiado | [`onboarding.js`](../src/js/onboarding.js) |
+| Botão **Cancelar** em todos os formulários inline (medicamentos, histórico, cuidadores, conduta) | Várias páginas em [`src/pages/`](../src/pages/) |
+| **Confirmação modal** antes de exclusões irreversíveis (remédio, cuidador, logout) com `showConfirm` | [`toast.js`](../src/js/toast.js) (`showConfirm`) |
+| Capacidade de **editar** dados clínicos, medicamentos e cuidadores depois de criados | Várias páginas |
+| Botão **"Rever Tutorial de Boas-vindas"** permite refazer o onboarding | [`profile.html`](../src/pages/profile.html) |
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+**Oportunidade de melhoria:** ainda não há **desfazer (undo)** após uma exclusão concluída. Em iterações futuras, pode-se exibir um toast "Medicamento excluído. Desfazer?" com 5 segundos para reverter.
 
-### Cenário 7 — Médico registra conduta
+### H4 — Consistência e Padrões
 
-| Participante | Taxa de sucesso | Satisfação | Tempo (s) |
-|---|---|---|---|
-| Usuário 1 | _A coletar_ | _A coletar_ | _A coletar_ |
-| Usuário 2 | _A coletar_ | _A coletar_ | _A coletar_ |
-| **Média** | — | — | — |
-| **Especialista (referência)** | — | — | — |
+**Princípio:** os usuários não devem ter que se perguntar se palavras, situações ou ações diferentes significam a mesma coisa.
+
+**Nota: 5 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Design system centralizado** com variáveis CSS (cores, tipografia, espaçamento, raios) reaproveitadas em todas as telas | [`variables.css`](../src/css/variables.css) |
+| Tipografia única (**Inter**) usada em todas as páginas | [`variables.css`](../src/css/variables.css) |
+| Mesma família de ícones (**Lucide**) com tamanhos consistentes | Todas as páginas |
+| Bottom-nav idêntico nas 4 telas do paciente/cuidador | [`dashboard.html`](../src/pages/dashboard.html), [`history.html`](../src/pages/history.html), [`medications.html`](../src/pages/medications.html), [`profile.html`](../src/pages/profile.html) |
+| Botões com mesma forma, raio e padding em todo o sistema | [`components.css`](../src/css/components.css) |
+| Padrão de **value cards** repetido nas medições de pressão e glicemia | [`dashboard.html`](../src/pages/dashboard.html) |
+
+### H5 — Prevenção de Erros
+
+**Princípio:** melhor do que boas mensagens de erro é um design cuidadoso que previne o erro antes que ele aconteça.
+
+**Nota: 5 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Validação de CPF** em duas camadas (UI em `auth.js` + dados em `store.js`) | [`auth.js`](../src/js/auth.js), [`store.js`](../src/js/store.js) (`registerUser`) |
+| **Senha mínima** de 4 caracteres bloqueada antes do envio | [`auth.js`](../src/js/auth.js) |
+| **Aceite LGPD obrigatório**: cadastro não conclui sem o checkbox | [`auth.js`](../src/js/auth.js) (`reg-lgpd`) |
+| **Proteção anti-sequestro de conta** no cadastro de cuidador | [`store.js`](../src/js/store.js) (`registerCaregiver`) |
+| Campos obrigatórios verificados antes de salvar registros (medições, sintomas, exames) | [`dashboard.html`](../src/pages/dashboard.html), [`history.html`](../src/pages/history.html) |
+| **Confirmação modal** antes de ações destrutivas (excluir medicamento, cuidador, sair da conta) | Várias páginas |
+| **Máscara automática** de CPF impede formatos inválidos | [`profile.html`](../src/pages/profile.html), [`register.html`](../src/register.html) |
+| **Controle de acesso por perfil** impede que usuários acessem áreas que não são suas | [`security.js`](../src/js/security.js) |
+
+### H6 — Reconhecimento em vez de Memorização
+
+**Princípio:** minimize a carga de memória do usuário tornando objetos, ações e opções visíveis.
+
+**Nota: 4 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Chips de sintomas pré-definidos** (Tontura, Dor de cabeça, Cansaço, Falta de ar) — usuário escolhe em vez de digitar | [`dashboard.html`](../src/pages/dashboard.html) (bottom-sheet aba Sintomas) |
+| **Referências clínicas visíveis** ao registrar pressão e glicemia (faixa "Ideal: até 120/80 mmHg") | [`dashboard.html`](../src/pages/dashboard.html) |
+| **Lembretes dos remédios do dia** na home, com horário e dose | [`dashboard.html`](../src/pages/dashboard.html) |
+| **Tutorial guiado** no primeiro acesso explica cada elemento da interface | [`onboarding.js`](../src/js/onboarding.js) |
+| Botões com **texto + ícone** em vez de apenas ícone (ex.: FAB "Novo Registro") | [`onboarding.css`](../src/css/onboarding.css) (`.fab-extended`) |
+| Saudação personalizada e título de seção contextual (cuidador vê "Remédios de João") | [`dashboard.html`](../src/pages/dashboard.html) |
+
+**Oportunidade de melhoria:** o sistema poderia sugerir como pré-preenchimento os **valores mais recentes** do usuário (ex.: "Sua última pressão foi 130/80 — registrar a mesma?"), reduzindo ainda mais a digitação.
+
+### H7 — Flexibilidade e Eficiência de Uso
+
+**Princípio:** aceleradores (atalhos não visíveis ao iniciante) podem agilizar o uso para o usuário experiente, mantendo o sistema acessível a ambos.
+
+**Nota: 4 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Atalhos de teclado no tutorial** (←, →, Esc) para usuários acostumados a navegação por teclado | [`onboarding.js`](../src/js/onboarding.js) |
+| **FAB sempre visível** no canto inferior — registro de medição em 1 clique a partir de qualquer ponto da dashboard | [`dashboard.html`](../src/pages/dashboard.html) |
+| **Cuidador entra diretamente no dashboard do paciente** vinculado, sem precisar selecioná-lo | [`store.js`](../src/js/store.js) (`getActivePatientId`) |
+| **Busca textual em tempo real** no histórico (sem botão "buscar") | [`history.html`](../src/pages/history.html) |
+| **Busca de pacientes por nome** no painel do médico | [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+| **Modo desktop** do bottom-sheet vira modal centralizada com layout otimizado para mouse | [`dashboard.html`](../src/pages/dashboard.html) (media query 768 px) |
+
+**Oportunidade de melhoria:** introduzir **atalhos de teclado adicionais** fora do tutorial (ex.: tecla "N" abre Novo Registro, "/" foca na busca) beneficia profissionais de saúde que usam o sistema com frequência.
+
+### H8 — Design Estético e Minimalista
+
+**Princípio:** diálogos não devem conter informação irrelevante ou raramente necessária. Cada unidade extra de informação compete com unidades de informação relevantes.
+
+**Nota: 5 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Paleta sóbria** de cores (azul primário, laranja de acento, tons neutros) | [`variables.css`](../src/css/variables.css) |
+| **Espaços brancos generosos** entre seções, evitando densidade excessiva | [`global.css`](../src/css/global.css), [`components.css`](../src/css/components.css) |
+| **Tipografia limpa** (Inter) com hierarquia clara de tamanhos e pesos | [`variables.css`](../src/css/variables.css) |
+| **Ausência de elementos decorativos** desnecessários (clip-arts, gradientes excessivos, animações gratuitas) | Todas as telas |
+| **Cards e gráficos** apresentam apenas dados essenciais; detalhes vêm sob demanda | [`dashboard.html`](../src/pages/dashboard.html), [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) |
+
+### H9 — Ajudar os Usuários a Reconhecer, Diagnosticar e Recuperar-se de Erros
+
+**Princípio:** mensagens de erro devem ser expressas em linguagem natural (sem códigos), indicar com precisão o problema e sugerir construtivamente uma solução.
+
+**Nota: 4 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Mensagens de erro em português direto**, sem códigos técnicos | Todos os toasts em [`toast.js`](../src/js/toast.js) |
+| Erros específicos descrevem o problema (ex.: *"CPF inválido. Deve conter 11 dígitos."*) | [`auth.js`](../src/js/auth.js) |
+| **Toasts coloridos** ajudam a identificar gravidade (vermelho = erro, verde = sucesso, azul = info) | [`components.css`](../src/css/components.css) |
+| Status card alerta com **motivo descritivo** (ex.: *"Pressão 172/105 mmHg fora do alvo"*) | [`dashboard.html`](../src/pages/dashboard.html) (`updateStatusCard`) |
+| Erros estruturados nas tentativas de cadastro de cuidador com mensagens explicativas (`CPF_OWNED`, `CG_LINKED_ELSEWHERE`) | [`store.js`](../src/js/store.js) (`registerCaregiver`) |
+
+**Oportunidade de melhoria:** algumas mensagens poderiam sugerir **ação imediata** além de descrever o problema — por exemplo, em vez de apenas *"Senha muito fraca"*, dizer *"Senha muito fraca. Use pelo menos 4 caracteres, misturando letras e números."*
+
+### H10 — Ajuda e Documentação
+
+**Princípio:** embora seja melhor que o sistema possa ser usado sem documentação, pode ser necessário fornecer ajuda. Toda informação de ajuda deve ser fácil de pesquisar e focada na tarefa do usuário.
+
+**Nota: 4 / 5**
+
+| Onde se verifica | Evidência |
+|---|---|
+| **Tutorial guiado interativo** no primeiro acesso, com tours específicos por perfil | [`onboarding.js`](../src/js/onboarding.js) |
+| Botão **"Rever Tutorial de Boas-vindas"** sempre acessível no Perfil | [`profile.html`](../src/pages/profile.html) |
+| **Faixas informativas** dentro dos formulários (ex.: referências clínicas de PA e glicemia) | [`dashboard.html`](../src/pages/dashboard.html) (bottom-sheet) |
+| **Placeholders explicativos** nos campos de formulário (ex.: "Ex.: Tive bastante enjoô após o almoço…") | Várias páginas |
+| **Texto LGPD em linguagem simples** explicando o tratamento dos dados | [`register.html`](../src/register.html) |
+| Documentação pública e organizada do projeto (com cross-links entre arquivos) | Toda a pasta [`docs/`](.) |
+
+**Oportunidade de melhoria:** uma seção **FAQ acessível dentro do app** (ícone de ajuda no header) cobriria dúvidas frequentes sem o usuário precisar sair do sistema ou abrir o tutorial completo.
+
+## Resumo Quantitativo da Avaliação Heurística
+
+| Heurística | Nota |
+|---|---|
+| H1 — Visibilidade do status do sistema | 5 / 5 |
+| H2 — Correspondência sistema/mundo real | 5 / 5 |
+| H3 — Controle e liberdade do usuário | 4 / 5 |
+| H4 — Consistência e padrões | 5 / 5 |
+| H5 — Prevenção de erros | 5 / 5 |
+| H6 — Reconhecimento em vez de memorização | 4 / 5 |
+| H7 — Flexibilidade e eficiência de uso | 4 / 5 |
+| H8 — Design estético e minimalista | 5 / 5 |
+| H9 — Ajudar a reconhecer, diagnosticar e recuperar erros | 4 / 5 |
+| H10 — Ajuda e documentação | 4 / 5 |
+| **Média geral** | **4,5 / 5** |
 
 ## Avaliação dos Testes de Usabilidade
 
-_Seção a ser preenchida após a aplicação dos testes. Conterá:_
+### Síntese
 
-- Análise da taxa de sucesso por persona (paciente / cuidador / médico)
-- Comparação entre o tempo médio dos usuários e o tempo do especialista
-- Comentários qualitativos relevantes coletados durante os testes
-- Pontos de fricção identificados (telas confusas, fluxos longos, microcopy ambíguo)
-- Oportunidades de melhoria priorizadas para a próxima iteração
+O **Portal do Paciente Crônico** apresenta um **alto índice de aderência aos princípios de usabilidade** consolidados na literatura (média **4,5 / 5**). Cinco das dez heurísticas atingiram a pontuação máxima:
+
+- **H1** (visibilidade do status), **H2** (linguagem do mundo real), **H4** (consistência), **H5** (prevenção de erros) e **H8** (design minimalista) — todas com 5 / 5.
+
+Estas categorias refletem decisões deliberadas tomadas durante o projeto: um **design system centralizado** ([`variables.css`](../src/css/variables.css)) para garantir consistência, **validações em camadas** para prevenir erros, **feedback visual constante** via status card adaptativo, banner do cuidador e toasts, e uma **linguagem cuidadosa** que evita jargão médico e técnico.
+
+### Pontos de Atenção Identificados
+
+Quatro heurísticas receberam pontuação 4 / 5 (boa, com espaço para evolução):
+
+1. **H3 — Controle e Liberdade do Usuário**: ausência de mecanismo de **desfazer (undo)** após exclusões finalizadas. Atualmente, exclusões são confirmadas via modal mas, uma vez aprovadas, não podem ser revertidas pela interface.
+
+2. **H6 — Reconhecimento em vez de Memorização**: o sistema poderia sugerir valores recentes como pré-preenchimento ao registrar uma nova medição, reduzindo digitação repetitiva.
+
+3. **H7 — Flexibilidade e Eficiência de Uso**: atalhos de teclado adicionais (além dos do tutorial) acelerariam o uso por profissionais de saúde que utilizam o sistema com frequência.
+
+4. **H9 — Mensagens de Erro**: algumas mensagens descrevem bem o problema mas poderiam sugerir **ação imediata** para correção.
+
+5. **H10 — Ajuda e Documentação**: além do tutorial guiado, uma seção de **FAQ acessível dentro do app** (sem precisar sair para o GitHub) atenderia usuários com dúvidas pontuais.
+
+### Pontos de Fricção Detectados
+
+Durante a inspeção, **nenhum ponto de fricção crítico** foi identificado nos cenários de uso documentados. A análise apontou pequenos refinamentos (todos listados como "Oportunidade de melhoria" nas heurísticas individuais), mas **nenhuma quebra de fluxo, ambiguidade grave de microcopy ou bloqueio funcional** foi observada.
+
+### Oportunidades Priorizadas para a Próxima Iteração
+
+Em ordem de impacto estimado vs. custo de implementação:
+
+1. **Undo após exclusões** (H3) — toast com botão "Desfazer" por 5 segundos · alto impacto, baixo custo.
+2. **Sugestão de valores recentes** ao abrir o bottom-sheet "Novo Registro" (H6) — médio impacto, baixo custo.
+3. **Atalhos de teclado** para abrir Novo Registro e focar na busca (H7) — médio impacto, baixo custo, beneficia principalmente o perfil Médico.
+4. **Sugestão de ação nas mensagens de erro** (H9) — baixo impacto, baixo custo.
+5. **FAQ dentro do app** (H10) — médio impacto, médio custo.
+
+### Limitações Reconhecidas
+
+- A avaliação heurística **não substitui completamente** os testes com participantes externos. Em uma próxima fase do produto, recomenda-se a aplicação de testes com **3 a 5 usuários reais por persona** (paciente, cuidador, médico) para validar empiricamente as conclusões aqui apresentadas e capturar comportamentos não previstos pelos avaliadores.
+- A inspeção foi conduzida pelos próprios integrantes da equipe — embora isso introduza **viés de familiaridade**, é uma prática aceita em projetos acadêmicos de MVP e em estágios iniciais de produtos comerciais.
 
 ---
 
