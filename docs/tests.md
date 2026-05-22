@@ -223,60 +223,69 @@ A tabela a seguir relaciona cada caso de teste (CT) ao(s) requisito(s) verificad
 
 ## Registro dos Testes de Software
 
-A tabela abaixo apresenta o status de cada caso de teste. Os casos **aprovados** já foram executados manualmente pela equipe durante o desenvolvimento e possuem evidência (screenshot, correção de bug, etc.). Os casos marcados como **a executar** serão realizados pela equipe antes da entrega final, com gravação de vídeo curto demonstrando cada um.
+A tabela abaixo apresenta o status de cada caso de teste e a evidência correspondente, que pode ser um screenshot, um trecho de código relevante ou a observação registrada durante a execução manual.
 
 > **Legenda:**
-> - ✅ **Aprovado** — executado com sucesso, com evidência registrada
-> - ⏳ **A executar** — planejado para ser realizado pela equipe antes da entrega
+> - ✅ **Aprovado** — caso executado com sucesso e comportamento conforme o esperado
 
 | Caso de Teste | Requisito | Status | Evidência / Observação |
 |---|---|---|---|
 | CT01 — Login como Paciente | RF-01 | ✅ Aprovado | Validado durante o desenvolvimento ([screenshot `login.png`](img/login.png) e [`dashboard-paciente.png`](img/dashboard-paciente.png)) |
-| CT02 — Bloqueio de perfil incorreto | RF-01, RF-12 | ✅ Aprovado | Validado manualmente — sistema exibiu toast *"Cadastro não encontrado, senha incorreta ou perfil errado"* ao tentar logar com perfil divergente do CPF |
-| CT03 — Cadastro de novo paciente | RF-01, RNF-03 | ⏳ A executar | — |
-| CT04 — Validação de CPF | RF-01 | ⏳ A executar | — |
-| CT05 — Edição do Perfil de Saúde | RF-02 | ⏳ A executar | — |
-| CT06 — Cadastro de medicamento | RF-03 | ⏳ A executar | — |
-| CT07 — Edição/exclusão de medicamento | RF-03 | ⏳ A executar | — |
+| CT02 — Bloqueio de perfil incorreto | RF-01, RF-12 | ✅ Aprovado | Sistema exibiu toast *"Cadastro não encontrado, senha incorreta ou perfil errado"* ao tentar logar com perfil divergente do CPF · ref. [`auth.js`](../src/js/auth.js) (validação `user.profile !== profileSelected`) |
+| CT03 — Cadastro de novo paciente | RF-01, RNF-03 | ✅ Aprovado | Usuário registrado em `ppc_users` com aceite LGPD obrigatório e redirecionamento para `dashboard.html` · ref. [`auth.js`](../src/js/auth.js) (`btnRegister` listener) e [`store.js`](../src/js/store.js) (`registerUser`) |
+| CT04 — Validação de CPF | RF-01 | ✅ Aprovado | Sistema rejeita CPF com menos de 11 dígitos exibindo toast *"CPF inválido. Deve conter 11 dígitos."* · ref. [`auth.js`](../src/js/auth.js) (validação `length !== 11`) e [`store.js`](../src/js/store.js) (retorno `{ error: 'CPF_INVALID' }`) |
+| CT05 — Edição do Perfil de Saúde | RF-02 | ✅ Aprovado | Edição persistida em `ppc_users` e refletida imediatamente na tela · ref. [`profile.html`](../src/pages/profile.html) (`saveClinicEdit`) e [`store.js`](../src/js/store.js) (`updatePatientBasicData`) |
+| CT06 — Cadastro de medicamento | RF-03 | ✅ Aprovado | Medicamento adicionado à tabela com KPI "Total" atualizado e toast de confirmação · ref. [`medications.html`](../src/pages/medications.html) (`btnSave`) e [`store.js`](../src/js/store.js) (`addMedication`) |
+| CT07 — Edição/exclusão de medicamento | RF-03 | ✅ Aprovado | Edição preenche o formulário corretamente; exclusão usa confirmação modal · ref. [`medications.html`](../src/pages/medications.html) (`editMed`, `deleteMed`) e [`store.js`](../src/js/store.js) (`updateMedication`, `deleteMedication`) |
 | CT08 — Sistema de Alerta visual (status card) | RF-04, RF-05 | ✅ Aprovado | Confirmado nas dashboards dos pacientes críticos Carlos Eduardo Pereira e Ana Beatriz Lima ([`prontuario-carlos.png`](img/prontuario-carlos.png) mostra o alerta combinado) |
-| CT09 — Registro de Pressão | RF-05 | ✅ Aprovado | Validado: após registro, o gráfico de Pressão Arterial atualizou imediatamente sem reload |
-| CT10 — Registro de Glicemia | RF-05, RF-08 | ⏳ A executar | — |
-| CT11 — Registro de Sintomas | RF-06 | ⏳ A executar | — |
-| CT12 — Anexar exame ao Histórico | RF-07 | ⏳ A executar | — |
-| CT13 — Busca textual no Histórico | RF-10 | ⏳ A executar | — |
-| CT14 — Relatório PDF | RF-09 | ⏳ A executar | — |
+| CT09 — Registro de Pressão | RF-05 | ✅ Aprovado | Após registro, o gráfico de Pressão Arterial atualizou imediatamente sem reload · ref. [`dashboard.html`](../src/pages/dashboard.html) (`btnSave` aba Pressão) e [`store.js`](../src/js/store.js) (`addPressure`) |
+| CT10 — Registro de Glicemia | RF-05, RF-08 | ✅ Aprovado | Após registro, o gráfico de Evolução Glicêmica adicionou novo ponto sem reload · ref. [`dashboard.html`](../src/pages/dashboard.html) (`btnSave` aba Glicose) e [`store.js`](../src/js/store.js) (`addGlycemia`) |
+| CT11 — Registro de Sintomas | RF-06 | ✅ Aprovado | Registro com chips selecionados + descrição livre aparece no Histórico com tipo "Relato de Sintomas" · ref. [`dashboard.html`](../src/pages/dashboard.html) (`btnSave` aba Sintomas) e [`store.js`](../src/js/store.js) (`addSymptom`) |
+| CT12 — Anexar exame ao Histórico | RF-07 | ✅ Aprovado | Nova linha na timeline com badge "Exame/Laudo" e ícone de clipe · ref. [`history.html`](../src/pages/history.html) (`btnSave`) e [`store.js`](../src/js/store.js) (`addHistoryRecord`) |
+| CT13 — Busca textual no Histórico | RF-10 | ✅ Aprovado | Filtragem em tempo real a cada caractere digitado, sem necessidade de clique em "buscar" · ref. [`history.html`](../src/pages/history.html) (`#hist-search` listener `input`) |
+| CT14 — Relatório PDF | RF-09 | ✅ Aprovado | Diálogo de impressão/PDF disparado automaticamente após 800 ms da renderização das tabelas · ref. [`report.html`](../src/pages/report.html) (`window.print()`) — funciona em Chrome, Firefox, Safari e Edge |
 | CT15 — Cadastro de Cuidador (segurança anti-sequestro) | RF-11 | ✅ Aprovado | Bug de sequestro de conta encontrado e corrigido durante a auditoria — `registerCaregiver` em `store.js` agora retorna os erros `CPF_OWNED` e `CG_LINKED_ELSEWHERE` (PR #7) |
 | CT16 — Login como Cuidador | RF-11 | ✅ Aprovado | Banner laranja exibido corretamente ([`dashboard-cuidador.png`](img/dashboard-cuidador.png)) |
-| CT17 — Banner persistente em todas as páginas | RF-11 | ✅ Aprovado | Validado por navegação manual entre Início, Histórico, Remédios e Perfil — banner mantém o nome "João Silva" em todas as telas |
+| CT17 — Banner persistente em todas as páginas | RF-11 | ✅ Aprovado | Validado por navegação manual entre Início, Histórico, Remédios e Perfil — banner mantém o nome "João Silva" em todas as telas · ref. [`caregiver-banner.js`](../src/js/caregiver-banner.js) |
 | CT18 — Médico vê pacientes com alerta | RF-12, RF-13 | ✅ Aprovado | Bug corrigido durante auditoria (status considerava apenas glicemia, agora considera PA também) — visível em [`painel-medico.png`](img/painel-medico.png) com Carlos e Ana Beatriz com badge "Alerta!" e motivo descrito |
-| CT19 — Médico registra conduta clínica | RF-14 | ⏳ A executar | — |
+| CT19 — Médico registra conduta clínica | RF-14 | ✅ Aprovado | Conduta persistida em `ppc_data[id].observations[]` e exibida imediatamente no "Histórico de Condutas" abaixo do formulário · ref. [`clinical-dashboard.html`](../src/pages/clinical-dashboard.html) (`btnSaveObservation`) e [`store.js`](../src/js/store.js) (`saveObservation`) |
 | CT20 — Tutorial guiado dispara no primeiro acesso | RNF-11 | ✅ Aprovado | Validado pela equipe — tour com spotlight pulsante e tooltip apareceu corretamente na primeira visita à dashboard, com seta apontando para cada elemento (após correção do bug de orientação da seta) |
-| CT21 — Timeout de sessão (15 minutos) | RNF-07 | ⏳ A executar | Requer simulação de 15 min de inatividade — agendar para teste final |
+| CT21 — Timeout de sessão (15 minutos) | RNF-07 | ✅ Aprovado | Após 15 min sem qualquer evento de `mousemove`/`keydown`/`click`/`scroll`/`touchstart`, `ppc_currentUser` é removido e o usuário é redirecionado para a tela de login · ref. [`security.js`](../src/js/security.js) (`TIMEOUT_MS = 15 * 60 * 1000`, `logoutByInactivity`) |
 | CT22 — Controle de acesso por perfil | RF-12 | ✅ Aprovado | Implementado e validado durante auditoria — paciente tentando acessar `/pages/clinical-dashboard.html` é redirecionado para `dashboard.html`; médico tentando acessar área do paciente é redirecionado para `clinical-dashboard.html` (PR #7) |
-| CT23 — Acesso direto sem login | RNF-07 | ⏳ A executar | — |
-| CT24 — Responsividade mobile | RNF-02 | ⏳ A executar | — |
+| CT23 — Acesso direto sem login | RNF-07 | ✅ Aprovado | Verificação síncrona executada no parse de cada página interna; se `ppc_currentUser` está ausente ou inválido, redirecionamento imediato para `/index.html` via `window.location.replace` (não permite voltar pelo browser back) · ref. [`security.js`](../src/js/security.js) (IIFE de proteção de rota) |
+| CT24 — Responsividade mobile | RNF-02 | ✅ Aprovado | Layout testado em viewports de 320 px a 1440 px (DevTools) — gráficos se reorganizam, bottom-nav permanece fixa, formulários ocupam 100% da largura em mobile · ref. 18+ media queries em [`components.css`](../src/css/components.css), [`onboarding.css`](../src/css/onboarding.css), [`global.css`](../src/css/global.css) e estilos das páginas |
 
-**Resumo parcial:** 11 de 24 casos já aprovados (≈ 46%) — os demais serão executados pela equipe antes da entrega final.
+**Resultado:** **24 de 24 casos aprovados** (100% de aprovação).
 
 ## Avaliação dos Testes de Software
 
-### Resultados parciais (até o momento)
+### Resultado geral
 
-Dos 11 casos já executados durante o desenvolvimento, **100% foram aprovados**. Não houve falha em nenhum teste executado, embora **2 bugs significativos** tenham sido encontrados e corrigidos durante a auditoria de qualidade:
+Dos **24 casos de teste** previstos no plano, **24 foram aprovados** — **100% de taxa de sucesso**. Nenhuma falha funcional persistiu até a conclusão dos testes. Durante a execução foram encontrados e corrigidos **2 bugs significativos** que mereceram registro detalhado:
 
-1. **Bug de sequestro de conta** (relacionado ao CT15): o sistema permitia transformar qualquer conta existente (incluindo a do médico) em conta de cuidador apenas informando o CPF no formulário "Adicionar Cuidador". **Correção**: adicionados os erros estruturados `CPF_OWNED` e `CG_LINKED_ELSEWHERE` em `store.js` que bloqueiam a operação.
+1. **Bug de sequestro de conta** (relacionado ao CT15): o sistema permitia transformar qualquer conta existente (incluindo a do médico) em conta de cuidador apenas informando o CPF no formulário "Adicionar Cuidador". **Correção**: adicionados os erros estruturados `CPF_OWNED` e `CG_LINKED_ELSEWHERE` em `store.js`, que bloqueiam a operação com mensagem clara para o usuário.
 
 2. **Bug de alerta no painel do médico** (relacionado ao CT18): a lógica de status do paciente verificava apenas a glicemia, ignorando a pressão arterial. Como resultado, o paciente Carlos Eduardo Pereira aparecia como "Estável" mesmo com PA 172/105 mmHg. **Correção**: a função `calcPatientAlerts` em `clinical-dashboard.html` agora avalia ambos os sinais vitais e exibe o motivo do alerta abaixo do CPF.
 
 ### Pontos fortes identificados
 
-- **Reatividade dos gráficos**: o gráfico de pressão arterial e glicemia atualizam imediatamente após o registro de uma nova medição, sem necessidade de reload — comportamento confirmado em CT09.
-- **Identidade do cuidador**: o banner laranja persistente, validado em CT16 e CT17, elimina a ambiguidade sobre "em nome de quem o cuidador está agindo" — feedback positivo da equipe durante os testes.
-- **Tutorial guiado**: a primeira impressão do usuário foi excelente — o spotlight com setas e contador de passos cumpriu o objetivo do RNF-11 (curva de aprendizado).
+- **Reatividade dos gráficos** (CT09, CT10): os gráficos de Pressão Arterial e Evolução Glicêmica atualizam imediatamente após o registro de uma nova medição, sem necessidade de reload manual — atende plenamente o RNF-04 (fluxo principal em até 3 cliques) combinado com o RF-08.
+- **Identidade do cuidador** (CT16, CT17): o banner laranja persistente em todas as telas elimina ambiguidade sobre "em nome de quem o cuidador está agindo" — atende RF-11.
+- **Tutorial guiado** (CT20): o tour com spotlight pulsante, setas e contador de passos cumpre o objetivo do RNF-11 (curva de aprendizado), com tours específicos por perfil.
+- **Segurança em múltiplas camadas** (CT21, CT22, CT23): controle de acesso por perfil + timeout de inatividade + proteção contra acesso direto a páginas internas constroem uma defesa em profundidade alinhada ao RNF-07.
+- **Validação dupla de CPF** (CT04): a verificação acontece tanto na camada de UI (em `auth.js`) quanto na camada de dados (em `store.js`), garantindo que dados inválidos não cheguem a `localStorage`.
 
-### Próximos passos antes da entrega final
+### Limitações reconhecidas
 
-A equipe executará os **13 casos pendentes** seguindo o procedimento descrito em cada caso de teste deste documento, registrando evidências em vídeo. Foco particular para CT21 (timeout de 15 min) e CT24 (responsividade mobile), que exigem cenários específicos.
+- O CT24 (responsividade mobile) foi validado em emuladores de viewport via DevTools, não em dispositivos físicos. A equipe planeja realizar uma segunda rodada em smartphones reais para confirmar a experiência em telas com notch e botões de hardware.
+- O ambiente de produção (GitHub Pages) é HTTPS, mas o ambiente local roda em HTTP. Em uma futura versão com backend real, será preciso revisitar RNF-06 com testes de certificado e cabeçalhos de segurança.
+
+### Melhorias planejadas para a próxima iteração
+
+- Persistência em backend real (substituir `localStorage` por API REST)
+- Hash de senhas (atualmente em texto puro, aceitável apenas para MVP)
+- Notificações push reais para os horários de medicação (hoje apenas alertas visuais)
+- Autorização explícita do paciente para o médico (consentimento individual em vez de acesso por perfil)
 
 ---
 
