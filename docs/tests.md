@@ -34,9 +34,7 @@ A tabela a seguir relaciona cada caso de teste (CT) ao(s) requisito(s) verificad
 | **Dados de entrada** | CPF e senha válidos vinculados ao perfil Paciente | 
 | **Vídeo de teste:** 
 
-https://github.com/user-attachments/assets/6a12a858-83a3-4587-873f-5c712d165231
-
-| 
+https://github.com/user-attachments/assets/6a12a858-83a3-4587-873f-5c712d165231 
 
 ### CT02 — Bloqueio de login com perfil incorreto
 
