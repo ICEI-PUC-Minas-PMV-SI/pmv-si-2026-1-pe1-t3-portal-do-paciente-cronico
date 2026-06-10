@@ -67,6 +67,9 @@ https://github.com/user-attachments/assets/7e2295a4-69e5-4c47-ab55-950d85d9b6ba
 | **Procedimento** | 1) Tentar cadastrar com CPF de menos de 11 dígitos (`123.456`) |
 | **Requisitos associados** | RF-01 |
 | **Resultado esperado** | Toast de erro: *"CPF inválido. Deve conter 11 dígitos."* Cadastro não é concluído. |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/443995fb-cadd-46cd-8a76-436a34ef5c29
 
 ### CT05 — Edição do Perfil de Saúde
 
