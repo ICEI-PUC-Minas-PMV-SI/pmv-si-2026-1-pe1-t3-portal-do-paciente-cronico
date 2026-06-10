@@ -55,7 +55,10 @@ https://github.com/user-attachments/assets/45d8a92f-127c-47cc-803d-9268d8a2b661
 | **Procedimento** | 1) Acessar `/register.html` <br> 2) Selecionar perfil **Paciente** <br> 3) Preencher Nome, CPF (válido, 11 dígitos), Senha (≥ 4 caracteres), Data de Nascimento, Sexo, Tipo Sanguíneo, Alergias <br> 4) Marcar checkbox de aceite LGPD <br> 5) Clicar em **Cadastrar** |
 | **Requisitos associados** | RF-01, RNF-03 |
 | **Resultado esperado** | Cadastro persistido em `localStorage.ppc_users` e redirecionamento automático para `dashboard.html` |
-| **Dados de entrada** | Dados válidos + aceite LGPD |
+| **Dados de entrada** | Dados válidos + aceite LGPD | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/7e2295a4-69e5-4c47-ab55-950d85d9b6ba
 
 ### CT04 — Validação de CPF inválido no cadastro
 
