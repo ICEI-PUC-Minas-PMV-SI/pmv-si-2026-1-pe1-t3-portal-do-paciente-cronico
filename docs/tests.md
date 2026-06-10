@@ -31,7 +31,12 @@ A tabela a seguir relaciona cada caso de teste (CT) ao(s) requisito(s) verificad
 | **Procedimento** | 1) Acessar `/index.html` <br> 2) Selecionar perfil **Paciente** <br> 3) Preencher CPF `123.456.789-00` e senha `123` <br> 4) Clicar em **Entrar** |
 | **Requisitos associados** | RF-01 |
 | **Resultado esperado** | Redirecionar para `pages/dashboard.html` exibindo "Olá, João" |
-| **Dados de entrada** | CPF e senha válidos vinculados ao perfil Paciente |
+| **Dados de entrada** | CPF e senha válidos vinculados ao perfil Paciente | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/6a12a858-83a3-4587-873f-5c712d165231
+
+| 
 
 ### CT02 — Bloqueio de login com perfil incorreto
 
