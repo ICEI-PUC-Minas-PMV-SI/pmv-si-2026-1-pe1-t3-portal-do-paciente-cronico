@@ -43,7 +43,10 @@ https://github.com/user-attachments/assets/6a12a858-83a3-4587-873f-5c712d165231
 | **Procedimento** | 1) Acessar `/index.html` <br> 2) Selecionar perfil **Médico** <br> 3) Preencher CPF `123.456.789-00` (paciente) e senha `123` <br> 4) Clicar em **Entrar** |
 | **Requisitos associados** | RF-01, RF-12 |
 | **Resultado esperado** | Toast de erro: *"Cadastro não encontrado, senha incorreta ou perfil errado."* O sistema **não** permite o acesso. |
-| **Dados de entrada** | CPF de paciente combinado com perfil de médico |
+| **Dados de entrada** | CPF de paciente combinado com perfil de médico | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/45d8a92f-127c-47cc-803d-9268d8a2b661
 
 ### CT03 — Cadastro de novo paciente
 
