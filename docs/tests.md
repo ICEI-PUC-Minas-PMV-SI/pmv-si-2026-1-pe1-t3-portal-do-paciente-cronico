@@ -100,6 +100,9 @@ https://github.com/user-attachments/assets/ea02da24-f92c-484e-aa4d-183787d68122
 | **Procedimento** | 1) Na lista de medicamentos, clicar no ícone de editar de um item <br> 2) Alterar a dosagem <br> 3) Salvar <br> 4) Em seguida, clicar no ícone de excluir <br> 5) Confirmar |
 | **Requisitos associados** | RF-03 |
 | **Resultado esperado** | Edição persiste; exclusão remove o item após confirmação modal |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/fbda6603-705f-4a1f-b15d-a262051d0530
 
 ### CT08 — Sistema de Alerta visual (status card)
 
