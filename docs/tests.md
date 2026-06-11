@@ -79,6 +79,7 @@ https://github.com/user-attachments/assets/443995fb-cadd-46cd-8a76-436a34ef5c29
 | **Requisitos associados** | RF-02 |
 | **Resultado esperado** | Dado atualizado em `localStorage.ppc_users` e refletido imediatamente na tela |
 | **Vídeo de teste:** 
+
 https://github.com/ICEI-PUC-Minas-PMV-SI/pmv-si-2026-1-pe1-t3-portal-do-paciente-cronico/blob/main/docs/img/RF-02.mp4
 
 ### CT06 — Cadastro de novo medicamento
