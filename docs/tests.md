@@ -111,6 +111,9 @@ https://github.com/user-attachments/assets/fbda6603-705f-4a1f-b15d-a262051d0530
 | **Procedimento** | 1) Logar como paciente <br> 2) Registrar pressão `160/100` no FAB Novo Registro <br> 3) Observar o `#status-card` no topo do dashboard |
 | **Requisitos associados** | RF-04, RF-05 |
 | **Resultado esperado** | O cartão muda para fundo vermelho com o título **"Atenção!"** e mensagem *"Pressão 160/100 mmHg fora do alvo"* |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/0d252a5c-75e6-45a8-90bf-1fc641d7cb2a
 
 ### CT09 — Registro de Medição de Pressão
 
@@ -119,6 +122,9 @@ https://github.com/user-attachments/assets/fbda6603-705f-4a1f-b15d-a262051d0530
 | **Procedimento** | 1) No dashboard, clicar no botão **Novo Registro** <br> 2) Aba **Pressão** já vem selecionada <br> 3) Preencher Sistólica `120`, Diastólica `80` <br> 4) Clicar em **Salvar Registro** |
 | **Requisitos associados** | RF-05 |
 | **Resultado esperado** | Registro persistido; gráfico de Pressão Arterial atualiza imediatamente (**sem reload**); toast de sucesso |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/8c9ac75d-f150-47ea-83f7-b15820162cec
 
 ### CT10 — Registro de Glicemia e atualização reativa do gráfico
 
