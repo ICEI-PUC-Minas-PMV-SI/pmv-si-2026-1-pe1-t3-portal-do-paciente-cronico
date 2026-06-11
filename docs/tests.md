@@ -89,6 +89,9 @@ https://github.com/user-attachments/assets/02f158b9-91a0-438a-936f-473e38ff53f0
 | **Procedimento** | 1) Logar como paciente <br> 2) Acessar **Remédios** <br> 3) Clicar em **Novo Medicamento** <br> 4) Preencher Nome (`Losartana`), Dosagem (`50mg`), Primeira dose (`08:00`), Frequência (`A cada 12h`) <br> 5) Clicar em **Salvar** |
 | **Requisitos associados** | RF-03 |
 | **Resultado esperado** | Medicamento aparece na tabela; KPI "Total" incrementa em +1; toast de confirmação |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/ea02da24-f92c-484e-aa4d-183787d68122
 
 ### CT07 — Edição e exclusão de medicamento
 
