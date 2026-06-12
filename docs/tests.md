@@ -133,6 +133,9 @@ https://github.com/user-attachments/assets/8c9ac75d-f150-47ea-83f7-b15820162cec
 | **Procedimento** | 1) Abrir FAB Novo Registro <br> 2) Clicar na aba **Glicose** <br> 3) Preencher valor `95` <br> 4) Salvar |
 | **Requisitos associados** | RF-05, RF-08 |
 | **Resultado esperado** | Gráfico de Evolução Glicêmica ganha um novo ponto à direita sem necessidade de recarregar a página |
+| **Vídeo de teste:**
+
+https://github.com/user-attachments/assets/c9d97201-fcdb-46ca-90bf-62eb885f7e54
 
 ### CT11 — Registro de Sintomas (chips + descrição livre)
 
