@@ -155,6 +155,9 @@ https://github.com/user-attachments/assets/41b5d3e5-345a-4ce0-9c43-b5ad8d76942d
 | **Procedimento** | 1) Acessar **Histórico** <br> 2) Clicar em **Anexar Exame/Laudo** <br> 3) Preencher Título (`Hemograma`) e Arquivo (`hemograma.pdf`) <br> 4) Salvar |
 | **Requisitos associados** | RF-07 |
 | **Resultado esperado** | Linha nova na timeline com badge "Exame/Laudo" e ícone de clipe |
+| **Vídeo de teste:**
+
+https://github.com/user-attachments/assets/1f59cf7f-b4af-4d68-a323-3c231efa710b
 
 ### CT13 — Busca textual no Histórico (em tempo real)
 
