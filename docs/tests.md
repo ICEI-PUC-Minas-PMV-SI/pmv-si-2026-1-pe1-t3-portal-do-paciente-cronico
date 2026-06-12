@@ -176,7 +176,10 @@ https://github.com/user-attachments/assets/1bfb8e50-20b8-4290-a902-1e579e413f28
 |---|---|
 | **Procedimento** | 1) Acessar **Perfil** <br> 2) Clicar em **Gerar Relatório Clínico PDF** |
 | **Requisitos associados** | RF-09 |
-| **Resultado esperado** | Nova aba abre `report.html` com tabelas de perfil, medicamentos, pressões, glicemias e sintomas; diálogo de impressão dispara automaticamente após 800 ms |
+| **Resultado esperado** | Nova aba abre `report.html` com tabelas de perfil, medicamentos, pressões, glicemias e sintomas; diálogo de impressão dispara automaticamente após 800 ms | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/82a4e59e-ddd5-43fa-a4ff-95bf517a8a41
 
 ### CT15 — Cadastro de Cuidador (com bloqueio anti-sequestro)
 
