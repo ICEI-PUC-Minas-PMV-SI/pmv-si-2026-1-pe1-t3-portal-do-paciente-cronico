@@ -256,7 +256,7 @@ https://github.com/user-attachments/assets/70978140-abf3-47d8-b371-f8b1ef3a3756
 | **Resultado esperado** | Sessão é encerrada automaticamente, `ppc_currentUser` é removido do localStorage, redirecionamento para `index.html` |
 | **Vídeo de teste:**
 
-
+https://github.com/user-attachments/assets/73120883-b18f-4dc5-9b43-326bfe7d8a57
 
 ### CT22 — Controle de acesso por perfil (URL direta)
 
