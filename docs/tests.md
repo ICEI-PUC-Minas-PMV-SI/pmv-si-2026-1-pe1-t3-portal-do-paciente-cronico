@@ -265,6 +265,9 @@ https://github.com/user-attachments/assets/73120883-b18f-4dc5-9b43-326bfe7d8a57
 | **Procedimento** | 1) Logar como paciente <br> 2) Digitar manualmente na URL: `/pages/clinical-dashboard.html` |
 | **Requisitos associados** | RF-12 (segurança) |
 | **Resultado esperado** | `security.js` detecta perfil incompatível e redireciona automaticamente para `dashboard.html` |
+| **Vídeo de teste:**
+
+https://github.com/user-attachments/assets/570fd193-1c9a-4e50-98b6-5b9e38f36962
 
 ### CT23 — Acesso direto sem login
 
@@ -273,6 +276,9 @@ https://github.com/user-attachments/assets/73120883-b18f-4dc5-9b43-326bfe7d8a57
 | **Procedimento** | 1) Em uma sessão limpa, abrir `/pages/dashboard.html` diretamente |
 | **Requisitos associados** | RNF-07 |
 | **Resultado esperado** | Redirecionamento imediato para `/index.html` (qualquer página interna sem sessão é bloqueada) |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/e32d9d92-0993-4edd-8514-e98e8630a952
 
 ### CT24 — Responsividade mobile
 
