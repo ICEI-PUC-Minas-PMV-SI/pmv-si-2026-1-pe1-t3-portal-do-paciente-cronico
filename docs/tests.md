@@ -166,6 +166,9 @@ https://github.com/user-attachments/assets/68164a42-3f62-4571-b450-a1a4e50809e6
 | **Procedimento** | 1) Em **Histórico**, digitar `pressão` no campo de busca |
 | **Requisitos associados** | RF-10 |
 | **Resultado esperado** | Tabela filtra para mostrar apenas linhas que contenham "pressão" (sem precisar clicar em buscar) |
+| **Vídeo de teste:**
+
+https://github.com/user-attachments/assets/1bfb8e50-20b8-4290-a902-1e579e413f28
 
 ### CT14 — Geração de Relatório Clínico em PDF
 
