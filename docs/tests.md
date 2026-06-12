@@ -234,6 +234,8 @@ https://github.com/user-attachments/assets/c5862984-0784-4602-8992-fb65f3266660
 | **Resultado esperado** | Conduta persiste em `ppc_data[id].observations[]` e aparece imediatamente no "Histórico de Condutas" |
 | **Vídeo de teste:** 
 
+https://github.com/user-attachments/assets/ba9ea72f-71e5-476b-acf6-5cf3225bb335
+
 ### CT20 — Tutorial guiado dispara no primeiro acesso
 
 | | |
