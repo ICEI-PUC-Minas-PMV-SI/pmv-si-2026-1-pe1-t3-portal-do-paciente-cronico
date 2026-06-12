@@ -242,7 +242,8 @@ https://github.com/user-attachments/assets/ba9ea72f-71e5-476b-acf6-5cf3225bb335
 |---|---|
 | **Procedimento** | 1) Limpar `localStorage` (ou apagar todas as chaves `ppc_onboarding_done_*`) <br> 2) Logar como paciente <br> 3) Aguardar a dashboard renderizar |
 | **Requisitos associados** | RNF-11 |
-| **Resultado esperado** | Tutorial guiado dispara automaticamente após ~700 ms: overlay escuro com spotlight pulsante destacando elementos, tooltip com setas e contador "1/4", botões Voltar/Próximo/Pular |
+| **Resultado esperado** | Tutorial guiado dispara automaticamente após ~700 ms: overlay escuro com spotlight pulsante destacando elementos, tooltip com setas e contador "1/4", botões Voltar/Próximo/Pular | 
+| **Vídeo de teste:** 
 
 ### CT21 — Timeout de sessão por inatividade
 
@@ -274,7 +275,10 @@ https://github.com/user-attachments/assets/ba9ea72f-71e5-476b-acf6-5cf3225bb335
 |---|---|
 | **Procedimento** | 1) Abrir o app em dispositivo mobile (ou DevTools → modo responsivo, viewport 375×667 — iPhone SE) |
 | **Requisitos associados** | RNF-02 |
-| **Resultado esperado** | Layout se adapta: gráficos empilham verticalmente, bottom-nav permanece fixa, FAB "Novo Registro" centralizado no rodapé, formulários ocupam 100% da largura |
+| **Resultado esperado** | Layout se adapta: gráficos empilham verticalmente, bottom-nav permanece fixa, FAB "Novo Registro" centralizado no rodapé, formulários ocupam 100% da largura | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/1a01cdaf-d83f-4140-b6f2-cfe2f7b52564
 
 ---
 
