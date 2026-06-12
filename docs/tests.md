@@ -144,6 +144,9 @@ https://github.com/user-attachments/assets/c9d97201-fcdb-46ca-90bf-62eb885f7e54
 | **Procedimento** | 1) Abrir FAB Novo Registro <br> 2) Aba **Sintomas** <br> 3) Selecionar os chips "Tontura" e "Cansaço" <br> 4) Preencher textarea com descrição livre <br> 5) Salvar |
 | **Requisitos associados** | RF-06 |
 | **Resultado esperado** | Registro aparece no Histórico com tipo "Relato de Sintomas" |
+| **Vídeo de teste:**
+
+https://github.com/user-attachments/assets/41b5d3e5-345a-4ce0-9c43-b5ad8d76942d
 
 ### CT12 — Anexar exame ao Histórico
 
