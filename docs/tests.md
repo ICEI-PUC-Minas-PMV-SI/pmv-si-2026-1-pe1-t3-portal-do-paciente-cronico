@@ -157,7 +157,7 @@ https://github.com/user-attachments/assets/41b5d3e5-345a-4ce0-9c43-b5ad8d76942d
 | **Resultado esperado** | Linha nova na timeline com badge "Exame/Laudo" e ícone de clipe |
 | **Vídeo de teste:**
 
-https://github.com/user-attachments/assets/1f59cf7f-b4af-4d68-a323-3c231efa710b
+https://github.com/user-attachments/assets/68164a42-3f62-4571-b450-a1a4e50809e6
 
 ### CT13 — Busca textual no Histórico (em tempo real)
 
