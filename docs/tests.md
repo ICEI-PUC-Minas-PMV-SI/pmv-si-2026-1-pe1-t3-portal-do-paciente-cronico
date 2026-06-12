@@ -198,7 +198,10 @@ https://github.com/user-attachments/assets/744da28a-e7f4-4dee-bcaf-5348cde43678
 |---|---|
 | **Procedimento** | 1) Acessar `/index.html` <br> 2) Selecionar **Cuidador** <br> 3) CPF `477.447.980-23`, senha `123` <br> 4) Entrar |
 | **Requisitos associados** | RF-11 |
-| **Resultado esperado** | Dashboard carrega com **banner laranja** no topo: *"Você está acompanhando João Silva — Cuidador logado: Alan Cuidador"*. Saudação muda para *"Olá, Alan · Acompanhando João Silva"*. O título "Meus Remédios" vira "Remédios de João". |
+| **Resultado esperado** | Dashboard carrega com **banner laranja** no topo: *"Você está acompanhando João Silva — Cuidador logado: Alan Cuidador"*. Saudação muda para *"Olá, Alan · Acompanhando João Silva"*. O título "Meus Remédios" vira "Remédios de João". | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/fccfca3b-0366-40d5-b776-f3c0e6c127af
 
 ### CT17 — Banner persistente em todas as páginas do cuidador
 
@@ -206,7 +209,10 @@ https://github.com/user-attachments/assets/744da28a-e7f4-4dee-bcaf-5348cde43678
 |---|---|
 | **Procedimento** | Como cuidador logado, navegar entre Início, Histórico, Remédios e Perfil |
 | **Requisitos associados** | RF-11 |
-| **Resultado esperado** | Banner laranja aparece em todas as quatro telas, sempre com o nome do paciente representado |
+| **Resultado esperado** | Banner laranja aparece em todas as quatro telas, sempre com o nome do paciente representado | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/2b4eacff-afb9-458c-a78b-97cbbb661fbf
 
 ### CT18 — Médico visualiza lista de pacientes com indicadores
 
@@ -214,7 +220,10 @@ https://github.com/user-attachments/assets/744da28a-e7f4-4dee-bcaf-5348cde43678
 |---|---|
 | **Procedimento** | 1) Logar como **Médico** (CPF `111.111.111-11`) <br> 2) Observar a lista "Meus Pacientes Ativos" |
 | **Requisitos associados** | RF-12, RF-13, RF-04 |
-| **Resultado esperado** | Lista exibe 5 pacientes com badges. Carlos Eduardo Pereira e Ana Beatriz Lima aparecem com badge vermelho **"Alerta!"** e descrição do motivo (PA elevada / glicemia elevada) |
+| **Resultado esperado** | Lista exibe 7 pacientes com badges. Carlos Eduardo Pereira e Ana Beatriz Lima aparecem com badge vermelho **"Alerta!"** e descrição do motivo (PA elevada / glicemia elevada) | 
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/c5862984-0784-4602-8992-fb65f3266660
 
 ### CT19 — Médico registra conduta clínica
 
@@ -223,6 +232,7 @@ https://github.com/user-attachments/assets/744da28a-e7f4-4dee-bcaf-5348cde43678
 | **Procedimento** | 1) Como médico, clicar em um paciente da lista <br> 2) Rolar até "Prontuário e Conduta" <br> 3) Preencher observação e prescrição <br> 4) Clicar em **Salvar e Notificar o Paciente** |
 | **Requisitos associados** | RF-14 |
 | **Resultado esperado** | Conduta persiste em `ppc_data[id].observations[]` e aparece imediatamente no "Histórico de Condutas" |
+| **Vídeo de teste:** 
 
 ### CT20 — Tutorial guiado dispara no primeiro acesso
 
