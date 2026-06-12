@@ -245,6 +245,8 @@ https://github.com/user-attachments/assets/ba9ea72f-71e5-476b-acf6-5cf3225bb335
 | **Resultado esperado** | Tutorial guiado dispara automaticamente após ~700 ms: overlay escuro com spotlight pulsante destacando elementos, tooltip com setas e contador "1/4", botões Voltar/Próximo/Pular | 
 | **Vídeo de teste:** 
 
+https://github.com/user-attachments/assets/70978140-abf3-47d8-b371-f8b1ef3a3756
+
 ### CT21 — Timeout de sessão por inatividade
 
 | | |
@@ -252,6 +254,9 @@ https://github.com/user-attachments/assets/ba9ea72f-71e5-476b-acf6-5cf3225bb335
 | **Procedimento** | 1) Logar como qualquer perfil <br> 2) Aguardar **15 minutos** sem interagir (mouse, teclado, scroll) |
 | **Requisitos associados** | RNF-07 |
 | **Resultado esperado** | Sessão é encerrada automaticamente, `ppc_currentUser` é removido do localStorage, redirecionamento para `index.html` |
+| **Vídeo de teste:**
+
+
 
 ### CT22 — Controle de acesso por perfil (URL direta)
 
