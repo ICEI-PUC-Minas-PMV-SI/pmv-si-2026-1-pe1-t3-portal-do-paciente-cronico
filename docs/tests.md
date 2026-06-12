@@ -190,7 +190,7 @@ https://github.com/user-attachments/assets/346593ad-31ff-425a-bbeb-8aea9239ebf7
 | **Resultado esperado** | Toast de erro: *"Este CPF já pertence a outro tipo de usuário no sistema."* Cadastro **não** sequestra a conta do médico. |
 | **Vídeo de teste:** 
 
-https://github.com/user-attachments/assets/250f3842-1d54-4ce0-a99a-bd90977754ca
+https://github.com/user-attachments/assets/744da28a-e7f4-4dee-bcaf-5348cde43678
 
 ### CT16 — Login como Cuidador (banner de identificação)
 
