@@ -179,7 +179,7 @@ https://github.com/user-attachments/assets/1bfb8e50-20b8-4290-a902-1e579e413f28
 | **Resultado esperado** | Nova aba abre `report.html` com tabelas de perfil, medicamentos, pressões, glicemias e sintomas; diálogo de impressão dispara automaticamente após 800 ms | 
 | **Vídeo de teste:** 
 
-https://github.com/user-attachments/assets/82a4e59e-ddd5-43fa-a4ff-95bf517a8a41
+https://github.com/user-attachments/assets/346593ad-31ff-425a-bbeb-8aea9239ebf7
 
 ### CT15 — Cadastro de Cuidador (com bloqueio anti-sequestro)
 
@@ -188,6 +188,9 @@ https://github.com/user-attachments/assets/82a4e59e-ddd5-43fa-a4ff-95bf517a8a41
 | **Procedimento** | 1) Como paciente, acessar **Perfil → Meus Cuidadores → Adicionar Cuidador** <br> 2) Tentar cadastrar com CPF da Dra. Ana (`111.111.111-11`) |
 | **Requisitos associados** | RF-11 (segurança) |
 | **Resultado esperado** | Toast de erro: *"Este CPF já pertence a outro tipo de usuário no sistema."* Cadastro **não** sequestra a conta do médico. |
+| **Vídeo de teste:** 
+
+https://github.com/user-attachments/assets/250f3842-1d54-4ce0-a99a-bd90977754ca
 
 ### CT16 — Login como Cuidador (banner de identificação)
 
