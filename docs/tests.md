@@ -168,7 +168,7 @@ https://github.com/user-attachments/assets/68164a42-3f62-4571-b450-a1a4e50809e6
 | **Resultado esperado** | Tabela filtra para mostrar apenas linhas que contenham "pressão" (sem precisar clicar em buscar) |
 | **Vídeo de teste:**
 
-https://github.com/user-attachments/assets/1bfb8e50-20b8-4290-a902-1e579e413f28
+https://github.com/user-attachments/assets/2ec21329-e8db-4315-826c-d3ae050fa37f
 
 ### CT14 — Geração de Relatório Clínico em PDF
 
